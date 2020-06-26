@@ -127,8 +127,8 @@ export class LoginComponent implements OnInit {
         this.resetForm();
       } else {
         // Login Success
-        Logger.log('User' + user.userId);
-        // Move to User Dashboard ~~~~~~~~~~~~~~~~~~~~~~
+        Logger.log('User' + user.id);
+        // Report successful Sign-In  ~~~~~~~~~~~~~~~~~~~~~~
         this.doLogin.emit(ActionTypes.SIGNED_IN);
       }
     }, error => {
