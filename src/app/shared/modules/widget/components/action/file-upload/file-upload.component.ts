@@ -6,6 +6,7 @@ import {WidgetConstants} from '../../../config/widget-constants';
 import {WidgetVariables} from '../../../config/widget-variables';
 
 const none = WidgetConstants.cssDisplayNone;
+const namePlaceholder = WidgetConstants.fileNamePlaceholder
 
 @Component({
   selector: 'app-file-upload',
@@ -101,11 +102,11 @@ export class FileUploadComponent implements OnInit {
           this.doAction.emit(ActionEvents.LOAD_DATA);
         } else {
           // Failure - bad image ...
-          const msg = WidgetConstants.fileRejected.replace('<NAME>', file.name);
+          const msg = WidgetConstants.fileRejected.replace(namePlaceholder, file.name);
           this.ws.modal.alertUser(this.ws.modalUploadConfig, msg);
         }
       }).catch(() => {
-        const msg = WidgetConstants.fileUploadError.replace('<NAME>', file.name);
+        const msg = WidgetConstants.fileUploadError.replace(namePlaceholder, file.name);
         this.ws.modal.alertUser(this.ws.modalUploadConfig, msg);
       });
       WidgetVariables.actionInProgress(false);
