@@ -52,7 +52,7 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
   // LANDING ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   // noinspection JSUnusedGlobalSymbols
-  async postContactUs(form: FormData, contactURL: string): Promise<any> {
+  async postContactUs(form: FormData, contactURL: string): Promise<string> {
     return new Promise((resolve, reject) => {
       const url = this.baseURL + contactURL;
       this.postForm(form, url).subscribe( response  => {
@@ -68,7 +68,7 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
     });
   }
   // noinspection JSUnusedGlobalSymbols
-  async postRegister(form: FormData, registerURL: string): Promise<any> {
+  async postRegister(form: FormData, registerURL: string): Promise<string> {
     return new Promise((resolve, reject) => {
       const url = this.baseURL + registerURL;
       this.postForm(form, url).subscribe( response  => {
@@ -90,7 +90,7 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
     });
   }
 
-  async postLogin(form: FormData, loginURL: string): Promise<any> {
+  async postLogin(form: FormData, loginURL: string): Promise<{id: string} | string> {
     return new Promise((resolve, reject) => {
       const url = this.baseURL + loginURL;
       this.login(form, url).subscribe( response  => {
@@ -101,7 +101,7 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
           Logger.log('Token: ' + this.token);
           const user: UserInfo = res.body as UserInfo;
           GlobalVariables.userId = user.userId;
-          resolve(user); // JSON Object - Basic, user details
+          resolve({id: user.userId}); // JSON Object - Basic, user details
         },
         error => {
           const err: HttpErrorResponse = error;
