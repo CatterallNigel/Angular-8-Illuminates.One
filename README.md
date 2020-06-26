@@ -1,2 +1,2 @@
-# Angluar-8-Illuminates.One
+# Angular-8-Illuminates.One
 Showcase of Angular 8
