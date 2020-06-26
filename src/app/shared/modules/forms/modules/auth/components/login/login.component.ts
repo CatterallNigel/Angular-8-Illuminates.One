@@ -127,7 +127,6 @@ export class LoginComponent implements OnInit {
         this.resetForm();
       } else {
         // Login Success
-        UserFormsVariables.actionInProgress(true);
         Logger.log('User' + user.userId);
         // Move to User Dashboard ~~~~~~~~~~~~~~~~~~~~~~
         this.doLogin.emit(ActionTypes.SIGNED_IN);
