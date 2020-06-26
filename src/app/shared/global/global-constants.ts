@@ -68,6 +68,7 @@ export class GlobalConstants {
   public static galleryImageSelectedCssClassName = ['cat-thumb-selected'];
   // Display Text
   public static displayImageCssClassName = ['file-thumb'];
+  public static displayImageCSSDivClassList = ['scroll', 'center-fit'];
 
   // HTTP Service
   public static httpServiceUserCookie = 'user';
