@@ -4,6 +4,7 @@ import {WidgetConstants} from '../../../config/widget-constants';
 import {Logger} from '../../../utilities/logger';
 
 const noTagText = WidgetConstants.tagDescriptorNoTagText;
+const trimStringNoOfCharacters =  WidgetConstants.trimStringNoOfCharacters;
 
 @Component({
   selector: 'app-tag-descriptors',
@@ -51,6 +52,10 @@ export class TagDescriptorsComponent implements OnInit {
     } else {
       return [{name: noTagText, value: ''}];
     }
+  }
+
+  get noOfCharacters() {
+    return trimStringNoOfCharacters;
   }
 
   compare( a: TagType, b: TagType ) {
