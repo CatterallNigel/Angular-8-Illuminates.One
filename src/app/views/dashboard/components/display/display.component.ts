@@ -16,6 +16,7 @@ import {Router} from '@angular/router';
 import {TagType} from '../../../../shared/models/user/metadata.model';
 
 const imageClassName = GlobalConstants.displayImageCssClassName;
+const imageDivClassList = GlobalConstants.displayImageCSSDivClassList;
 const landing = GlobalConstants.landingPage;
 
 @Component({
@@ -76,7 +77,7 @@ export class DisplayComponent implements OnInit {
   get showMe(): ImageContainerDescriptorType {
     return  {
       id: ImageContainerDisplayIdents.ITEMS,
-      classes: ['scroll', 'center-fit'],
+      classes: imageDivClassList,
       images: this.images,
       isType: FileTypes.ITEMS,
     };
