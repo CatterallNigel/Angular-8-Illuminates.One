@@ -6,7 +6,7 @@ import {WidgetConstants} from '../../../config/widget-constants';
 import {WidgetVariables} from '../../../config/widget-variables';
 
 const none = WidgetConstants.cssDisplayNone;
-const namePlaceholder = WidgetConstants.fileNamePlaceholder
+const namePlaceholder = WidgetConstants.fileNamePlaceholder;
 
 @Component({
   selector: 'app-file-upload',
