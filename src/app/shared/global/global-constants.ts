@@ -66,6 +66,7 @@ export class GlobalConstants {
   public static galleryImageAnchorTitle = 'No of \'Items\' in this Category: ';
   public static galleryImageCssClassName = ['cat-thumb'];
   public static galleryImageSelectedCssClassName = ['cat-thumb-selected'];
+  public static galleryImageCSSDivClassList = ['scroll'];
   // Display Text
   public static displayImageCssClassName = ['file-thumb'];
   public static displayImageCSSDivClassList = ['scroll', 'center-fit'];
