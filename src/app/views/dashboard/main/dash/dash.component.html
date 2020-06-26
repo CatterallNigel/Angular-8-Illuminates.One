@@ -1,0 +1,28 @@
+<div id="centerContainer">
+  <app-spinner></app-spinner>
+  <app-dash-overlay></app-dash-overlay>
+  <!-- Add in Dashboard Header -->
+  <app-dash-header></app-dash-header>
+  <div class="colmask threecol">
+    <div class="colmid">
+      <div class="colleft">
+        <div class="col1">
+          <!-- Add in Thumbnails - ITEMS -->
+          <app-dash-display></app-dash-display>
+        </div>
+        <div class="col2">
+          <!-- Add in Categories -->
+          <app-dash-gallery></app-dash-gallery>
+        </div>
+        <div class="col3">
+          <!-- Add in Category Tags -->
+          <app-dash-tags></app-dash-tags>
+        </div>
+      </div>
+    </div>
+  </div>
+    <!-- Add in Common Footer -->
+  <app-brief-footer></app-brief-footer>
+  <app-quote-gen [quotationConfig]="this.quoteConfig"></app-quote-gen>
+</div>
+

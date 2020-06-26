@@ -1,0 +1,17 @@
+<div id="overlay" #overlay>
+  <app-dash-header></app-dash-header>
+  <div class="colmask ostyle threecol">
+    <div class="colmid ostyle">
+      <div class="colleft ostyle">
+        <div class="col1 oCol1">
+          <app-dash-view-file></app-dash-view-file>
+        </div>
+        <div class="col2 ostyle" ></div>
+        <div class="col3 ostyle" style="background: #000;">
+          <app-tag-descriptors [tagsToDisplay]="displayMe"></app-tag-descriptors>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-brief-footer></app-brief-footer>
+</div>

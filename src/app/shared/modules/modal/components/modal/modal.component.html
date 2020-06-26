@@ -1,0 +1,13 @@
+<div id="modal-content-wrapper">
+  <header id="modal-header">
+    <h1 id="modal-title">{{ this.title }}</h1>
+  </header>
+  <section id="modal-body">
+    <!--suppress HtmlFormInputWithoutLabel -->
+    <textarea readonly #msg>{{ this.message }}</textarea>
+  </section>
+  <footer id="modal-footer">
+    <button mat-raised-button id="modal-cancel-button" class="btnTxtWhite" (click)="this.closeModal()" *ngIf="this.isClose" onload="focus()">{{ this.close }}</button>
+    <button mat-raised-button id="modal-action-button" class="btnTxtWhite" (click)="this.actionFunction(msg)"  *ngIf="this.isAction">{{ this.action }}</button>
+  </footer>
+</div>

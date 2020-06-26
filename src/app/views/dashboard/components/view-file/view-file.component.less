@@ -1,0 +1,50 @@
+#pin {
+  background: #FFF;
+  border-radius: 20px;
+}
+
+#main-image {
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  margin: 50px auto 50px auto;
+}
+
+#close{
+  position: absolute;
+  top: 15px;
+  right: 2px;
+  display:none
+  /* font-size: 24pt;*/
+}
+
+.tag-pin{
+  font-size:36px !important;
+  color: #dc8f09;
+  margin : -4px -2px 0 0;
+  float: right;
+}
+
+#blank {
+  visibility: hidden;
+}
+
+.flip-hoz{
+  -moz-transform: scaleX(-1);
+  -o-transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  filter: fliph();
+  -ms-filter: "FlipH";
+}
+
+.flip-vert{
+  -moz-transform: scaleY(-1);
+  -o-transform: scaleY(-1);
+  -webkit-transform: scaleY(-1);
+  transform: scaleY(-1);
+  filter: flipv();
+  -ms-filter: "FlipV"
+}

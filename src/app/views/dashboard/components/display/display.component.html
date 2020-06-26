@@ -1,0 +1,11 @@
+<div class="icon-item-header drop-header">
+  <img src="../../../../../assets/images/home/circle-counter.png" class="circle-item">
+  <div class="circle-text-lrg">{{itemCounter | prefixPadNoToString: '&nbsp;'}}</div>
+  <h2 style="margin: 0 40px;">Items in Catergory</h2>
+</div>
+<app-display-image-thumbs [thumbsTobeDisplayed]="showMe" (doLoadImage)="loadImage($event)"></app-display-image-thumbs>
+<app-remove-category-items [typeToRemove]="removeMe" (doAction)="executeAction($event)"></app-remove-category-items>
+<app-file-upload [typeToAdd]="addMe" (doAction)="executeAction($event)"></app-file-upload>
+
+
+

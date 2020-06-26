@@ -1,0 +1,23 @@
+<app-spinner></app-spinner>
+<app-landing-header></app-landing-header>
+<div class="colmask threecol">
+  <div class="colmid">
+    <div class="colleft">
+      <div class="col1">
+        <app-login [loginUrl]="this.loginUrl" (doLogin)="signedIn($event)"></app-login>
+        <div id="error" #error><p></p></div>
+        <app-landing-welcome></app-landing-welcome>
+      </div>
+      <div class="col2">
+        <app-contact-us [contactUrl]="this.contactUrl"></app-contact-us>
+      </div>
+      <div id="rightCol" class="col3">
+        <app-register-with-us [registerUrl]="this.registerUrl"></app-register-with-us>
+        <div class="" style="margin-top:25vh;">
+          <img src="../../../../../assets/images/Illuminates-450x375-OnePlace-Mirrored-Trans.png" class="logo-bottom"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-brief-footer></app-brief-footer>

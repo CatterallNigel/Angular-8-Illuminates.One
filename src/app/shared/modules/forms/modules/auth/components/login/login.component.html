@@ -1,0 +1,12 @@
+<form #flogin="ngForm" id="login" (ngSubmit)="this.login()">
+  <div class="box">
+    <h1>Dashboard</h1>
+    <input type="email" id="email" name="email" [(ngModel)]="email" value="email"
+           class="email"  placeholder="Enter Username" (keyup)="checkValidation('email')"/>
+    <input type="password" id="password" name="password"  [(ngModel)]="password"  value="password"
+           class="login-password"  placeholder="Enter Password" (keyup)="checkValidation('password')"/>
+    <a href="#" id="signin" (click)="this.login()"><div class="btn" [ngClass]="{disabled: this.isDisabled}">Sign In</div></a>
+  </div>
+</form>
+<p style="margin-top:10px;">Forgot your password? <u style="color:#f1c40f;cursor: grabbing;" (click)="this.passwordReminder()">Click Here!</u></p>
+

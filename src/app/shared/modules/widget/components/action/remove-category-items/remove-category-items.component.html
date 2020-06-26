@@ -1,0 +1,4 @@
+<div class="cat-remove drop" #remove *ngIf="!showTypeToRemove(none)">
+  <input type="button" [id]="removeThese"  (click)="this.removeFromPortfolio()">
+  <label class="button" [for]="removeThese">{{labelTxt}}</label>
+</div>

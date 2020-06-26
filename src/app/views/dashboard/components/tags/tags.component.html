@@ -1,0 +1,13 @@
+<div #catTagContainer id="catTagContainer">
+  <app-tag-descriptors [tagsToDisplay]="displayMe"></app-tag-descriptors>
+  <app-remove-category-items [typeToRemove]="removeMe" (doAction)="executeAction($event)"></app-remove-category-items>
+  <app-file-upload [typeToAdd]="addMe" (doAction)="executeAction($event)"></app-file-upload>
+  <div class="drop">
+    <p><em>Category :</em> any of several fundamental and distinct <u>images</u> to which items belong</p>
+  </div>
+  <app-sign-out (doAction)="executeAction($event)"></app-sign-out>
+  <div (mouseenter)="this.changeUserGuideImage()" (mouseleave)="this.changeUserGuideImage()">
+    <img [src]="this.userGuideImage" class="user-guide" alt="Download Web User Guide" (click)="this.getUserGuide()" id="guide"/>
+    <img src="../../../../../assets/images/Illuminates-450x375-OnePlace-Mirrored-Trans.png" class="logo-bottom"/>
+  </div>
+</div>

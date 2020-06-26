@@ -1,0 +1,53 @@
+.background{
+  background-image: url("../../../../../assets/images/wave-banner.png");
+  background-repeat: no-repeat;
+  background-position: right;
+  max-height: 175px;
+}
+.imgbox {
+  display: grid;
+  height: 100%;
+}
+.logo {
+  width: 51%;
+  max-width: 450px;
+  float: left;
+  margin-top: 1.5em;
+}
+.center-fit {
+  max-width: 75%;
+  margin: auto;
+}
+/* Quote */
+.ludwig {
+  border-left: 0.2em solid #dc8f09;
+  font-family: 'Roboto', serif;
+  font-style: italic;
+  font-size: 1.4em;
+  line-height: 1.5em;
+  margin-inline-start: 4vw;
+  font-weight: 100;
+  color: #A9A9A9;
+}
+.ludwig:before, .ludwig:after {
+  content:'\09\201C\00a0';
+  font-family: 'Sanchez', serif;
+  color: #dc8f09;
+  white-space: pre-wrap;
+}
+.ludwig:after {
+  content: ' \201D';
+  white-space: pre-wrap;
+}
+
+.quote {
+  width: 40vw;
+  margin: 3em auto;
+  display: flex;
+  float: left;
+}
+
+blockquote {
+  margin-bottom: 3em;
+}
+/* END OF QUOTE */

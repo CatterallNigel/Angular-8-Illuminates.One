@@ -1,0 +1,27 @@
+<form #newRegister="ngForm" id="register-new" (submit)="register()" formGroupName="regForm">
+  <div class="container">
+    <h1>Register</h1>
+    <p style="text-align: center;">Please fill in this form to create an account.</p>
+    <hr>
+
+    <label for="email-reg"><b>Email*</b></label>
+    <input type="text" placeholder="Enter Email" name="email" [(ngModel)]="emailReg" id="email-reg" required
+           [ngClass]="{error: this.isNotValidEmail , success: !this.isNotValidEmail && this.emailReg.length !== 0}"
+           (keyup)="this.checkValidation('emailReg')">
+    <div *ngIf="this.isNotValidEmail" class="small-msg"> Invalid email address</div>
+    <label for="psw"><b>Password*</b></label>
+    <input type="password" placeholder="Enter Password" name="psw" [(ngModel)]="pswd" id="psw" required
+           [ngClass]="{error: this.isNotValidPswds && this.hasPasswords , success: !this.isNotValidPswds}"
+           (keyup)="this.checkValidation('pswd')">
+    <div *ngIf="this.isToShort" class="small-msg">Passwords must be a min of 8 characters</div>
+    <label for="psw-repeat"><b>Repeat Password*</b></label>
+    <input type="password" placeholder="Repeat Password" name="psw-repeat" [(ngModel)]="pswdRep" id="psw-repeat" required
+    [ngClass]="{error: this.isNotValidPswds && this.hasPasswords, success: !this.isNotValidPswds}" (keyup)="this.checkValidation('pswdRep')">
+    <div *ngIf="this.isNotValidPswds && this.hasPasswords" class="small-msg">Passwords don't match</div>
+    <hr>
+    <p style="text-align: center;"><strong>* required fields</strong></p>
+    <p style="text-align: center;">By creating an account you agree to our <br/><a href="#">Terms & Privacy</a>.</p>
+
+    <button type="submit" class="registerbtn" id="register-send" [disabled]="this.isFormInvalid">Register</button>
+  </div>
+</form>

@@ -1,0 +1,36 @@
+/* Quote */
+.ludwig {
+  border-left: 0.2em solid #dc8f09;
+  font-family: 'Roboto', serif;
+  font-style: italic;
+  font-size: 1.2em;
+  line-height: 1.5em;
+  /*margin-inline-start: 4vw;*/
+  font-weight: 100;
+  color: #A9A9A9;
+}
+.ludwig:before, .ludwig:after {
+  content:'\09\201C\00a0';
+  font-family: 'Sanchez', sans-serif;
+  color: #dc8f09;
+  white-space: pre-wrap;
+}
+.ludwig:after {
+  content: ' \201D';
+  white-space: pre-wrap;
+}
+
+.quote {
+  margin: 3em auto;
+  display: flex;
+  float: left;
+}
+
+.quote-right {
+  margin-top: -25px;
+  float: right;
+}
+blockquote {
+  /*margin-bottom: 3em;*/
+}
+/* END OF QUOTE */

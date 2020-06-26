@@ -1,0 +1,8 @@
+<!-- FOR CATEGORY & ITEMS -->
+<div class="drop" appFileDragDrop (doFileDropped)="this.handleFiles($event);" #upload>
+  <form class="my-form">
+    <p></p>
+    <input type="file" [id]="fileUpload" multiple="multiple" accept="image/*" (change)="this.handleFiles($event.target.files);">
+    <label class="button" [for]="fileUpload"></label>
+  </form>
+</div>

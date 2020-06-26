@@ -1,0 +1,30 @@
+<div class="files-action drop" style="background: rgba(0, 0, 0, 0.5);width:89%">
+  <div id="button-set">
+    <div class="button-cont" id="edit" *ngIf="this.showThisButton('open')">
+      <input type="button" id="fileActionOpen"  (click)="this.openFile()">
+      <label class="button" for="fileActionOpen">OPEN IN&nbsp;<br/>EDITOR &#9998;</label>
+    </div>
+    <div class="button-align button-set">
+      <div class="button-cont" id="download" *ngIf="this.showThisButton('download')">
+        <input type="button" value="" id="fileActionDownload"  (click)="this.downloadFile()">
+        <label class="button btn-h" for="fileActionDownload" style="padding: 12px 10px 8px 10px;">DOWNLOAD  &#8659;</label>
+      </div>
+      <div class="button-cont" id="share" *ngIf="this.showThisButton('share')">
+        <input type="button" value="" id="fileActionShare"  (click)="this.shareFile()">
+        <label class="button btn-h" for="fileActionShare" style="margin-left:-15px;padding: 12px 10px 8px 10px;">SHARE &#10227;</label>
+      </div>
+      <div class="button-cont" id="delete" *ngIf="this.showThisButton('delete')">
+        <input type="button" id="fileActionDelete"  (click)="this.removeFile()">
+        <label class="button btn-h" for="fileActionDelete"  style="padding: 12px 10px 8px 10px;color:red">DELETE  &#10540;</label>
+      </div>
+      <div class="button-cont" id="flipX" *ngIf="this.showThisButton('flipX')">
+        <input type="button" value="" id="fileActionFlipX"  (click)="this.flipFileX()">
+        <label class="button btn-h" for="fileActionFlipX">FLIP &#11020;</label>
+      </div>
+      <div class="button-cont" id="flipY"  *ngIf="this.showThisButton('flipY')">
+        <input type="button" value="" id="fileActionFlipY"  (click)="this.flipFileY()">
+        <label class="button btn-h" for="fileActionFlipY">FLIP &#11021;</label>
+      </div>
+    </div>
+  </div>
+</div>

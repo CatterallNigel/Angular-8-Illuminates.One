@@ -1,0 +1,42 @@
+<div class="container contact">
+  <h1>Contact</h1>
+  <p>Please fill out this form to contact us.</p>
+  <hr/>
+  <form #contact="ngForm" id="contact-us" (ngSubmit)="send()">
+    <label for="fname">First Name*</label>
+    <input type="text" id="fname" name="firstname" [(ngModel)]="firstname" placeholder="Your name.." required
+    (keyup)="checkValidation('firstname')" [ngClass]="{error: this.isNotValidField('firstName') && hasContents('firstName'), success: !this.isNotValidField('firstName')}" >
+    <div *ngIf="this.isNotValidField('firstName') && hasContents('firstName')" class="small-msg">Your full first name is required</div>
+    <label for="lname">Last Name*</label>
+    <input type="text" id="lname" name="lastname" [(ngModel)]="lastname" placeholder="Your last name.." required
+           (keyup)="checkValidation('lastname')"  [ngClass]="{error: this.isNotValidField('lastName') && hasContents('lastName'), success: !this.isNotValidField('lastName')}">
+    <div *ngIf="this.isNotValidField('lastName') && hasContents('lastName')" class="small-msg">Your full second name is required</div>
+    <label for="email-us"><b>Email*</b></label>
+    <input type="text" placeholder="Enter Email" name="email" [(ngModel)]="email" id="email-us" required
+           [ngClass]="{error: this.isNotValidEmail , success: !this.isNotValidEmail && hasContents('email')}" (keyup)="checkValidation('email')">
+    <div *ngIf="this.isNotValidEmail" class="small-msg"> Invalid email address</div>
+
+    <label for="country">Country*</label>
+    <select id="country" name="country" [(ngModel)]="country" required (change)="checkValidation('country')"
+            [ngClass]="{warn: this.isNotValidField('country') , success: !this.isNotValidField('country')}">
+      <option value="{{defaultSelectOptionValue}}">Please Select ...</option>
+      <option *ngFor="let country of this.countries" [ngValue]="country.code">
+        {{country.name}}
+      </option>
+      <!--<option value="canada">Canada</option>
+      <option value="usa">USA</option>
+      <option value="uk">UK</option>
+      <option value="germany">Germany</option>
+      <option value="other">Other</option>-->
+    </select>
+
+    <label for="subject">Subject*</label>
+    <textarea id="subject" name="subject" [(ngModel)]="message" placeholder="Write something.." style="height:150px"  required
+              (keyup)="checkValidation('subject')" [ngClass]="{error: this.isNotValidField('subject') && hasContents('subject'), success: !this.isNotValidField('subject')}"
+    ></textarea>
+    <div *ngIf="this.isNotValidField('subject') && hasContents('subject')" class="small-msg">Please enter a message</div>
+    <p style="text-align: center;"><strong>* required fields</strong></p>
+    <button type="submit" class="submitbtn" id="contact-send" [disabled]="this.isFormInValid">Submit</button>
+
+  </form>
+</div>

@@ -1,0 +1,11 @@
+<h2 class="colHeader">{{this.getTitle}}</h2>
+<hr  class="tag-div"/>
+<div id="itemtags">
+  <div class="tag" *ngFor="let tag of tags">
+    <a title="{{tag.name}} | {{tag.value}}">
+      <div class="tag-text">{{tag.name | trimString: 15}} | {{tag.value}}</div>
+    </a>
+    <i class="material-icons tag-pin">radio_button_checked</i>
+  </div>
+  <hr class="tag-div"/>
+</div>
