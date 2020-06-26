@@ -37,8 +37,7 @@ export class TagsComponent implements OnInit {
     this.data.getCurrentData.subscribe(data => {
       this.metadata = data;
       if ( this.metadata !== undefined) {
-        // noinspection TsLint
-        this.hasMetadata;
+        this.hasMetadata();
       }
     });
     // Allows Galley to invoke the loading of the correct TAGS
@@ -83,7 +82,7 @@ export class TagsComponent implements OnInit {
     };
   }
 
-  get hasMetadata() {
+  hasMetadata() {
     return Logger.log('Tag Metadata : ' + this.metadata.noOfTargets);
   }
 
