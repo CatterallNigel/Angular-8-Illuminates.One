@@ -97,7 +97,7 @@ export class WidgetConstants {
 
   public static fileRejected = 'The file: <NAME> was rejected by the server';
   public static fileUploadError = 'An error occurred uploading file: <NAME> please try again later';
-  public static fileNamePlaceholder = '<NAME>'
+  public static fileNamePlaceholder = '<NAME>';
   // File Actions Component
   public static modalFileOpeTitle = 'File Open';
   public static modalFileOpenErrorTitle = 'File Open Error';
