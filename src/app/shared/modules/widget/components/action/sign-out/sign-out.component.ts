@@ -35,7 +35,6 @@ export class SignOutComponent implements OnInit {
   }
 
   async signOut() {
-    let result = false;
     await this.ws.modal.alertUser(this.ws.modalSignOutConfig, WidgetConstants.signOutMessage).then( success => {
       Logger.log('Sign-out response: ' + success);
       if (success === 'action') {
