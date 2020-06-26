@@ -13,6 +13,7 @@ import {
 const anchorTitle = GlobalConstants.galleryImageAnchorTitle; // 'No of \'Items\' in this Category: ';
 const imageClassName = GlobalConstants.galleryImageCssClassName; // 'cat-thumb';
 const imageSelectedClassName = GlobalConstants.galleryImageSelectedCssClassName; // 'cat-thumb-selected'
+const imageDivClassList = GlobalConstants.galleryImageCSSDivClassList;
 
 @Component({
   selector: 'app-dash-gallery',
@@ -55,7 +56,7 @@ export class GalleryComponent implements OnInit {
   get showMe(): ImageContainerDescriptorType {
     return  {
       id: ImageContainerDisplayIdents.CATEGORY,
-      classes: ['scroll'],
+      classes: imageDivClassList,
       images: this.images,
       isType: FileTypes.CATEGORY,
       toggle: {
