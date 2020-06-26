@@ -93,7 +93,8 @@ export class QuoteGenComponent implements OnInit, AfterViewInit {
       if (this.quotations != null) {
         const quoteNo = Math.floor(Math.random() * (Object.keys(this.quotations.quotes).length - 1));
         const selectedQuote = this.quotations.quotes[quoteNo];
-        const author = selectedQuote.quoteAuthor == null || selectedQuote.quoteAuthor.length === 0 ? authorUnknown : selectedQuote.quoteAuthor;
+        const author = selectedQuote.quoteAuthor == null ||
+              selectedQuote.quoteAuthor.length === 0 ? authorUnknown : selectedQuote.quoteAuthor;
         this.quote = selectedQuote.quoteText + ' | ' + author;
         Logger.log('This quote is: ' + this.quote, 'QuoteGenComponent.generateQuote', 31);
       }
