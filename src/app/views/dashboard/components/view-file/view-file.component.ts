@@ -73,6 +73,7 @@ export class ViewFileComponent implements OnInit {
       baseShareURL: GlobalConstants.baseShareURL,
       downloadURL: GlobalConstants.baseURL + GlobalConstants.downloadFileURL + GlobalVariables.userId,
       shareURL: GlobalConstants.shareFileLinkURL,
+      shareWithURL: GlobalConstants.shareWithURL,
       buttons: fileActionButtons,
     };
   }

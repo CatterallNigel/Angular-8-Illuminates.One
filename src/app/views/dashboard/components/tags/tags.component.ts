@@ -37,6 +37,7 @@ export class TagsComponent implements OnInit {
     this.data.getCurrentData.subscribe(data => {
       this.metadata = data;
       if ( this.metadata !== undefined) {
+        // noinspection TsLint
         this.hasMetadata();
       }
     });
@@ -44,7 +45,7 @@ export class TagsComponent implements OnInit {
     if (this.eventService.subscription === undefined) {
       this.eventService.subscription = this.eventService
         .invokeComponenstLoadItems.subscribe((id: string) => {
-          Logger.log('Subscribing to LOAD event');
+          Logger.log('Subscribing to LOAD event', 'TagsComponent.ngOnInit' , 48);
           this.loadTags(id);
         });
     } else {
@@ -83,11 +84,13 @@ export class TagsComponent implements OnInit {
   }
 
   hasMetadata() {
-    return Logger.log('Tag Metadata : ' + this.metadata.noOfTargets);
+    Logger.log('Tag Metadata : ' + this.metadata.noOfTargets
+      , 'TagsComponent.hasMetadata' , 88);
   }
 
   showHideCatTags(hide: boolean) {
-    Logger.log('Setting Show-Hide val: ' + hide);
+    Logger.log('Setting Show-Hide val: ' + (hide ? 'Hidden' : 'Visible')
+      , 'TagsComponent.showHideCatTags' , 92);
     if (this.catTagContainer !== undefined) {
       const container: HTMLDivElement = this.catTagContainer.nativeElement;
       container.style.visibility = hide ? hidden : visible;
@@ -106,16 +109,17 @@ export class TagsComponent implements OnInit {
   }
 
   loadTags(targetUUID: string) {
-    Logger.log('This is the TAGS UUID: ' + targetUUID, 'TagsComponent.loadTags', 121);
+    Logger.log('This is the TAGS UUID: ' + targetUUID, 'TagsComponent.loadTags', 112);
     this.currentTarget = targetUUID;
     try {
     if (this.metadata.fileInfo.find(fi => fi.targetUUID === targetUUID) === undefined) {
-      Logger.log('Cannot find target:' + targetUUID, 'TagsComponent.loadTags', 127);
+      Logger.log('Cannot find target:' + targetUUID, 'TagsComponent.loadTags', 116);
       return;
     }
     this.tags = this.metadata.fileInfo.find(fi => fi.targetUUID === targetUUID).targetMetadata.tags;
     } catch (e) {
-      Logger.error('loadTag in forEach ERROR: ' + e.message);
+      Logger.error('loadTag in forEach ERROR: ' + e.message
+        , 'TagsComponent.loadTags', 121);
     }
   }
 

@@ -147,6 +147,7 @@ export interface FileActionsModel {
   baseShareURL?: string;
   downloadURL?: string;
   shareURL?: string;
+  shareWithURL?: string;
   buttons: FileActionButtons[];
 }
 

@@ -28,7 +28,8 @@ export class GlobalConstants {
   public static dashboardPage = 'dashboard';
 
   // HTTP SERVER URL's
-  /* REQUIRED for Node.js Server Proxy Calls - otherwise loops
+  /* REQUIRED for Node.js Server Proxy Calls */
+/*
   public static baseURL = '/';
   public static baseShareURL = 'https://docs.google.com/viewer?url=';
   public static contactURL = 'api/contact';
@@ -44,9 +45,11 @@ export class GlobalConstants {
   public static viewImageURL = 'api/view/';
   public static getViewImageURL = GlobalConstants.baseURL + GlobalConstants.viewImageURL;
   public static shareFileLinkURL = 'api/share/create/';
+  public static shareWithURL = 'api/share/';
   public static downloadFileURL = 'api/view/raw/';
-   */
+*/
   // For local testing
+
   public static baseURL = 'https://localhost:8443/';
   public static baseShareURL = 'https://docs.google.com/viewer?url=';
   public static contactURL = 'v1/contact';
@@ -62,6 +65,7 @@ export class GlobalConstants {
   public static viewImageURL = 'v1/view/';
   public static getViewImageURL = GlobalConstants.baseURL + GlobalConstants.viewImageURL;
   public static shareFileLinkURL = 'v1/share/create/';
+  public static shareWithURL = 'api/share/';
   public static downloadFileURL = 'v1/view/raw/';
 
   // Static Data Store

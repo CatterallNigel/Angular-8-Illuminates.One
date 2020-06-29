@@ -62,6 +62,7 @@ export class WidgetService {
   action: IWidgetDataActionsType; // could be some other service provided it matched the interface
 
   constructor(private injector: Injector) {
+    // this.event = this.injector.get(new InjectionToken('Event'));
     this.modal = this.injector.get(ModalService);
     this.action = this.injector.get(HttpService); // choose your service
   }

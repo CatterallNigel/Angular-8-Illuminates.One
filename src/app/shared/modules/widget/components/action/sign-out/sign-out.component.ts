@@ -36,9 +36,9 @@ export class SignOutComponent implements OnInit {
 
   async signOut() {
     await this.ws.modal.alertUser(this.ws.modalSignOutConfig, WidgetConstants.signOutMessage).then( success => {
-      Logger.log('Sign-out response: ' + success);
+      Logger.log('Sign-out response: ' + success, 'SignOutComponent.signOut', 39);
       if (success === 'action') {
-        Logger.log('Signing out ..... ');
+        Logger.log('Signing out ..... ', 'SignOutComponent.signOut', 41);
         this.ws.action.signOutApp().then( reply => {
             this.ws.modal.alertUser(this.ws.modalSignOutResponseConfig, reply).then( () => {
                 this.doAction.emit(ActionEvents.SIGNED_OUT);
@@ -48,7 +48,7 @@ export class SignOutComponent implements OnInit {
             this.ws.modal.alertUser(this.ws.modalSignOutResponseConfig, error);
           });
       } else {
-        Logger.log('Sign-out  CANCELLED');
+        Logger.log('Sign-out  CANCELLED', 'SignOutComponent.signOut', 51);
         return;
       }
     });

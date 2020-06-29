@@ -27,6 +27,7 @@ export class FileActionsComponent implements OnInit {
   baseShareURL: string;
   downloadURL: string;
   shareURL: string;
+  shareWithURL: string;
   buttons: FileActionButtons[];
 
   @Input()
@@ -38,6 +39,7 @@ export class FileActionsComponent implements OnInit {
       this.baseShareURL = fileInfoModel.baseShareURL;
       this.downloadURL = fileInfoModel.downloadURL;
       this.shareURL = fileInfoModel.shareURL;
+      this.shareWithURL = fileInfoModel.shareWithURL;
       this.buttons = fileInfoModel.buttons;
     }
   }
@@ -111,7 +113,7 @@ export class FileActionsComponent implements OnInit {
     WidgetVariables.actionInProgress(true);
     await this.getShareLinkOrError().then( response => {
         if (typeof response === 'string') {
-          const sharedURL = location.protocol + '//' + location.host + '//' +  this.shareURL + response;
+          const sharedURL = location.protocol + '//' + location.host + '/' +  this.shareWithURL + response;
           Logger.log('Share Link URL: ' + sharedURL, 'FileActionsComponent.shareFile', 115);
           this.ws.modalFileCopyConfig.title = WidgetConstants.modalFileShareTitle;
           this.ws.modal.alertUser(this.ws.modalFileCopyConfig, sharedURL);
