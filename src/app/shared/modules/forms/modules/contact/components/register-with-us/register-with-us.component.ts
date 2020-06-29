@@ -67,7 +67,8 @@ export class RegisterWithUsComponent implements OnInit {
     Object.keys(this.controls).forEach(key => {
       const strValue = '';
       this.controls[key].setValue(strValue);
-      Logger.log('SET VAL - Name: ' + key + ' isVaild: ' + this.controls[key].invalid);
+      Logger.log('SET VAL - Name: ' + key + ' isVaild: ' + this.controls[key].invalid,
+        'RegisterWithUsComponent.initValues', 70);
     });
 
     CustomValidators.hasContent(this.regForm);
@@ -75,7 +76,8 @@ export class RegisterWithUsComponent implements OnInit {
 
     if (UserFormsConstants.config.log.debug) {
       Object.keys(this.controls).forEach(key => {
-        Logger.log(' AFTER UPDATE - Name: ' + key + ' isVaild: ' + this.controls[key].invalid);
+        Logger.log(' AFTER UPDATE - Name: ' + key + ' isVaild: ' + this.controls[key].invalid,
+          'RegisterWithUsComponent.initValues', 79);
       });
     }
   }
@@ -128,15 +130,15 @@ export class RegisterWithUsComponent implements OnInit {
   // REGISTER ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     async  register() {
       if (this.isFormInvalid) {
-        Logger.error('Form invalid');
+        Logger.error('Form invalid', 'RegisterWithUsComponent.register', 132);
         return;
       }
       const formData = new FormData();
-      Logger.log('Register Email: ' + this.emailReg);
+      Logger.log('Register Email: ' + this.emailReg, 'RegisterWithUsComponent.register', 137);
       formData.append('email', this.emailReg);
       formData.append('psw', this.pswd);
 
-      Logger.log('Registering ...');
+      Logger.log('Registering ...', 'RegisterWithUsComponent.register', 141);
 
       // Start SPINNER ~~~~~~~~~~~~~
       UserFormsVariables.actionInProgress(true);
@@ -145,19 +147,19 @@ export class RegisterWithUsComponent implements OnInit {
       try {
         msg = await this.ufs.action.postRegister(formData, this.url);
       } catch (e) {
-        Logger.error(e.message);
+        Logger.error('Register Failed:' + e.message, 'RegisterWithUsComponent.register', 150);
       }
 
       // Stop SPINNER ~~~~~~~~~~~~~~
       UserFormsVariables.actionInProgress(false);
 
       // Response Message
-      Logger.log('Returned Msg: ' + msg.toString());
+      Logger.log('Returned Msg: ' + msg.toString(), 'RegisterWithUsComponent.register', 157);
 
       // Inform user of MESSAGE
       this.ufs.modalRegisterConfig.message = msg.toString();
       const result = await this.ufs.modal.alertUser(this.ufs.modalRegisterConfig, '');
-      Logger.log('Event: ' + result);
+      Logger.log('Register Event: ' + result, 'RegisterWithUsComponent.register', 162);
 
       // Reset Form and initialize
       this.formValues.reset();

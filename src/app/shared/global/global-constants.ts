@@ -28,6 +28,25 @@ export class GlobalConstants {
   public static dashboardPage = 'dashboard';
 
   // HTTP SERVER URL's
+  /* REQUIRED for Node.js Server Proxy Calls - otherwise loops
+  public static baseURL = '/';
+  public static baseShareURL = 'https://docs.google.com/viewer?url=';
+  public static contactURL = 'api/contact';
+  public static registerURL = 'api/register/new';
+  public static loginURL = 'api/register/web';
+  public static userMetadataURL = 'api/targets/';
+  public static catFileUploadURL = 'api/add';
+  public static itemFileUploadURL = 'api/add/file';
+  public static removeCategoryURL = 'api/remove/target/';
+  public static removeFilesURL = 'api/remove/';
+  public static getUserGuideURL = 'api/get/guide/';
+  public static signOutURL = 'api/leave/';
+  public static viewImageURL = 'api/view/';
+  public static getViewImageURL = GlobalConstants.baseURL + GlobalConstants.viewImageURL;
+  public static shareFileLinkURL = 'api/share/create/';
+  public static downloadFileURL = 'api/view/raw/';
+   */
+  // For local testing
   public static baseURL = 'https://localhost:8443/';
   public static baseShareURL = 'https://docs.google.com/viewer?url=';
   public static contactURL = 'v1/contact';
@@ -66,12 +85,12 @@ export class GlobalConstants {
   public static galleryImageAnchorTitle = 'No of \'Items\' in this Category: ';
   public static galleryImageCssClassName = ['cat-thumb'];
   public static galleryImageSelectedCssClassName = ['cat-thumb-selected'];
+  public static galleryImageCSSDivClassList = ['scroll'];
   // Display Text
   public static displayImageCssClassName = ['file-thumb'];
+  public static displayImageCSSDivClassList = ['scroll', 'center-fit'];
 
   // HTTP Service
-  public static httpServiceUserCookie = 'user';
-  public static httpServiceTokenCookie = 'token';
   public static httpServiceAuthTokenName = 'OP-Token';
   // Quotation Generator
   public static changeQuotePeriod = 15000; // every 15 seconds

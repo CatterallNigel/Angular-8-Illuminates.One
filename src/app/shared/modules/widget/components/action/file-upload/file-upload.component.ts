@@ -6,6 +6,7 @@ import {WidgetConstants} from '../../../config/widget-constants';
 import {WidgetVariables} from '../../../config/widget-variables';
 
 const none = WidgetConstants.cssDisplayNone;
+const namePlaceholder = WidgetConstants.fileNamePlaceholder;
 
 @Component({
   selector: 'app-file-upload',
@@ -28,7 +29,7 @@ export class FileUploadComponent implements OnInit {
       this.typeOfSelector = add.isType;
       this.url = add.url;
       this.btnDesc = this.btnDescription.find(btn => btn.isType as FileTypes === this.typeOfSelector);
-      Logger.log('FileUploadComponent: ' + JSON.stringify(add), 'set typeToAdd', 39);
+      Logger.log('FileUploadComponent: ' + JSON.stringify(add), 'FileUploadComponent.typeToAdd', 39);
       this.populateText();
     }
   }
@@ -76,13 +77,13 @@ export class FileUploadComponent implements OnInit {
 
   // Upload new File(s) to Category
   async handleFiles(files: FileList) {
-    Logger.log('No of File to upload: ' + files.length);
+    Logger.log('No of File to upload: ' + files.length, 'FileUploadComponent.handleFiles', 80);
     // noinspection TsLint
     for (let i = 0; i < files.length; i++) {
       WidgetVariables.actionInProgress(true);
       const file = files[i];
       const formData = new FormData();
-      Logger.log('File is type of : ' + typeof(file));
+      Logger.log('File is type of : ' + typeof(file), 'FileUploadComponent.handleFiles', 86);
       formData.append('file', file);
       formData.append('name', (Math.round((new Date()).getTime() / 1000)).toString());
       if (this.typeOfSelector === FileTypes.ITEMS) {
@@ -96,16 +97,16 @@ export class FileUploadComponent implements OnInit {
           this.doAction.emit(ActionEvents.TOKEN_EXPIRED);
 
         } else if (result) {
-          Logger.log('File uploaded successfully ...');
+          Logger.log('File uploaded successfully ...', 'FileUploadComponent.handleFiles', 100);
           // Reload metadata as NEW Files !!
           this.doAction.emit(ActionEvents.LOAD_DATA);
         } else {
           // Failure - bad image ...
-          const msg = WidgetConstants.fileRejected.replace('<NAME>', file.name);
+          const msg = WidgetConstants.fileRejected.replace(namePlaceholder, file.name);
           this.ws.modal.alertUser(this.ws.modalUploadConfig, msg);
         }
       }).catch(() => {
-        const msg = WidgetConstants.fileUploadError.replace('<NAME>', file.name);
+        const msg = WidgetConstants.fileUploadError.replace(namePlaceholder, file.name);
         this.ws.modal.alertUser(this.ws.modalUploadConfig, msg);
       });
       WidgetVariables.actionInProgress(false);

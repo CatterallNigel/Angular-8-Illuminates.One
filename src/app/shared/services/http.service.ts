@@ -5,9 +5,9 @@ import {UserInfo} from '../models/user/user.model';
 import {GlobalConstants} from '../global/global-constants';
 import {UserMetaDataType} from '../models/user/metadata.model';
 import {GlobalVariables} from '../global/global-variables';
-import {Logger} from '../classes/utils/logger';
 import {IWidgetDataActionsType, RemoveUserCategoryResponseType, RemoveUserFilesResponseType} from '../modules/widget';
 import {IUserFormsActionsType} from '../modules/forms/interfaces/data-actions-interface';
+import {Logger} from './utilities/logger';
 
 
 const authHeader =  GlobalConstants.httpServiceAuthTokenName; // 'OP-Token';
@@ -40,57 +40,58 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
 
   // noinspection JSUnusedGlobalSymbols
   static printToConsole(text: string) {
-    return Logger.log('HTTP-Service Msg: ' + text);
+    return Logger.log('HTTP-Service Msg: ' + text, 'HttpService.printToConsole', 43);
   }
 
   private prinResponseHeaders(headers: HttpHeaders) {
     if (GlobalConstants.config.log.log) {
-      Logger.log('Printing Headers ....');
-      headers.keys().map((key) => Logger.log(`Header:${key} Value: ${headers.get(key)}`));
+      Logger.log('Printing Headers ....', 'HttpService.prinResponseHeaders', 43);
+      headers.keys().map((key) =>
+        Logger.log(`Header:${key} Value: ${headers.get(key)}`, 'HttpService.prinResponseHeaders', 49));
     }
   }
   // LANDING ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   // noinspection JSUnusedGlobalSymbols
-  async postContactUs(form: FormData, contactURL: string): Promise<any> {
+  async postContactUs(form: FormData, contactURL: string): Promise<string> {
     return new Promise((resolve, reject) => {
       const url = this.baseURL + contactURL;
       this.postForm(form, url).subscribe( response  => {
           const res: HttpResponse<string> = response;
-          Logger.log('Response Received: ' + res.body);
+          Logger.log('Response Received: ' + res.body, 'HttpService.postContactUs', 61);
           resolve(res.body);
         },
         error => {
-          Logger.error(error);
+          Logger.error(error, 'HttpService.postContactUs', 65);
           reject('');
         }
       );
     });
   }
   // noinspection JSUnusedGlobalSymbols
-  async postRegister(form: FormData, registerURL: string): Promise<any> {
+  async postRegister(form: FormData, registerURL: string): Promise<string> {
     return new Promise((resolve, reject) => {
       const url = this.baseURL + registerURL;
       this.postForm(form, url).subscribe( response  => {
           const res: HttpResponse<string> = response;
-          Logger.log('Response Received: ' + res.body);
+          Logger.log('Response Received: ' + res.body, 'HttpService.postRegister', 77);
           resolve(res.body);
         },
         error => {
           const err: HttpErrorResponse = error;
           if ( err.status === HttpService.HTTP_STATUS_NOT_ACCEPTABLE ) {
-            Logger.error('User : HTTP_STATUS_NOT_ACCEPTABLE');
+            Logger.error('User : HTTP_STATUS_NOT_ACCEPTABLE', 'HttpService.postRegister', 83);
             resolve(GlobalConstants.emailAddressInvalid); // this is the app
           }
           // What was the error ?
-          Logger.error('Error: ' + err.message);
+          Logger.error('Register Error: ' + err.message, 'HttpService.postRegister', 87);
           reject(err.message);
         }
       );
     });
   }
 
-  async postLogin(form: FormData, loginURL: string): Promise<any> {
+  async postLogin(form: FormData, loginURL: string): Promise<{id: string} | string> {
     return new Promise((resolve, reject) => {
       const url = this.baseURL + loginURL;
       this.login(form, url).subscribe( response  => {
@@ -98,19 +99,19 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
          // GET HEADERS - GET and Save Security Token etc ...
           this.prinResponseHeaders(res.headers);
           this.token =  res.headers.get(authHeader);
-          Logger.log('Token: ' + this.token);
+          Logger.log('Token: ' + this.token, 'HttpService.postLogin', 102);
           const user: UserInfo = res.body as UserInfo;
           GlobalVariables.userId = user.userId;
-          resolve(user); // JSON Object - Basic, user details
+          resolve({id: user.userId}); // JSON Object - Basic, user details
         },
         error => {
           const err: HttpErrorResponse = error;
           if ( err.status === HttpService.HTTP_STATUS_UNAUTHORIZED ) {
-            Logger.error('User : HTTP_STATUS_UNAUTHORIZED');
+            Logger.error('User : HTTP_STATUS_UNAUTHORIZED', 'HttpService.postLogin', 110);
             resolve(GlobalConstants.loginFailed);
           }
           // What was the error ?
-          Logger.error('Error: ' + err.message);
+          Logger.error('Login Error: ' + err.message, 'HttpService.postLogin', 114);
           reject(err.message);
         }
       );
@@ -118,7 +119,7 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
   }
 
   private login(form: FormData, url: string): Observable<HttpResponse<object>> {
-    Logger.log('Login Post URL: ' + url);
+    Logger.log('Login Post URL: ' + url, 'HttpService.login', 122);
 
     return this.http.post(url, form,
       {
@@ -128,7 +129,7 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
   }
 
   private postForm(form: FormData, url: string): Observable<HttpResponse<string>> {
-    Logger.log('Form Post URL: ' + url);
+    Logger.log('Form Post URL: ' + url, 'HttpService.postForm', 132);
     return this.http.post(url, form,
       {
         responseType: 'text',
@@ -148,28 +149,29 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
   async requestMetaData(): Promise<any> {
     return new Promise((resolve, reject) => {
       const id: string = GlobalVariables.userId;
-      Logger.log('User ID: ' + id + ' Token: ' + this.token);
+      // Logger.log('User ID: ' + id + ' Token: ' + this.token, 'HttpService.requestMetaData', 152);
       const url = this.baseURL + this.metadataURL  + id;
       this.getUserMetadata(url, this.token).subscribe(response => {
           const res: HttpResponse<object> = response;
-          Logger.log('Response:' + res.body);
+          Logger.log('Response:' + res.body, 'HttpService.requestMetaData', 156);
           resolve(res.body as UserMetaDataType);
         },
         error => {
           const err: HttpErrorResponse = error;
           if (err.status === HttpService.HTTP_TEMPORARY_REDIRECT) {
-            Logger.error('User : HTTP_TEMPORARY_REDIRECT - TOKEN EXPIRED');
+            Logger.error('User : HTTP_TEMPORARY_REDIRECT - TOKEN EXPIRED',
+              'HttpService.requestMetaData', 162);
             resolve(GlobalConstants.tokenExpired);
           }
           // What was the error ?
-          Logger.error('Error: ' + err.message);
+          Logger.error('Metadata Error: ' + err.message, 'HttpService.requestMetaData', 166);
           reject(err.message);
         });
     });
   }
 
   private getUserMetadata(url: string, token: string): Observable<HttpResponse<object>> {
-    Logger.log('Getting user metadata ..');
+    Logger.log('Getting user metadata ..', 'HttpService.getUserMetadata', 174);
 
     const headers: HttpHeaders = new HttpHeaders(
       {'OP-Token': token}
@@ -193,27 +195,28 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
       this.uploadFile(form, url, this.token).subscribe(response => {
           // noinspection UnnecessaryLocalVariableJS
           const res: HttpResponse<string> = response;
-          Logger.log('Response:' + res);
+          Logger.log('Response:' + res, 'HttpService.uploadNewFiles', 198);
           resolve(true);
       },
         error => {
           const err: HttpErrorResponse = error;
           if (err.status === HttpService.HTTP_BAD_REQUEST) {
-            Logger.error('User : HTTP_BAD_REQUEST - BAD IMAGE');
+            Logger.error('User : HTTP_BAD_REQUEST - BAD IMAGE', 'HttpService.uploadNewFiles', 204);
             resolve(false);
           } else if (err.status === HttpService.HTTP_TEMPORARY_REDIRECT) {
-            Logger.error('User : HTTP_TEMPORARY_REDIRECT - TOKEN EXPIRED');
+            Logger.error('User : HTTP_TEMPORARY_REDIRECT - TOKEN EXPIRED'
+              , 'HttpService.uploadNewFiles', 207);
             resolve();
           }
           // What was the error ?
-          Logger.error('Error: ' + err.message);
+          Logger.error('Upload File Error: ' + err.message, 'HttpService.uploadNewFiles', 212);
           reject(err.message);
         });
     });
   }
 
   private uploadFile(form: FormData, url: string, token: string): Observable<HttpResponse<string>> {
-    Logger.log('Uploading file ..');
+    Logger.log('Uploading file ..', 'HttpService.uploadFile', 198);
 
     const headers: HttpHeaders = new HttpHeaders(
       {'OP-Token': token}
@@ -233,13 +236,14 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
       const url = this.baseURL + removeCatURL + id + '/' + target;
       this.getRemoveTargetFilesFromUser(url, this.token).subscribe(response => {
           const res: HttpResponse<object> = response;
-          Logger.log('Response:' + JSON.stringify(res.body));
+          Logger.log('Response:' + JSON.stringify(res.body), 'HttpService.removeCategory', 239);
           resolve(res.body as RemoveUserCategoryResponseType);
         },
         error => {
           const err: HttpErrorResponse = error;
           if (err.status === HttpService.HTTP_TEMPORARY_REDIRECT) {
-            Logger.error('User : HTTP_TEMPORARY_REDIRECT - TOKEN EXPIRED');
+            Logger.error('User : HTTP_TEMPORARY_REDIRECT - TOKEN EXPIRED'
+              , 'HttpService.removeCategory', 245);
             const errorRes = {
               completed: 'fail',
               type: 'cat',
@@ -248,7 +252,7 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
             resolve(errorRes as RemoveUserCategoryResponseType);
           }
           // What was the error ?
-          Logger.error('Error: ' + err.message);
+          Logger.error('Remove Category Error: ' + err.message, 'HttpService.removeCategory', 256);
           const errorFail = {
             completed: 'fail',
             type: 'cat',
@@ -260,7 +264,8 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
   }
 
   private getRemoveTargetFilesFromUser(url: string, token: string): Observable<HttpResponse<object>> {
-    Logger.log('Getting user metadata ..');
+    Logger.log('Removing target files from user ..'
+      , 'HttpService.getRemoveTargetFilesFromUser', 239);
 
     const headers: HttpHeaders = new HttpHeaders(
       {'OP-Token': token}
@@ -280,13 +285,15 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
       const url = this.baseURL + this.removeFilesURL + GlobalVariables.userId + '/' + target + '/' + fileId;
       this.getRemoveTargetFilesFromUser(url, this.token).subscribe(response => {
           const res: HttpResponse<object> = response;
-          Logger.log('Response:' + JSON.stringify(res.body));
+          Logger.log('Response:' + JSON.stringify(res.body)
+            , 'HttpService.removeFiles', 239);
           resolve(res.body as RemoveUserFilesResponseType);
         },
         error => {
           const err: HttpErrorResponse = error;
           if (err.status === HttpService.HTTP_TEMPORARY_REDIRECT) {
-            Logger.error('User : HTTP_TEMPORARY_REDIRECT - TOKEN EXPIRED');
+            Logger.error('User : HTTP_TEMPORARY_REDIRECT - TOKEN EXPIRED'
+              , 'HttpService.removeFiles', 295);
             const errorRes = {
               completed: 'fail',
               type: 'items',
@@ -295,7 +302,7 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
             resolve(errorRes as RemoveUserFilesResponseType);
           }
           // What was the error ?
-          Logger.error('Error: ' + err.message);
+          Logger.error('Remove Files Error: ' + err.message, 'HttpService.removeFiles', 305);
           const errorFail = {
             completed: 'fail',
             type: 'items',
@@ -323,7 +330,7 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
   }
 
   private doSignOut(url: string, token: string): Observable<HttpResponse<string>> {
-    Logger.log('Signing user out ..');
+    Logger.log('Signing user out ..', 'HttpService.doSignOut', 333);
 
     const headers: HttpHeaders = new HttpHeaders(
       {'OP-Token': token}
@@ -344,24 +351,26 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
         '/' + targetUUID + '/' + fileUUID;
       this.getShareFileLink(url, this.token).subscribe(response => {
           const res: HttpResponse<string> = response;
-          Logger.log('Response:' + res.body);
+          Logger.log('Response:' + res.body, 'HttpService.createShareLink', 354);
           resolve(res.body);
         },
         error => {
           const err: HttpErrorResponse = error;
           if (err.status === HttpService.HTTP_TEMPORARY_REDIRECT) {
-            Logger.error('User : HTTP_TEMPORARY_REDIRECT - TOKEN EXPIRED');
+            Logger.error('User : HTTP_TEMPORARY_REDIRECT - TOKEN EXPIRED'
+              , 'HttpService.createShareLink', 361);
             resolve(GlobalConstants.tokenExpired);
           }
           // What was the error ?
-          Logger.error('Error: ' + err.message);
+          Logger.error('Create Share Link Error: ' + err.message
+            , 'HttpService.createShareLink', 366);
           reject(err.message);
         });
     });
   }
 
   private getShareFileLink(url: string, token: string): Observable<HttpResponse<string>> {
-    Logger.log('Getting share file link ..');
+    Logger.log('Getting share file link ..', 'HttpService.getShareFileLink', 373);
 
     const headers: HttpHeaders = new HttpHeaders(
       {'OP-Token': token}

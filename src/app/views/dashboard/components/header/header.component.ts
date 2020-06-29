@@ -20,13 +20,14 @@ export class HeaderComponent implements OnInit {
       this.metadata = data;
       if ( this.metadata !== undefined) {
         // noinspection TsLint
-        this.hasMetadata;
+        this.hasMetadata();
       }
     });
   }
 
-  get hasMetadata() {
-    return Logger.log('Header Metadata : ' + this.metadata.noOfTargets);
+  hasMetadata() {
+    Logger.log('Header Metadata : ' + this.metadata.noOfTargets
+      , 'HeaderComponent.hasMetadata', 30);
   }
 
   get noOfTargets(): number {

@@ -1,8 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ButtonConfig, ButtonType, ModalConfig, ModalResultType} from '../../model/modal-model';
-import {Logger} from '../../../../classes/utils/logger';
 import {ModalConstants} from '../../config/modal-constants';
+import {Logger} from '../../utilities/logger';
 
 const actionEvtTxt =  ModalConstants.modalBtnEventActionTxt; // 'action';
 const closeEvtTxt =  ModalConstants.modalBtnEventCloseTxt; // 'close';
@@ -29,7 +29,8 @@ export class ModalComponent implements OnInit {
 
   ngOnInit() {
     const modalConfig: ModalConfig = this.data;
-    Logger.log('ModalService Config: ' + modalConfig.title + ' : ' + modalConfig.message);
+    Logger.log('ModalService Config: ' + modalConfig.title + ' : ' + modalConfig.message
+      , 'ModalComponent.ngOnInit', 10);
     this.title = modalConfig.title;
     this.message = modalConfig.message;
     this.buttons = modalConfig.btn;

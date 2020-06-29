@@ -47,7 +47,7 @@ export class OverlayComponent implements OnInit {
         });
       }
     } catch (e) {
-      Logger.error('Dashboard Init Error: ' + e.message);
+      Logger.error('Overlay Init Error: ' + e.message, 'OverlayComponent.ngOnInit', 50);
     }
   }
 
@@ -66,7 +66,8 @@ export class OverlayComponent implements OnInit {
   }
 
   showItemToDisplay(show: boolean) {
-    Logger.log('In DASH - showItemToDisplay :' + show ? block : none);
+    Logger.log('In DASH - showItemToDisplay :' + show ? block.toUpperCase() : none.toUpperCase()
+      , 'OverlayComponent.ngOnInit', 50);
     const overlay: HTMLDivElement = this.overlay.nativeElement as HTMLDivElement;
     overlay.style.display = show ? block : none ;
   }

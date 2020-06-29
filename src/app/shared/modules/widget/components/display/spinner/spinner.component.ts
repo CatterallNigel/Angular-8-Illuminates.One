@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {WidgetVariables} from '../../../config/widget-variables';
+import {Logger} from '../../../utilities/logger';
 
 
 
@@ -10,12 +11,18 @@ import {WidgetVariables} from '../../../config/widget-variables';
 })
 export class SpinnerComponent implements OnInit {
 
+  spinner = false;
+
   constructor() { }
 
   ngOnInit() {
   }
 
   get isInProgress() {
+    if (this.spinner !== WidgetVariables.inProgress) {
+      this.spinner = WidgetVariables.inProgress;
+      Logger.log('Spinner has :  ' + (WidgetVariables.inProgress ? 'STARTED' : 'STOPPED'), 'SpinnerComponent.isInProgress', 20);
+    }
     return WidgetVariables.inProgress;
   }
 }

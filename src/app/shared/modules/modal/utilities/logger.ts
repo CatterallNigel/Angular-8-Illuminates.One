@@ -1,12 +1,12 @@
-import {GlobalConstants} from '../../global/global-constants';
+import {ModalConstants} from '../config/modal-constants';
 
 export class Logger {
 
   static log(message: string, method?: string, line?: number) {
     const METHOD =  method !== undefined ? method + ': ' : '' ;
     const LINE =  line == null ?  'Not-Listed' : line.toString();
-    const log = 'GLOBAL: ' + METHOD + 'LINE: ' + LINE + ' Msg: ' + message;
-    if (GlobalConstants.config.log.log) {
+    const log = 'MODAL: ' + METHOD + 'LINE: ' + LINE + ' Msg: ' + message;
+    if (ModalConstants.config.log.log) {
       console.log(log);
     }
   }
@@ -14,8 +14,8 @@ export class Logger {
   static error(message: string, method?: string, line?: number) {
     const METHOD =  method !== undefined ? method + ': ' : '' ;
     const LINE =  line == null ?  'Not-Listed' : line.toString();
-    const error = 'GLOBAL: ' + METHOD + 'LINE: ' + LINE + ' Msg: ' + message;
-    if (GlobalConstants.config.log.error) {
+    const error = 'MODAL: ' + METHOD + 'LINE: ' + LINE + ' Msg: ' + message;
+    if (ModalConstants.config.log.error) {
       console.error(error);
     }
   }

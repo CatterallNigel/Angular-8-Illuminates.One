@@ -34,13 +34,14 @@ export class DashComponent implements OnInit {
         }
       });
     } catch (e) {
-      Logger.error('Dashboard Init Error: ' + e.message);
+      Logger.error('Dashboard Init Error: ' + e.message, 'DashComponent.ngOnInit', 37);
     }
   }
 
   hasMetadata() {
     const metadata = this.metadata as UserMetaDataType;
-    Logger.log('Dash Metadata : ' + metadata.noOfTargets);
+    Logger.log('Dash Metadata : ' + metadata.noOfTargets
+      , 'DashComponent.hasMetadata', 37);
   }
 
   get quoteConfig() {

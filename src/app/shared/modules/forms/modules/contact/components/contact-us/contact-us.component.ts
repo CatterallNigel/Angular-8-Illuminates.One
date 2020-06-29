@@ -95,7 +95,7 @@ export class ContactUsComponent implements OnInit {
         strValue = this.defaultSelectOptionValue;
       }
       this.controls[key].setValue(strValue);
-      Logger.log('SET VAL - Name: ' + key + ' isVaild: ' + this.controls[key].invalid);
+      Logger.log('SET VAL - Name: ' + key + ' isVaild: ' + this.controls[key].invalid, 'ContactUsComponent.initValues', 98);
     });
 
     CustomValidators.hasContent(this.contactForm);
@@ -103,7 +103,7 @@ export class ContactUsComponent implements OnInit {
 
     if (UserFormsConstants.config.log.debug) {
       Object.keys(this.controls).forEach(key => {
-        Logger.log(' AFTER UPDATE - Name: ' + key + ' isVaild: ' + this.controls[key].invalid);
+        Logger.log(' AFTER UPDATE - Name: ' + key + ' isVaild: ' + this.controls[key].invalid, 'ContactUsComponent.initValues', 106);
       });
     }
 }
@@ -165,7 +165,7 @@ export class ContactUsComponent implements OnInit {
   async send() {
 
     if (this.isFormInValid) {
-      Logger.error('Form invalid');
+      Logger.error('Form invalid', 'ContactUsComponent.send', 168);
       return;
     }
 
@@ -177,7 +177,7 @@ export class ContactUsComponent implements OnInit {
     formData.append('country', this.country);
     formData.append('subject', this.message);
 
-    Logger.log('Sending ...');
+    Logger.log('Sending ...', 'ContactUsComponent.send', 180);
     // Start SPINNER ~~~~~~~~~~~~~
     UserFormsVariables.actionInProgress(true);
 
@@ -185,19 +185,19 @@ export class ContactUsComponent implements OnInit {
     try {
       msg = await this.ufs.action.postContactUs(formData, this.url);
     } catch (e) {
-      Logger.error(e.message);
+      Logger.error('Contact Error: ' + e.message, 'ContactUsComponent.send', 188);
     }
 
     // Stop SPINNER ~~~~~~~~~~~~~~
     UserFormsVariables.actionInProgress(false);
 
     // Response Message
-    Logger.log('Returned Msg: ' + msg.toString());
+    Logger.log('Returned Msg: ' + msg.toString(), 'ContactUsComponent.send', 195);
 
     // Inform user of MESSAGE
     this.ufs.modalContactConfig.message = msg.toString();
     const result = await this.ufs.modal.alertUser(this.ufs.modalContactConfig, '');
-    Logger.log('Event: ' + result);
+    Logger.log('Send Event: ' + result, 'ContactUsComponent.send', 200);
 
   // Reset Form and initialize
     this.formValues.reset();

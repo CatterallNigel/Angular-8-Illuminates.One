@@ -57,7 +57,7 @@ export class LandComponent implements OnInit {
           this.router.navigate([dashboard]);
         }
       }, error => {
-        Logger.error('Load Data Error Login: ' + error.toString());
+        Logger.error('Load Data Error Login: ' + error.toString(), 'LandComponent.preLoadData', 60);
         this.displayMessage(GlobalConstants.tryLater);
         resolve(false);
       });

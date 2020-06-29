@@ -1,6 +1,6 @@
 import {AbstractControl, FormControl, FormGroup} from '@angular/forms';
-import {Logger} from '../../../classes/utils/logger';
 import {UserFormsConstants} from '../config/user-forms-constants';
+import {Logger} from '../utilities/logger';
 
 const country = UserFormsConstants.customValidatorCountry; // 'country';
 const password = UserFormsConstants.customValidatorPassword; // 'password';
@@ -11,20 +11,21 @@ export class CustomValidators {
   // noinspection JSUnusedLocalSymbols
   static anyValidationTest(c: AbstractControl): { invalid: boolean } {
     if ( !UserFormsConstants.config.log.debug ) { return; }
-    Logger.log('Validation UPDATING ....');
+    Logger.log('Validation UPDATING ....', 'CustomValidators.anyValidationTest', 14);
     return;
   }
 
   static hasContent(c: AbstractControl): {invalid: boolean} {
     Object.keys(c.value).forEach(key => {
-      Logger.log('hasContent:validator - Field: ' + key);
+      Logger.log('hasContent:validator - Field: ' + key, 'CustomValidators.hasContent', 20);
       if (c.get(key).value === null || c.get(key).value.length === 0) {
-        Logger.log('hasContent:validator - NO CONTENT');
+        Logger.log('hasContent:validator - NO CONTENT', 'CustomValidators.hasContent', 20);
         c.get(key).setErrors({noContent: true});
         return { invalid: true };
       } else {
         c.get(key).setErrors(null);
-        Logger.log('Control HAS VALUE of: ' + c.get(key).value.toString());
+        Logger.log('Control HAS VALUE of: ' + c.get(key).value.toString(),
+          'CustomValidators.hasContent', 20);
       }
     });
     return null;
@@ -33,21 +34,25 @@ export class CustomValidators {
   static isCountry(c: AbstractControl): {invalid: boolean} {
     if ( c.get(country).value === null || c.get(country).value === UserFormsConstants.defaultOptionValue) {
       c.get(country).setErrors({ noCountry: true });
-      Logger.log('This country IS INVAILD : ' + c.get('country').value);
+      Logger.log('This country IS INVAILD : ' + c.get('country').value,
+        'CustomValidators.isCountry', 20);
       return {invalid: true};
     } else if ( c.get(country).value !== null && c.get(country).value !== UserFormsConstants.defaultOptionValue) {
-      Logger.log('This country IS Valid : ' + c.get('country').value);
+      Logger.log('This country IS Valid : ' + c.get('country').value,
+        'CustomValidators.isCountry', 20);
       c.get(country).setErrors(null);
     }
   }
 
   static passwordConfirming(c: AbstractControl): {invalid: boolean} {
     if (c.get(password).value !== c.get(confirmPassword).value) {
-      Logger.log('Password fail VALIDATION: ' + c.get('password').value + ' : ' + c.get(confirmPassword).value);
+      Logger.log('Password fail VALIDATION: ' + c.get('password').value + ' : '
+        + c.get(confirmPassword).value, 'CustomValidators.passwordConfirming', 20);
       c.get(confirmPassword).setErrors({ nomatch: true });
       return {invalid: true};
     } else {
-      Logger.log('passwordConfirmin:::Pswd: ' + c.get('password').value + ' PswdRep: ' + c.get(confirmPassword).value);
+      Logger.log('passwordConfirmin:::Pswd: ' + c.get('password').value + ' PswdRep: '
+        + c.get(confirmPassword).value, 'CustomValidators.passwordConfirming', 20);
       c.get(confirmPassword).setErrors(null);
     }
   }
@@ -66,7 +71,8 @@ export class CustomValidators {
   static printControlValidation(form: FormGroup) {
     if ( !UserFormsConstants.config.log.debug ) { return; }
     Object.keys(form.controls).forEach(key => {
-      Logger.log(' FormControl: ' + key + ' : ' + form.controls[key].invalid);
+      Logger.log(' FormControl: ' + key + ' : ' + form.controls[key].invalid
+        , 'CustomValidators.passwordConfirming', 20);
     });
   }
 

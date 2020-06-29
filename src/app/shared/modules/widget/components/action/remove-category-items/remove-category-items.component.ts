@@ -38,7 +38,8 @@ export class RemoveCategoryItemsComponent implements OnInit {
       this.currentTarget = remove.target;
       this.typeOfSelector = remove.isType;
       this.btnDesc = this.btnRemoveDescrtions.find(btn => btn.isType as FileTypes === remove.isType);
-      Logger.log('RemoveCategoryItemsComponent: ' + JSON.stringify(remove), 'set typeToRemove', 43);
+      Logger.log('RemoveCategoryItemsComponent: ' + JSON.stringify(remove),
+        'RemoveCategoryItemsComponent.typeToRemove', 43);
       this.updateClasses();
     }
   }
@@ -100,13 +101,14 @@ export class RemoveCategoryItemsComponent implements OnInit {
       error: WidgetConstants.modalRemoveCategoryErrorTitle});
     if (result) {
       if (this.currentTarget == null) {
-        Logger.error( 'Target NOT SET', 'removeCat', 73);
+        Logger.error( 'Target NOT SET', 'RemoveCategoryItemsComponent.removeCat', 73);
         return;
       }
       WidgetVariables.actionInProgress(true);
       await this.ws.action.removeCategory(this.currentTarget).then(success => {
           if (success.completed === 'success') {
-            Logger.log('REMOVE COMPONENT: Removed Category and ALL items');
+            Logger.log('REMOVE COMPONENT: Removed Category and ALL items'
+              , 'RemoveCategoryItemsComponent.removeCat', 110);
             this.doAction.emit(ActionEvents.LOAD_DATA);
           } else { // Token has expired
             this.ws.modal.alertUser(this.ws.modalRemoveErrorConfig, success.error);
@@ -115,7 +117,8 @@ export class RemoveCategoryItemsComponent implements OnInit {
         },
         error => {
           const errorFail = error as RemoveUserCategoryResponseType;
-          Logger.error('REMOVE COMPONENT: Remove Category ERROR: ' + errorFail.error);
+          Logger.error('REMOVE COMPONENT: Remove Category ERROR: ' + errorFail.error
+            , 'RemoveCategoryItemsComponent.removeCat', 120);
           this.ws.modal.alertUser(this.ws.modalRemoveErrorConfig, WidgetConstants.tryLater);
         });
       WidgetVariables.actionInProgress(false);
@@ -129,7 +132,7 @@ export class RemoveCategoryItemsComponent implements OnInit {
       WidgetVariables.actionInProgress(true);
       await this.ws.action.removeFiles(this.currentTarget, '*').then(success => {
           if (success.completed === 'success') {
-            Logger.log('Removed ALL file items');
+            Logger.log('Removed ALL file items', 'RemoveCategoryItemsComponent.removeFiles', 73);
             this.doAction.emit(ActionEvents.LOAD_DATA);
           } else { // Token has expired
             this.ws.modal.alertUser(this.ws.modalRemoveErrorConfig, success.error);
@@ -138,7 +141,8 @@ export class RemoveCategoryItemsComponent implements OnInit {
         },
         error => {
           const errorFail = error as RemoveUserFilesResponseType;
-          Logger.error('Remove Category ERROR: ' + errorFail.error);
+          Logger.error('Remove Category ERROR: ' + errorFail.error
+            , 'RemoveCategoryItemsComponent.removeFiles', 73);
           this.ws.modal.alertUser(this.ws.modalRemoveErrorConfig, WidgetConstants.tryLater);
         });
       WidgetVariables.actionInProgress(false);
@@ -150,12 +154,13 @@ export class RemoveCategoryItemsComponent implements OnInit {
       this.ws.modalRemoveConfig.title = msg.confirm;
       this.ws.modalRemoveErrorConfig.title = msg.error;
       this.ws.modal.alertUser(this.ws.modalRemoveConfig, WidgetConstants.removeAllFiles).then( success => {
-        Logger.log('Remove response: ' + success);
+        Logger.log('Remove response: ' + success,
+          'RemoveCategoryItemsComponent.confirmRemove', 167);
         if (success === 'action') {
-          Logger.log(msg.confirm + ' SUCCESS');
+          Logger.log(msg.confirm + ' SUCCESS', 'RemoveCategoryItemsComponent.confirmRemove', 167);
           resolve(true);
         } else {
-          Logger.log(msg.error + ' CANCELLED');
+          Logger.log(msg.error + ' CANCELLED', 'RemoveCategoryItemsComponent.confirmRemove', 167);
           resolve(false);
         }
       });

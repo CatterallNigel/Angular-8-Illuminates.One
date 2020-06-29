@@ -18,6 +18,7 @@ export class WidgetConstants {
   public static logoutImageBlack = '../../../../../assets/images/icons/logout-black-icon.png';
   // Tag Decriptor Text
   public static tagDescriptorNoTagText = 'No Tags Available';
+  public static trimStringNoOfCharacters = 15;
   // Headings
   public static catergoryTagsTitle = 'Category Tags';
   public static itemTagsTitle  = 'Item Tags';
@@ -75,9 +76,6 @@ export class WidgetConstants {
   public static modalRemoveCategoryErrorTitle = 'Error: Remove Category';
   public static modalRemoveItemsTitle = 'Remove File(s)';
   public static modalRemoveItemsErrorTitle = 'Error: Remove File(s)';
-  // File Actions
-  // public static modalRemoveFileTitle = 'Remove File';
-  // public static modalRemoveFileErrorTitle = 'Error: Remove File';
   // File Upload Component
   public static modalUploadCategoryTitle = 'Category Upload';
   public static modalUploadItemsTitle = 'Item(s) Upload';
@@ -95,10 +93,11 @@ export class WidgetConstants {
   // Quotation Generator
   public static changeQuotePeriod = 10000; // every 10 seconds
   public static headerQuotes = 'There is no light, without first darkness';
+  public static authorUnknownQuote = 'Unknown';
 
   public static fileRejected = 'The file: <NAME> was rejected by the server';
   public static fileUploadError = 'An error occurred uploading file: <NAME> please try again later';
-
+  public static fileNamePlaceholder = '<NAME>';
   // File Actions Component
   public static modalFileOpeTitle = 'File Open';
   public static modalFileOpenErrorTitle = 'File Open Error';

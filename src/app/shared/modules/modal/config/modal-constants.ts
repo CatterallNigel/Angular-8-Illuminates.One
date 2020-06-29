@@ -1,4 +1,26 @@
+export interface LogLevel {
+  debug?: boolean;
+  log: boolean;
+  error: boolean;
+}
+
+export interface Config {
+  mode: string;
+  log: LogLevel;
+}
+
+export type ConfigModel = Config;
+
 export class ModalConstants {
+
+  public static config: ConfigModel = {
+    mode: 'debug',
+    log: {
+      debug: false,
+      log: true,
+      error: true,
+    },
+  };
 
   // Modal Service
   public static  modalDialogDefaultId = 'modal-component'; // Style - found in sytles.less

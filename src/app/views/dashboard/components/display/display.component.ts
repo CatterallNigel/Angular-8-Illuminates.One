@@ -16,6 +16,7 @@ import {Router} from '@angular/router';
 import {TagType} from '../../../../shared/models/user/metadata.model';
 
 const imageClassName = GlobalConstants.displayImageCssClassName;
+const imageDivClassList = GlobalConstants.displayImageCSSDivClassList;
 const landing = GlobalConstants.landingPage;
 
 @Component({
@@ -59,7 +60,8 @@ export class DisplayComponent implements OnInit {
   }
 
   hasMetadata() {
-    Logger.log('Display Metadata : ' + this.metadata.noOfTargets);
+    Logger.log('Display Metadata : ' + this.metadata.noOfTargets
+      , 'DisplayComponent.hasMetadata', 63);
   }
 
   get addMe(): AddDescriptorType {
@@ -76,7 +78,7 @@ export class DisplayComponent implements OnInit {
   get showMe(): ImageContainerDescriptorType {
     return  {
       id: ImageContainerDisplayIdents.ITEMS,
-      classes: ['scroll', 'center-fit'],
+      classes: imageDivClassList,
       images: this.images,
       isType: FileTypes.ITEMS,
     };
@@ -90,7 +92,7 @@ export class DisplayComponent implements OnInit {
     Logger.log('This is the DISPLAY UUID: ' + targetUUID, 'DisplayComponent.loadItemsToDisplay', 84);
     const fileInfo: FileInfoType =  this.metadata.fileInfo.find(fi => fi.targetUUID === targetUUID);
     if (fileInfo === undefined || fileInfo.fileInfos === undefined) {
-      Logger.log('No files to display ...');
+      Logger.log('No files to display ...', 'DisplayComponent.loadItemsToDisplay', 95);
       return;
     }
     const images: ImageThumbDescriptorType[] = [];
@@ -113,7 +115,8 @@ export class DisplayComponent implements OnInit {
   loadImage(event: string) {
     const file = this.currentItems.find( fis => fis.fileUUID === event);
     const tags: TagType[] = this.currentItems.find(fis => fis.fileUUID === file.fileUUID).fileMetadata.tags;
-    Logger.log('Clicked file name: ' + file.fileName + ' Event:' + event);
+    Logger.log('Clicked file name: ' + file.fileName + ' Event:' + event
+      , 'DisplayComponent.loadImage', 95);
     const fileInfoModel: FileInfoModelType = {
       targetId: this.currentTarget,
       file,

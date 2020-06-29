@@ -7,6 +7,7 @@ import {WidgetService} from '../../../services/widget.service';
 
 const changeQuotePeriod = WidgetConstants.changeQuotePeriod == null ? 10000 : WidgetConstants.changeQuotePeriod;
 const defaultQuote = WidgetConstants.headerQuotes == null ? 'Your quote goes here' : WidgetConstants.headerQuotes;
+const authorUnknown = WidgetConstants.authorUnknownQuote == null ? 'Unknown' :  WidgetConstants.authorUnknownQuote;
 
 @Component({
   selector: 'app-quote-gen',
@@ -92,9 +93,10 @@ export class QuoteGenComponent implements OnInit, AfterViewInit {
       if (this.quotations != null) {
         const quoteNo = Math.floor(Math.random() * (Object.keys(this.quotations.quotes).length - 1));
         const selectedQuote = this.quotations.quotes[quoteNo];
-        const author = selectedQuote.quoteAuthor == null || selectedQuote.quoteAuthor.length === 0 ? 'unknown' : selectedQuote.quoteAuthor;
+        const author = selectedQuote.quoteAuthor == null ||
+              selectedQuote.quoteAuthor.length === 0 ? authorUnknown : selectedQuote.quoteAuthor;
         this.quote = selectedQuote.quoteText + ' | ' + author;
-        Logger.log('This quote is: ' + this.quote, 'QuoteGenComponent.generateQuote', 31);
+        // Logger.log('This quote is: ' + this.quote, 'QuoteGenComponent.generateQuote', 31);
       }
     } catch (e) {
       Logger.error('Quote Error: ' + e.message, 'QuoteGenComponent.generateQuote', 36);

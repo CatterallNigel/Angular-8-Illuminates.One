@@ -56,7 +56,7 @@ export class LoginComponent implements OnInit {
     Object.keys(this.controls).forEach(key => {
       const strValue = '';
       this.controls[key].setValue(strValue);
-      Logger.log('SET VAL - Name: ' + key + ' isVaild: ' + this.controls[key].invalid);
+      Logger.log('SET VAL - Name: ' + key + ' isVaild: ' + this.controls[key].invalid, 'LoginComponent.initValues', 59);
     });
 
     CustomValidators.hasContent(this.loginForm);
@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit {
 
     if (UserFormsConstants.config.log.debug) {
       Object.keys(this.controls).forEach(key => {
-        Logger.log(' AFTER UPDATE - Name: ' + key + ' isVaild: ' + this.controls[key].invalid);
+        Logger.log(' AFTER UPDATE - Name: ' + key + ' isVaild: ' + this.controls[key].invalid, 'LoginComponent.initValues', 67);
       });
     }
   }
@@ -93,22 +93,22 @@ export class LoginComponent implements OnInit {
 
     if (UserFormsConstants.config.log.debug) {
       Object.keys(this.controls).forEach(key => {
-        Logger.log(' AFTER UPDATE - Name: ' + key + ' isVaild: ' + this.controls[key].invalid);
+        Logger.log(' AFTER UPDATE - Name: ' + key + ' isVaild: ' + this.controls[key].invalid, 'LoginComponent.checkValidation', 96);
       });
     }
   }
   // END OF ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   async passwordReminder() {
     const result = await this.ufs.modal.alertUser(this.ufs.modalPwsdConfig, '');
-    Logger.log('Event: ' + result);
+    Logger.log('Reminder Event: ' + result, 'LoginComponent.passwordReminder', 103);
   }
 
   async login() {
     if (this.isDisabled) {
-      Logger.error('Form Invalid');
+      Logger.error('Form Invalid', 'LoginComponent.login', 108);
       return;
     }
-    Logger.log('Logging IN ..');
+    Logger.log('Logging IN ..', 'LoginComponent.login', 111);
     // Form data
     const formData = new FormData();
     formData.append(email, this.email);
@@ -120,21 +120,20 @@ export class LoginComponent implements OnInit {
     await this.ufs.action.postLogin(formData, this.url).then(user => {
       if (typeof user === 'string' || user instanceof String) {
         // Login Failed HTTP Unauthorized OR ERROR
-        Logger.log('User: ' + user);
+        Logger.log('Login rejected  - Msg: ' + user, 'LoginComponent.login', 123);
         // Inform user of MESSAGE
         this.ufs.modal.alertUser(this.ufs.modalLoginConfig, user as string);
         // Reset Form and initialize
         this.resetForm();
       } else {
         // Login Success
-        UserFormsVariables.actionInProgress(true);
-        Logger.log('User' + user.userId);
-        // Move to User Dashboard ~~~~~~~~~~~~~~~~~~~~~~
+        Logger.log('Login Successful: ' /* + user.id */, 'LoginComponent.login', 130);
+        // Report successful Sign-In  ~~~~~~~~~~~~~~~~~~~~~~
         this.doLogin.emit(ActionTypes.SIGNED_IN);
       }
     }, error => {
-        Logger.error('Server returned error: ' + error,  'LoginComponent.postLogin', 166);
-    }).catch(e =>  Logger.error('Login User Error; ' + e.message, 'LoginComponent.postLogin', 167));
+        Logger.error('Server returned error: ' + error,  'LoginComponent.postLogin', 135);
+    }).catch(e =>  Logger.error('Login User Error; ' + e.message, 'LoginComponent.login', 136));
 
     UserFormsVariables.actionInProgress(false);
   }

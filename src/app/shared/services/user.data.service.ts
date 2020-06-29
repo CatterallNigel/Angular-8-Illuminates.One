@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs/index';
 import {UserMetaDataType} from '../models';
 import {HttpService} from './http.service';
-import {Logger} from '../classes/utils/logger';
+import {Logger} from './utilities/logger';
 
 @Injectable({
   providedIn: 'root'
@@ -30,12 +30,14 @@ export class UserDataService {
             this.changeData(metadata as UserMetaDataType);
             resolve(true);
           }}, error => {
-          Logger.error('Dashboard Metadata Error: ' + error.toString());
+          Logger.error('Dashboard Metadata Error: ' + error.toString()
+            , 'UserDataService.loadData', 34);
           resolve(false);
         });
       });
     } catch (e) {
-      Logger.error('UserDataService loadData Error: ' + e.message);
+      Logger.error('UserDataService loadData Error: ' + e.message
+        , 'UserDataService.loadData', 40);
     }
   }
 
@@ -43,7 +45,7 @@ export class UserDataService {
     if ( typeof metadata === 'string' || metadata instanceof String ) {
       const error = metadata as string;
       if (error.search('expired')) {
-        Logger.log('Token Expired :) ...');
+        Logger.log('Token Expired :) ...', 'UserDataService.loadData', 48);
         return false;
       }
     }

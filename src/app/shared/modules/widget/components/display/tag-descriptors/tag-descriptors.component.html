@@ -3,7 +3,7 @@
 <div id="itemtags">
   <div class="tag" *ngFor="let tag of tags">
     <a title="{{tag.name}} | {{tag.value}}">
-      <div class="tag-text">{{tag.name | trimString: 15}} | {{tag.value}}</div>
+      <div class="tag-text">{{tag.name | trimString: this.noOfCharacters}} | {{tag.value}}</div>
     </a>
     <i class="material-icons tag-pin">radio_button_checked</i>
   </div>

@@ -4,6 +4,7 @@ import {WidgetConstants} from '../../../config/widget-constants';
 import {Logger} from '../../../utilities/logger';
 
 const noTagText = WidgetConstants.tagDescriptorNoTagText;
+const trimStringNoOfCharacters =  WidgetConstants.trimStringNoOfCharacters;
 
 @Component({
   selector: 'app-tag-descriptors',
@@ -25,7 +26,7 @@ export class TagDescriptorsComponent implements OnInit {
     this.currentItem = tags.fileId;
     this.isTypeOf = tags.isType;
     if (JSON.stringify(this.data) !== JSON.stringify(tags.data)) {
-      Logger.log('TagDescriptorsComponent -TAGS have CHANGED' , 'set tagsToDisplay', 26);
+      Logger.log('TagDescriptorsComponent -TAGS have CHANGED' , 'TagDescriptorsComponent.tagsToDisplay', 26);
       this.data = tags.data;
     }
   }
@@ -34,6 +35,7 @@ export class TagDescriptorsComponent implements OnInit {
 
   }
 
+  // noinspection JSUnusedGlobalSymbols
   get getTitle() {
     switch (this.isTypeOf) {
       case FileTypes.CATEGORY:
@@ -51,6 +53,10 @@ export class TagDescriptorsComponent implements OnInit {
     } else {
       return [{name: noTagText, value: ''}];
     }
+  }
+
+  get noOfCharacters() {
+    return trimStringNoOfCharacters;
   }
 
   compare( a: TagType, b: TagType ) {

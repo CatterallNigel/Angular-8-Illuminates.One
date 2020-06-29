@@ -124,7 +124,7 @@ export class DisplayImageThumbsComponent implements OnInit, AfterViewInit {
   }
 
   toggleStyle(id: string) {
-    this.div.querySelectorAll('.' + this.toggle.active)[0].className = this.toggle.inactive;
+    this.div.querySelector('.' + this.toggle.active).className = this.toggle.inactive;
     const images = this.div.querySelectorAll('img');
     images.forEach(img => {
       if (img.id === id) {
