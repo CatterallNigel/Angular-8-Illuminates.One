@@ -14,6 +14,7 @@ const block = GlobalConstants.cssDiplayBlock;
 const visible = GlobalConstants.cssVisibilityVisible;
 const hidden = GlobalConstants.cssVisibilityHidden;
 const fullWidth = GlobalConstants.cssFullWidth;
+const notAvailable = GlobalConstants.viewTextNotAvsilable;
 
 const fileActionButtons: FileActionButtons[] = [
   FileActionButtons.OPEN,
@@ -36,6 +37,7 @@ export class ViewFileComponent implements OnInit {
   @ViewChild('mainImage', {static: false}) mainImage: ElementRef;
   targetUUID: string;
   fileUUID: string;
+  fileGivenName: string;
 
   constructor(private data: UserDataService, private eventService: EventService, private router: Router ) { }
 
@@ -78,12 +80,17 @@ export class ViewFileComponent implements OnInit {
     };
   }
 
+  get givenName() {
+    return this.fileGivenName != null && this.fileGivenName !== '' ? this.fileGivenName : notAvailable;
+  }
+
   loadItemToDisplay(fileInfoModel: FileInfoModelType) {
     GlobalVariables.inProgress(true);
     this.targetUUID = fileInfoModel.targetId;
     this.fileUUID = fileInfoModel.file.fileUUID;
+    this.fileGivenName = fileInfoModel.file.fileName;
     Logger.log('Displaying IMAGE fileId: ' + fileInfoModel.file.fileUUID
-      , 'ViewFileComponent.loadItemToDisplay', 84);
+      , 'ViewFileComponent.loadItemToDisplay', 92);
     const url = GlobalConstants.getViewImageURL + GlobalVariables.userId + '/' + this.targetUUID  + '/' + this.fileUUID;
     const image: HTMLImageElement = this.mainImage.nativeElement.querySelector(img) as HTMLImageElement;
     image.src = url;
@@ -92,7 +99,7 @@ export class ViewFileComponent implements OnInit {
   }
 
   showImage( image: HTMLImageElement, event: Event) {
-    Logger.log('Making image visible ...', 'ViewFileComponent.showImage', 94);
+    Logger.log('Making image visible ...', 'ViewFileComponent.showImage', 102);
     this.showPin();
     image.style.visibility = visible;
     this.eventService.onMainImageLoaded(true);
@@ -103,12 +110,12 @@ export class ViewFileComponent implements OnInit {
   }
 
   showPin() {
-    Logger.log('Showing PIN ..', 'ViewFileComponent.showPin', 105);
+    Logger.log('Showing PIN ..', 'ViewFileComponent.showPin', 113);
     try {
       this.mainImage.nativeElement.querySelector('#close').style.display = block;
     } catch (e) {
       Logger.error('Error in displaying pin ! : ' +  e.message
-        , 'ViewFileComponent.showPin', 109);
+        , 'ViewFileComponent.showPin', 118);
     }
   }
 
@@ -116,12 +123,12 @@ export class ViewFileComponent implements OnInit {
     let classe;
     switch (command) {
       case GlobalConstants.horizontal:
-        Logger.log('Commanded FLIP-Y...', 'ViewFileComponent.flipImage', 118);
+        Logger.log('Commanded FLIP-Y...', 'ViewFileComponent.flipImage', 126);
         classe = GlobalConstants.horizontalCSSClass;
         this.changeClass(classe);
         break;
       case GlobalConstants.vertical:
-        Logger.log('Commanded FLIP-Y...', 'ViewFileComponent.flipImage', 123);
+        Logger.log('Commanded FLIP-Y...', 'ViewFileComponent.flipImage', 131);
         classe = GlobalConstants.verticalCSSClass;
         this.changeClass(classe);
         break;
@@ -132,10 +139,10 @@ export class ViewFileComponent implements OnInit {
     const image: HTMLImageElement = this.mainImage.nativeElement.querySelector(img) as HTMLImageElement;
     const classes: DOMTokenList = image.classList;
     if (classes.contains(classe)) {
-      Logger.log('Removing :' + classe + ' from IMAGE ..', 'ViewFileComponent.changeClass', 134);
+      Logger.log('Removing :' + classe + ' from IMAGE ..', 'ViewFileComponent.changeClass', 142);
       classes.remove(classe);
     } else {
-      Logger.log('Adding :' + classe + ' from IMAGE ..', 'ViewFileComponent.changeClass', 137);
+      Logger.log('Adding :' + classe + ' from IMAGE ..', 'ViewFileComponent.changeClass', 145);
       classes.add(classe);
     }
   }

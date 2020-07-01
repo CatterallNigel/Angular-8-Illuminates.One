@@ -34,7 +34,7 @@ export class QuoteGenComponent implements OnInit, AfterViewInit {
   set quotationConfig(config: QuotationConfigType) {
     if (this.quoteData == null || this.quoteData !== config.dataFile ||
       this.interval !== config.changeInterval || this.noOfWords !== config.noOfWords ) {
-      Logger.log('Quote Config is: ' + JSON.stringify(config), 'QuoteGenComponent.quotationConfig', 34);
+      Logger.log('Quote Config is: ' + JSON.stringify(config), 'QuoteGenComponent.quotationConfig', 36);
       this.quoteData = config.dataFile;
       this.interval = config.changeInterval;
       this.noOfWords = config.noOfWords;
@@ -73,7 +73,7 @@ export class QuoteGenComponent implements OnInit, AfterViewInit {
         quotes,
         interval: this.interval,
       };
-      Logger.log('Quotes: ' + Object.keys(this.quotations.quotes).length, 'QuoteGenComponent.loadQuotesFromData', 64);
+      Logger.log('Quotes: ' + Object.keys(this.quotations.quotes).length, 'QuoteGenComponent.loadQuotesFromData', 76);
       this.generateQuote();
     });
   }
@@ -96,10 +96,10 @@ export class QuoteGenComponent implements OnInit, AfterViewInit {
         const author = selectedQuote.quoteAuthor == null ||
               selectedQuote.quoteAuthor.length === 0 ? authorUnknown : selectedQuote.quoteAuthor;
         this.quote = selectedQuote.quoteText + ' | ' + author;
-        // Logger.log('This quote is: ' + this.quote, 'QuoteGenComponent.generateQuote', 31);
+        // Logger.log('This quote is: ' + this.quote, 'QuoteGenComponent.generateQuote', 98);
       }
     } catch (e) {
-      Logger.error('Quote Error: ' + e.message, 'QuoteGenComponent.generateQuote', 36);
+      Logger.error('Quote Error: ' + e.message, 'QuoteGenComponent.generateQuote', 102);
     }
     this.getAnotherQuote();
   }

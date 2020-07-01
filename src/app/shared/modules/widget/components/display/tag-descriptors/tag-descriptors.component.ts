@@ -26,7 +26,7 @@ export class TagDescriptorsComponent implements OnInit {
     this.currentItem = tags.fileId;
     this.isTypeOf = tags.isType;
     if (JSON.stringify(this.data) !== JSON.stringify(tags.data)) {
-      Logger.log('TagDescriptorsComponent -TAGS have CHANGED' , 'TagDescriptorsComponent.tagsToDisplay', 26);
+      Logger.log('TagDescriptorsComponent -TAGS have CHANGED' , 'TagDescriptorsComponent.tagsToDisplay', 29);
       this.data = tags.data;
     }
   }

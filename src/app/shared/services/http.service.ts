@@ -24,6 +24,7 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
   static HTTP_STATUS_NOT_ACCEPTABLE = 406;
   static HTTP_TEMPORARY_REDIRECT = 307;
   static HTTP_BAD_REQUEST = 400;
+  static HTTP_CONFLICT = 409;
 
   baseURL = GlobalConstants.baseURL;
   metadataURL = GlobalConstants.userMetadataURL;
@@ -40,14 +41,14 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
 
   // noinspection JSUnusedGlobalSymbols
   static printToConsole(text: string) {
-    return Logger.log('HTTP-Service Msg: ' + text, 'HttpService.printToConsole', 43);
+    return Logger.log('HTTP-Service Msg: ' + text, 'HttpService.printToConsole', 44);
   }
 
   private prinResponseHeaders(headers: HttpHeaders) {
     if (GlobalConstants.config.log.log) {
-      Logger.log('Printing Headers ....', 'HttpService.prinResponseHeaders', 43);
+      Logger.log('Printing Headers ....', 'HttpService.prinResponseHeaders', 49);
       headers.keys().map((key) =>
-        Logger.log(`Header:${key} Value: ${headers.get(key)}`, 'HttpService.prinResponseHeaders', 49));
+        Logger.log(`Header:${key} Value: ${headers.get(key)}`, 'HttpService.prinResponseHeaders', 50));
     }
   }
   // LANDING ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -58,11 +59,11 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
       const url = this.baseURL + contactURL;
       this.postForm(form, url).subscribe( response  => {
           const res: HttpResponse<string> = response;
-          Logger.log('Response Received: ' + res.body, 'HttpService.postContactUs', 61);
+          Logger.log('Response Received: ' + res.body, 'HttpService.postContactUs', 62);
           resolve(res.body);
         },
         error => {
-          Logger.error(error, 'HttpService.postContactUs', 65);
+          Logger.error(error, 'HttpService.postContactUs', 66);
           reject('');
         }
       );
@@ -74,17 +75,17 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
       const url = this.baseURL + registerURL;
       this.postForm(form, url).subscribe( response  => {
           const res: HttpResponse<string> = response;
-          Logger.log('Response Received: ' + res.body, 'HttpService.postRegister', 77);
+          Logger.log('Response Received: ' + res.body, 'HttpService.postRegister', 78);
           resolve(res.body);
         },
         error => {
           const err: HttpErrorResponse = error;
           if ( err.status === HttpService.HTTP_STATUS_NOT_ACCEPTABLE ) {
-            Logger.error('User : HTTP_STATUS_NOT_ACCEPTABLE', 'HttpService.postRegister', 83);
+            Logger.error('User : HTTP_STATUS_NOT_ACCEPTABLE', 'HttpService.postRegister', 84);
             resolve(GlobalConstants.emailAddressInvalid); // this is the app
           }
           // What was the error ?
-          Logger.error('Register Error: ' + err.message, 'HttpService.postRegister', 87);
+          Logger.error('Register Error: ' + err.message, 'HttpService.postRegister', 88);
           reject(err.message);
         }
       );
@@ -99,7 +100,7 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
          // GET HEADERS - GET and Save Security Token etc ...
           this.prinResponseHeaders(res.headers);
           this.token =  res.headers.get(authHeader);
-          Logger.log('Token: ' + this.token, 'HttpService.postLogin', 102);
+          Logger.log('Token: ' + this.token, 'HttpService.postLogin', 103);
           const user: UserInfo = res.body as UserInfo;
           GlobalVariables.userId = user.userId;
           resolve({id: user.userId}); // JSON Object - Basic, user details
@@ -107,11 +108,15 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
         error => {
           const err: HttpErrorResponse = error;
           if ( err.status === HttpService.HTTP_STATUS_UNAUTHORIZED ) {
-            Logger.error('User : HTTP_STATUS_UNAUTHORIZED', 'HttpService.postLogin', 110);
+            Logger.error('User : HTTP_STATUS_UNAUTHORIZED', 'HttpService.postLogin', 111);
             resolve(GlobalConstants.loginFailed);
           }
+          if ( err.status === HttpService.HTTP_CONFLICT ) {
+            Logger.error('User : HTTP_CONFLICT', 'HttpService.postLogin', 115);
+            resolve(GlobalConstants.loginConflict);
+          }
           // What was the error ?
-          Logger.error('Login Error: ' + err.message, 'HttpService.postLogin', 114);
+          Logger.error('Login Error: ' + err.message, 'HttpService.postLogin', 119);
           reject(err.message);
         }
       );
@@ -119,7 +124,7 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
   }
 
   private login(form: FormData, url: string): Observable<HttpResponse<object>> {
-    Logger.log('Login Post URL: ' + url, 'HttpService.login', 122);
+    Logger.log('Login Post URL: ' + url, 'HttpService.login', 127);
 
     return this.http.post(url, form,
       {
@@ -129,7 +134,7 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
   }
 
   private postForm(form: FormData, url: string): Observable<HttpResponse<string>> {
-    Logger.log('Form Post URL: ' + url, 'HttpService.postForm', 132);
+    Logger.log('Form Post URL: ' + url, 'HttpService.postForm', 137);
     return this.http.post(url, form,
       {
         responseType: 'text',
@@ -149,11 +154,11 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
   async requestMetaData(): Promise<any> {
     return new Promise((resolve, reject) => {
       const id: string = GlobalVariables.userId;
-      // Logger.log('User ID: ' + id + ' Token: ' + this.token, 'HttpService.requestMetaData', 152);
+      // Logger.log('User ID: ' + id + ' Token: ' + this.token, 'HttpService.requestMetaData', 157);
       const url = this.baseURL + this.metadataURL  + id;
       this.getUserMetadata(url, this.token).subscribe(response => {
           const res: HttpResponse<object> = response;
-          Logger.log('Response:' + res.body, 'HttpService.requestMetaData', 156);
+          Logger.log('Response:' + res.body, 'HttpService.requestMetaData', 161);
           resolve(res.body as UserMetaDataType);
         },
         error => {
@@ -164,14 +169,14 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
             resolve(GlobalConstants.tokenExpired);
           }
           // What was the error ?
-          Logger.error('Metadata Error: ' + err.message, 'HttpService.requestMetaData', 166);
+          Logger.error('Metadata Error: ' + err.message, 'HttpService.requestMetaData', 172);
           reject(err.message);
         });
     });
   }
 
   private getUserMetadata(url: string, token: string): Observable<HttpResponse<object>> {
-    Logger.log('Getting user metadata ..', 'HttpService.getUserMetadata', 174);
+    Logger.log('Getting user metadata ..', 'HttpService.getUserMetadata', 179);
 
     const headers: HttpHeaders = new HttpHeaders(
       {'OP-Token': token}
@@ -195,13 +200,13 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
       this.uploadFile(form, url, this.token).subscribe(response => {
           // noinspection UnnecessaryLocalVariableJS
           const res: HttpResponse<string> = response;
-          Logger.log('Response:' + res, 'HttpService.uploadNewFiles', 198);
+          Logger.log('Response:' + res, 'HttpService.uploadNewFiles', 203);
           resolve(true);
       },
         error => {
           const err: HttpErrorResponse = error;
           if (err.status === HttpService.HTTP_BAD_REQUEST) {
-            Logger.error('User : HTTP_BAD_REQUEST - BAD IMAGE', 'HttpService.uploadNewFiles', 204);
+            Logger.error('User : HTTP_BAD_REQUEST - BAD IMAGE', 'HttpService.uploadNewFiles', 209);
             resolve(false);
           } else if (err.status === HttpService.HTTP_TEMPORARY_REDIRECT) {
             Logger.error('User : HTTP_TEMPORARY_REDIRECT - TOKEN EXPIRED'
@@ -209,14 +214,14 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
             resolve();
           }
           // What was the error ?
-          Logger.error('Upload File Error: ' + err.message, 'HttpService.uploadNewFiles', 212);
+          Logger.error('Upload File Error: ' + err.message, 'HttpService.uploadNewFiles', 217);
           reject(err.message);
         });
     });
   }
 
   private uploadFile(form: FormData, url: string, token: string): Observable<HttpResponse<string>> {
-    Logger.log('Uploading file ..', 'HttpService.uploadFile', 198);
+    Logger.log('Uploading file ..', 'HttpService.uploadFile', 224);
 
     const headers: HttpHeaders = new HttpHeaders(
       {'OP-Token': token}
@@ -236,7 +241,7 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
       const url = this.baseURL + removeCatURL + id + '/' + target;
       this.getRemoveTargetFilesFromUser(url, this.token).subscribe(response => {
           const res: HttpResponse<object> = response;
-          Logger.log('Response:' + JSON.stringify(res.body), 'HttpService.removeCategory', 239);
+          Logger.log('Response:' + JSON.stringify(res.body), 'HttpService.removeCategory', 244);
           resolve(res.body as RemoveUserCategoryResponseType);
         },
         error => {
@@ -252,7 +257,7 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
             resolve(errorRes as RemoveUserCategoryResponseType);
           }
           // What was the error ?
-          Logger.error('Remove Category Error: ' + err.message, 'HttpService.removeCategory', 256);
+          Logger.error('Remove Category Error: ' + err.message, 'HttpService.removeCategory', 260);
           const errorFail = {
             completed: 'fail',
             type: 'cat',
@@ -302,7 +307,7 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
             resolve(errorRes as RemoveUserFilesResponseType);
           }
           // What was the error ?
-          Logger.error('Remove Files Error: ' + err.message, 'HttpService.removeFiles', 305);
+          Logger.error('Remove Files Error: ' + err.message, 'HttpService.removeFiles', 310);
           const errorFail = {
             completed: 'fail',
             type: 'items',
@@ -330,7 +335,7 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
   }
 
   private doSignOut(url: string, token: string): Observable<HttpResponse<string>> {
-    Logger.log('Signing user out ..', 'HttpService.doSignOut', 333);
+    Logger.log('Signing user out ..', 'HttpService.doSignOut', 338);
 
     const headers: HttpHeaders = new HttpHeaders(
       {'OP-Token': token}
@@ -351,7 +356,7 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
         '/' + targetUUID + '/' + fileUUID;
       this.getShareFileLink(url, this.token).subscribe(response => {
           const res: HttpResponse<string> = response;
-          Logger.log('Response:' + res.body, 'HttpService.createShareLink', 354);
+          Logger.log('Response:' + res.body, 'HttpService.createShareLink', 359);
           resolve(res.body);
         },
         error => {
@@ -370,7 +375,7 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
   }
 
   private getShareFileLink(url: string, token: string): Observable<HttpResponse<string>> {
-    Logger.log('Getting share file link ..', 'HttpService.getShareFileLink', 373);
+    Logger.log('Getting share file link ..', 'HttpService.getShareFileLink', 378);
 
     const headers: HttpHeaders = new HttpHeaders(
       {'OP-Token': token}

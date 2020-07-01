@@ -7,6 +7,8 @@ import {WidgetVariables} from '../../../config/widget-variables';
 
 const none = WidgetConstants.cssDisplayNone;
 const namePlaceholder = WidgetConstants.fileNamePlaceholder;
+// For unique ID's in reuse of button description
+let buttonId = 0;
 
 @Component({
   selector: 'app-file-upload',
@@ -18,6 +20,7 @@ export class FileUploadComponent implements OnInit {
   @ViewChild('upload', {static: false}) upload: ElementRef;
   currentTarget: string;
   typeOfSelector: FileTypes;
+  none: FileTypes = FileTypes.NONE;
   url: string;
   btnDescription: ButtonDesciptorType[] = WidgetConstants.fileUploadButtonsDescriptors;
   btnDesc: ButtonDesciptorType;
@@ -25,11 +28,17 @@ export class FileUploadComponent implements OnInit {
   @Input()
   set typeToAdd(add: AddDescriptorType) {
     if (this.currentTarget == null || this.currentTarget !== add.target || this.typeOfSelector !== add.isType) {
+      if (this.btnDesc == null) {
+        buttonId += 1;
+      }
       this.currentTarget = add.target;
       this.typeOfSelector = add.isType;
       this.url = add.url;
       this.btnDesc = this.btnDescription.find(btn => btn.isType as FileTypes === this.typeOfSelector);
-      Logger.log('FileUploadComponent: ' + JSON.stringify(add), 'FileUploadComponent.typeToAdd', 39);
+      if (this.btnDesc != null && this.btnDesc.id.indexOf('-') !== -1) {
+        this.btnDesc.id += '-' + buttonId; // For uniqueness of the input ID
+      }
+      Logger.log('FileUploadComponent: ' + JSON.stringify(add), 'FileUploadComponent.typeToAdd', 41);
       this.populateText();
     }
   }
@@ -75,15 +84,15 @@ export class FileUploadComponent implements OnInit {
       }, 0);
   }
 
-  // Upload new File(s) to Category
+  // Upload new File(s) to Category or Items
   async handleFiles(files: FileList) {
-    Logger.log('No of File to upload: ' + files.length, 'FileUploadComponent.handleFiles', 80);
+    Logger.log('No of File to upload: ' + files.length, 'FileUploadComponent.handleFiles', 89);
     // noinspection TsLint
     for (let i = 0; i < files.length; i++) {
       WidgetVariables.actionInProgress(true);
       const file = files[i];
       const formData = new FormData();
-      Logger.log('File is type of : ' + typeof(file), 'FileUploadComponent.handleFiles', 86);
+      Logger.log('File is type of : ' + typeof(file), 'FileUploadComponent.handleFiles', 95);
       formData.append('file', file);
       formData.append('name', (Math.round((new Date()).getTime() / 1000)).toString());
       if (this.typeOfSelector === FileTypes.ITEMS) {
@@ -95,11 +104,10 @@ export class FileUploadComponent implements OnInit {
           // Token expired
           this.ws.modal.alertUser(this.ws.modalUploadConfig, WidgetConstants.tokenExpired);
           this.doAction.emit(ActionEvents.TOKEN_EXPIRED);
-
         } else if (result) {
-          Logger.log('File uploaded successfully ...', 'FileUploadComponent.handleFiles', 100);
+          Logger.log('File uploaded successfully ...', 'FileUploadComponent.handleFiles', 108);
           // Reload metadata as NEW Files !!
-          this.doAction.emit(ActionEvents.LOAD_DATA);
+          this.doAction.emit(ActionEvents.FILE_LOADED); // Notifies THIS file have been loaded..
         } else {
           // Failure - bad image ...
           const msg = WidgetConstants.fileRejected.replace(namePlaceholder, file.name);
@@ -111,6 +119,8 @@ export class FileUploadComponent implements OnInit {
       });
       WidgetVariables.actionInProgress(false);
     }
+    // Required when the calling parent component is refreshed by the results
+    this.doAction.emit(ActionEvents.LOAD_COMPLETE); // Notifies all files have been loaded..
     files = null;
   }
 }

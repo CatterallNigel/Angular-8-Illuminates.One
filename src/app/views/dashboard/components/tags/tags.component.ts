@@ -5,12 +5,14 @@ import {TagType, UserMetaDataType} from '../../../../shared/models';
 import {GlobalConstants, GlobalVariables} from '../../../../shared';
 import {Logger} from '../../../../shared/classes';
 import {FileTagDesciptorType, FileTypes, RemoveDescriptorType, ActionEvents} from '../../../../shared/modules/widget';
+import {AddDescriptorType} from '../../../../shared/modules/widget/models/common-model';
 
 
 const hidden = GlobalConstants.cssVisibilityHidden;
 const visible = GlobalConstants.cssVisibilityVisible;
 const blank = GlobalConstants.HTMLWindowTargetBlank;
 const landing = GlobalConstants.landingPage;
+const placeholderUUID =  GlobalConstants.tagsNoCatPlaceholder;
 
 @Component({
   selector: 'app-dash-tags',
@@ -45,7 +47,7 @@ export class TagsComponent implements OnInit {
     if (this.eventService.subscription === undefined) {
       this.eventService.subscription = this.eventService
         .invokeComponenstLoadItems.subscribe((id: string) => {
-          Logger.log('Subscribing to LOAD event', 'TagsComponent.ngOnInit' , 48);
+          Logger.log('Subscribing to LOAD event', 'TagsComponent.ngOnInit' , 50);
           this.loadTags(id);
         });
     } else {
@@ -67,12 +69,16 @@ export class TagsComponent implements OnInit {
     }
   }
 
-  get addMe(): RemoveDescriptorType {
+  get addMe(): AddDescriptorType {
     return { isType: FileTypes.CATEGORY, target: this.currentTarget, url: GlobalConstants.catFileUploadURL};
   }
 
   get removeMe(): RemoveDescriptorType {
-    return { isType: FileTypes.CATEGORY, target: this.currentTarget};
+    if (this.currentTarget !== '') {
+      return {isType: FileTypes.CATEGORY, target: this.currentTarget};
+    } else {
+      return {isType: FileTypes.NONE, target: placeholderUUID};
+    }
   }
 
   get displayMe(): FileTagDesciptorType {
@@ -85,12 +91,12 @@ export class TagsComponent implements OnInit {
 
   hasMetadata() {
     Logger.log('Tag Metadata : ' + this.metadata.noOfTargets
-      , 'TagsComponent.hasMetadata' , 88);
+      , 'TagsComponent.hasMetadata' , 93);
   }
 
   showHideCatTags(hide: boolean) {
     Logger.log('Setting Show-Hide val: ' + (hide ? 'Hidden' : 'Visible')
-      , 'TagsComponent.showHideCatTags' , 92);
+      , 'TagsComponent.showHideCatTags' , 99);
     if (this.catTagContainer !== undefined) {
       const container: HTMLDivElement = this.catTagContainer.nativeElement;
       container.style.visibility = hide ? hidden : visible;
@@ -109,17 +115,19 @@ export class TagsComponent implements OnInit {
   }
 
   loadTags(targetUUID: string) {
-    Logger.log('This is the TAGS UUID: ' + targetUUID, 'TagsComponent.loadTags', 112);
+    Logger.log('This is the TAGS UUID: ' + targetUUID, 'TagsComponent.loadTags', 118);
     this.currentTarget = targetUUID;
     try {
     if (this.metadata.fileInfo.find(fi => fi.targetUUID === targetUUID) === undefined) {
-      Logger.log('Cannot find target:' + targetUUID, 'TagsComponent.loadTags', 116);
+      Logger.log('Cannot find target:' + targetUUID, 'TagsComponent.loadTags', 122);
+      // Clean up artifacts..
+      this.tags = [];
       return;
     }
     this.tags = this.metadata.fileInfo.find(fi => fi.targetUUID === targetUUID).targetMetadata.tags;
     } catch (e) {
       Logger.error('loadTag in forEach ERROR: ' + e.message
-        , 'TagsComponent.loadTags', 121);
+        , 'TagsComponent.loadTags', 129);
     }
   }
 
@@ -128,7 +136,7 @@ export class TagsComponent implements OnInit {
     window.open(guideURL, blank);
   }
 
-  executeAction(typ: ActionEvents) {
+  async executeAction(typ: ActionEvents) {
     switch (typ) {
       case ActionEvents.SIGNED_OUT:
       case ActionEvents.TOKEN_EXPIRED:
@@ -136,11 +144,13 @@ export class TagsComponent implements OnInit {
         GlobalVariables.userId = undefined;
         this.router.navigate([landing]);
         break;
-      case ActionEvents.LOAD_DATA:
+      case ActionEvents.FILE_DELETED:
+      case ActionEvents.FILE_LOADED:
         GlobalVariables.target = undefined;
-        this.data.loadData();
+        await this.data.loadData().then(result => {
+        Logger.log('Tags Load Data Result: ' + result, 'TagsComponent.executeAction', 151);
+      });
         break;
     }
   }
-
 }

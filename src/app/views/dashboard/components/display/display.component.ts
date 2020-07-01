@@ -65,7 +65,11 @@ export class DisplayComponent implements OnInit {
   }
 
   get addMe(): AddDescriptorType {
-    return { isType: FileTypes.ITEMS, target: this.currentTarget, url: GlobalConstants.itemFileUploadURL};
+    if (this.currentTarget !== '') {
+      return {isType: FileTypes.ITEMS, target: this.currentTarget, url: GlobalConstants.itemFileUploadURL};
+    } else {
+      return {isType: FileTypes.NONE, target: this.currentTarget, url: GlobalConstants.itemFileUploadURL};
+    }
   }
 
   get removeMe(): RemoveDescriptorType {
@@ -84,15 +88,21 @@ export class DisplayComponent implements OnInit {
     };
   }
 
+  get hasCategory() {
+    return this.currentTarget !== '';
+  }
+
   get itemCounter() {
     return this.itemCount;
   }
 
   loadItemsToDisplay(targetUUID: string) {
-    Logger.log('This is the DISPLAY UUID: ' + targetUUID, 'DisplayComponent.loadItemsToDisplay', 84);
+    Logger.log('This is the DISPLAY UUID: ' + targetUUID, 'DisplayComponent.loadItemsToDisplay', 100);
     const fileInfo: FileInfoType =  this.metadata.fileInfo.find(fi => fi.targetUUID === targetUUID);
     if (fileInfo === undefined || fileInfo.fileInfos === undefined) {
-      Logger.log('No files to display ...', 'DisplayComponent.loadItemsToDisplay', 95);
+      Logger.log('No files to display ...', 'DisplayComponent.loadItemsToDisplay', 103);
+      this.itemCount = 0;
+      this.images = [];
       return;
     }
     const images: ImageThumbDescriptorType[] = [];
@@ -105,7 +115,7 @@ export class DisplayComponent implements OnInit {
         id: fis.fileUUID,
         classes: imageClassName,
       };
-      Logger.log('We are adding an image .... ', 'DisplayComponent.loadItemsToDisplay', 84);
+      Logger.log('We are adding an image .... ', 'DisplayComponent.loadItemsToDisplay', 118);
       images.push(image);
     });
     this.images = images;
@@ -116,7 +126,7 @@ export class DisplayComponent implements OnInit {
     const file = this.currentItems.find( fis => fis.fileUUID === event);
     const tags: TagType[] = this.currentItems.find(fis => fis.fileUUID === file.fileUUID).fileMetadata.tags;
     Logger.log('Clicked file name: ' + file.fileName + ' Event:' + event
-      , 'DisplayComponent.loadImage', 95);
+      , 'DisplayComponent.loadImage', 128);
     const fileInfoModel: FileInfoModelType = {
       targetId: this.currentTarget,
       file,
@@ -132,7 +142,8 @@ export class DisplayComponent implements OnInit {
         GlobalVariables.userId = undefined;
         this.router.navigate([landing]);
         break;
-      case ActionEvents.LOAD_DATA:
+      case ActionEvents.FILE_DELETED:
+      case ActionEvents.FILE_LOADED:
         await this.data.loadData().then(() => {
           this.loadItemsToDisplay(GlobalVariables.target);
         });

@@ -21,7 +21,7 @@ export class SpinnerComponent implements OnInit {
   get isInProgress() {
     if (this.spinner !== WidgetVariables.inProgress) {
       this.spinner = WidgetVariables.inProgress;
-      Logger.log('Spinner has :  ' + (WidgetVariables.inProgress ? 'STARTED' : 'STOPPED'), 'SpinnerComponent.isInProgress', 20);
+      Logger.log('Spinner has :  ' + (WidgetVariables.inProgress ? 'STARTED' : 'STOPPED'), 'SpinnerComponent.isInProgress', 24);
     }
     return WidgetVariables.inProgress;
   }

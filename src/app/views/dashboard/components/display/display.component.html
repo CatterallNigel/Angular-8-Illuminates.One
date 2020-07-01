@@ -1,3 +1,4 @@
+<div *ngIf="this.hasCategory; else noItemText">
 <div class="icon-item-header drop-header">
   <img src="../../../../../assets/images/home/circle-counter.png" class="circle-item">
   <div class="circle-text-lrg">{{itemCounter | prefixPadNoToString: '&nbsp;'}}</div>
@@ -6,6 +7,14 @@
 <app-display-image-thumbs [thumbsTobeDisplayed]="showMe" (doLoadImage)="loadImage($event)"></app-display-image-thumbs>
 <app-remove-category-items [typeToRemove]="removeMe" (doAction)="executeAction($event)"></app-remove-category-items>
 <app-file-upload [typeToAdd]="addMe" (doAction)="executeAction($event)"></app-file-upload>
-
+</div>
+<ng-template #noItemText >
+  <h2 class="colHeader">Here is Where Your Items are Displayed</h2>
+  <hr class="cat-hr"/>
+  <div class="drop lgrText">
+    <p>Once you <em>ADD</em> a <strong>'Category'</strong> to your <strong>'Portfolio'</strong> you can upload, drag and drop items
+      here that become associated with that Category, start by adding your first <strong>'Category'</strong></p>
+  </div>
+</ng-template>
 
 

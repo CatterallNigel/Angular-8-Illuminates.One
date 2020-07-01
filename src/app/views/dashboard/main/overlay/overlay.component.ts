@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {TagType, FileInfoModelType} from '../../../../shared/models';
 import {GlobalConstants} from '../../../../shared';
 import {Logger} from '../../../../shared/classes';
@@ -13,7 +13,7 @@ const none = GlobalConstants.cssDisplayNone;
   templateUrl: './overlay.component.html',
   styleUrls: ['./overlay.component.less']
 })
-export class OverlayComponent implements OnInit {
+export class OverlayComponent implements OnInit, AfterViewInit {
 
   @ViewChild('overlay', { static: false}) overlay: ElementRef;
   currentTarget: string;
@@ -21,6 +21,8 @@ export class OverlayComponent implements OnInit {
   tags: TagType[];
 
   constructor(private eventService: EventService) { }
+
+  view: HTMLDivElement;
 
   ngOnInit() {
     try {
@@ -47,8 +49,12 @@ export class OverlayComponent implements OnInit {
         });
       }
     } catch (e) {
-      Logger.error('Overlay Init Error: ' + e.message, 'OverlayComponent.ngOnInit', 50);
+      Logger.error('Overlay Init Error: ' + e.message, 'OverlayComponent.ngOnInit', 52);
     }
+  }
+
+  ngAfterViewInit() {
+    this.view = this.overlay.nativeElement as HTMLDivElement;
   }
 
   get displayMe(): FileTagDesciptorType {
@@ -67,8 +73,20 @@ export class OverlayComponent implements OnInit {
 
   showItemToDisplay(show: boolean) {
     Logger.log('In DASH - showItemToDisplay :' + show ? block.toUpperCase() : none.toUpperCase()
-      , 'OverlayComponent.ngOnInit', 50);
-    const overlay: HTMLDivElement = this.overlay.nativeElement as HTMLDivElement;
-    overlay.style.display = show ? block : none ;
+      , 'OverlayComponent.ngOnInit', 75);
+    this.view.style.display = show ? block : none ;
+    if (show) {
+      this.swapHead();
+    }
+  }
+
+
+  swapHead() {
+    if (this.view != null) {
+      if (this.view.clientHeight < this.view.scrollHeight) {
+        (this.view.querySelector('#head') as HTMLDivElement).style.display = none;
+        (this.view.querySelector('.head-space') as HTMLDivElement).style.display = block;
+      }
+    }
   }
 }

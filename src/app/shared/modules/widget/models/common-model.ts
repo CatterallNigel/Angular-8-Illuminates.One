@@ -13,9 +13,11 @@ export type ConfigWidgetType = Config;
 
 export enum ActionEvents {
   LOAD_DATA,
+  LOAD_COMPLETE,
   SIGNED_OUT,
   TOKEN_EXPIRED,
   FILE_DELETED,
+  FILE_LOADED,
 }
 
 export enum FileTypes {

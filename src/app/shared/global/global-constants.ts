@@ -90,6 +90,11 @@ export class GlobalConstants {
   public static galleryImageCssClassName = ['cat-thumb'];
   public static galleryImageSelectedCssClassName = ['cat-thumb-selected'];
   public static galleryImageCSSDivClassList = ['scroll'];
+  public static galleryNoCatPlaceholder = 'galley-placeholder-uuid';
+  // Tags Component
+  public static tagsNoCatPlaceholder = 'cat-placeholder-uuid';
+  // View-File Component
+  public static viewTextNotAvsilable = 'N/A';
   // Display Text
   public static displayImageCssClassName = ['file-thumb'];
   public static displayImageCSSDivClassList = ['scroll', 'center-fit'];
@@ -107,8 +112,9 @@ export class GlobalConstants {
   public static removeFile = 'Remove this file from category?';
   public static emailAddressInvalid = 'The email address supplied is invalid, please correct and resubmit';
   public static tokenExpired = 'Your session has expired, please sign-in';
-    public static loginFailed = 'Incorrect username and/or password. If you have just ' +
+  public static loginFailed = 'Incorrect username and/or password. If you have just ' +
     'registered with us, please wait till you receive the confirmation email';
+  public static loginConflict = 'There is currently an active user signed in - there can only be one active session per sign-in';
 
   // Images
   public static userGuideImageWhite = '../../../../../assets/images/home/web-user-guide.jpg';

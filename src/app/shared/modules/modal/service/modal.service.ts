@@ -44,7 +44,7 @@ export class ModalService {
         return new Promise(resolve => resolve(result.event));
       },
       error => {
-        Logger.error('Modal Error: ' + error, 'ModalComponent.alertUser', 46);
+        Logger.error('Modal Error: ' + error, 'ModalComponent.alertUser', 47);
         return new Promise(resolve => resolve(''));
       });
   }

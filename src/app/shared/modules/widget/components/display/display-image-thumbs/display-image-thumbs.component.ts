@@ -32,7 +32,7 @@ export class DisplayImageThumbsComponent implements OnInit, AfterViewInit {
     if (this.containerImages == null
       || (JSON.stringify(this.containerImages) !== JSON.stringify(items.images)
       && (this.isTypeOf === items.isType))) {
-      Logger.log('Data Changes NEW Images? ' + items.images.length, 'DisplayImageThumbsComponent.thumbsTobeDisplayed', 44);
+      Logger.log('Data Changes NEW Images? ' + items.images.length, 'DisplayImageThumbsComponent.thumbsTobeDisplayed', 35);
       this.containerId = items.id == null ? '' : items.id;
       this.containerClasses = items.classes == null ? [''] : items.classes;
       this.containerImages = items.images;
@@ -64,6 +64,7 @@ export class DisplayImageThumbsComponent implements OnInit, AfterViewInit {
 
   renderImages() {
     this.clearAll();
+    this.div.style.display = this.containerImages != null ? this.containerImages.length === 0 ? 'none' : 'block' : 'none';
     this. createImageDisplay();
   }
 
@@ -115,7 +116,7 @@ export class DisplayImageThumbsComponent implements OnInit, AfterViewInit {
 
   // noinspection JSUnusedLocalSymbols
   imageClicked(imgId: string, event: Event) { // IS SELECTED ...
-    Logger.log('Clicked on Image !! Id: ' + imgId, 'DisplayImageThumbsComponent.imageClicked', 153);
+    Logger.log('Clicked on Image !! Id: ' + imgId, 'DisplayImageThumbsComponent.imageClicked', 119);
     // Change any styling ...
     if (this.toggle != null) {
       this.toggleStyle(imgId);

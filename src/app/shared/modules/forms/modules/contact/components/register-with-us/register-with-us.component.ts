@@ -130,7 +130,7 @@ export class RegisterWithUsComponent implements OnInit {
   // REGISTER ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     async  register() {
       if (this.isFormInvalid) {
-        Logger.error('Form invalid', 'RegisterWithUsComponent.register', 132);
+        Logger.error('Form invalid', 'RegisterWithUsComponent.register', 133);
         return;
       }
       const formData = new FormData();

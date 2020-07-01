@@ -34,13 +34,13 @@ export class EventService {
 
   // noinspection JSUnusedGlobalSymbols
   onImageRemoved(deleted: boolean) {
-    Logger.log('onImageRemoved CALLED', 'EventService.onImageRemoved', 21);
+    Logger.log('onImageRemoved CALLED', 'EventService.onImageRemoved', 37);
     this.invokeComponentImageRemoved.emit(deleted);
   }
 
   // noinspection JSUnusedGlobalSymbols
   onSendCommand(command: string) {
-    Logger.log('onSendCommand CALLED', 'EventService.onSendCommand', 21);
+    Logger.log('onSendCommand CALLED', 'EventService.onSendCommand', 43);
     this.invokeComponentSendCommand.emit(command);
   }
 }

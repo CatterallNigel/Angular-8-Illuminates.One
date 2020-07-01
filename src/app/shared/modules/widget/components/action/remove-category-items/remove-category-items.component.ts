@@ -39,7 +39,7 @@ export class RemoveCategoryItemsComponent implements OnInit {
       this.typeOfSelector = remove.isType;
       this.btnDesc = this.btnRemoveDescrtions.find(btn => btn.isType as FileTypes === remove.isType);
       Logger.log('RemoveCategoryItemsComponent: ' + JSON.stringify(remove),
-        'RemoveCategoryItemsComponent.typeToRemove', 43);
+        'RemoveCategoryItemsComponent.typeToRemove', 41);
       this.updateClasses();
     }
   }
@@ -101,7 +101,7 @@ export class RemoveCategoryItemsComponent implements OnInit {
       error: WidgetConstants.modalRemoveCategoryErrorTitle});
     if (result) {
       if (this.currentTarget == null) {
-        Logger.error( 'Target NOT SET', 'RemoveCategoryItemsComponent.removeCat', 73);
+        Logger.error( 'Target NOT SET', 'RemoveCategoryItemsComponent.removeCat', 104);
         return;
       }
       WidgetVariables.actionInProgress(true);
@@ -109,7 +109,7 @@ export class RemoveCategoryItemsComponent implements OnInit {
           if (success.completed === 'success') {
             Logger.log('REMOVE COMPONENT: Removed Category and ALL items'
               , 'RemoveCategoryItemsComponent.removeCat', 110);
-            this.doAction.emit(ActionEvents.LOAD_DATA);
+            this.doAction.emit(ActionEvents.FILE_DELETED);
           } else { // Token has expired
             this.ws.modal.alertUser(this.ws.modalRemoveErrorConfig, success.error);
             this.doAction.emit(ActionEvents.TOKEN_EXPIRED);
@@ -132,8 +132,8 @@ export class RemoveCategoryItemsComponent implements OnInit {
       WidgetVariables.actionInProgress(true);
       await this.ws.action.removeFiles(this.currentTarget, '*').then(success => {
           if (success.completed === 'success') {
-            Logger.log('Removed ALL file items', 'RemoveCategoryItemsComponent.removeFiles', 73);
-            this.doAction.emit(ActionEvents.LOAD_DATA);
+            Logger.log('Removed ALL file items', 'RemoveCategoryItemsComponent.removeFiles', 135);
+            this.doAction.emit(ActionEvents.FILE_DELETED);
           } else { // Token has expired
             this.ws.modal.alertUser(this.ws.modalRemoveErrorConfig, success.error);
             this.doAction.emit(ActionEvents.TOKEN_EXPIRED);
@@ -142,7 +142,7 @@ export class RemoveCategoryItemsComponent implements OnInit {
         error => {
           const errorFail = error as RemoveUserFilesResponseType;
           Logger.error('Remove Category ERROR: ' + errorFail.error
-            , 'RemoveCategoryItemsComponent.removeFiles', 73);
+            , 'RemoveCategoryItemsComponent.removeFiles', 145);
           this.ws.modal.alertUser(this.ws.modalRemoveErrorConfig, WidgetConstants.tryLater);
         });
       WidgetVariables.actionInProgress(false);
@@ -155,12 +155,12 @@ export class RemoveCategoryItemsComponent implements OnInit {
       this.ws.modalRemoveErrorConfig.title = msg.error;
       this.ws.modal.alertUser(this.ws.modalRemoveConfig, WidgetConstants.removeAllFiles).then( success => {
         Logger.log('Remove response: ' + success,
-          'RemoveCategoryItemsComponent.confirmRemove', 167);
+          'RemoveCategoryItemsComponent.confirmRemove', 157);
         if (success === 'action') {
-          Logger.log(msg.confirm + ' SUCCESS', 'RemoveCategoryItemsComponent.confirmRemove', 167);
+          Logger.log(msg.confirm + ' SUCCESS', 'RemoveCategoryItemsComponent.confirmRemove', 160);
           resolve(true);
         } else {
-          Logger.log(msg.error + ' CANCELLED', 'RemoveCategoryItemsComponent.confirmRemove', 167);
+          Logger.log(msg.error + ' CANCELLED', 'RemoveCategoryItemsComponent.confirmRemove', 163);
           resolve(false);
         }
       });

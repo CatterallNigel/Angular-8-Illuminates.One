@@ -1,3 +1,10 @@
 <h2 class="colHeader">Your Categories</h2>
 <hr class="cat-hr"/>
+<div class="drop" *ngIf="this.noCategoriesAvailable">
+  <p>Your <strong>'Portfolio'</strong> is empty - start by adding some categories and then add other items to it!</p>
+</div>
+<div  *ngIf="this.noCategoriesAvailable">
+  <app-file-upload [typeToAdd]="addMe" (doAction)="executeAction($event)"></app-file-upload>
+</div>
 <app-display-image-thumbs [thumbsTobeDisplayed]="showMe" (doLoadImage)="loadCatThumbs($event)"></app-display-image-thumbs>
+

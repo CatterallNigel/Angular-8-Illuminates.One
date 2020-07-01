@@ -31,7 +31,7 @@ export class UserDataService {
             resolve(true);
           }}, error => {
           Logger.error('Dashboard Metadata Error: ' + error.toString()
-            , 'UserDataService.loadData', 34);
+            , 'UserDataService.loadData', 33);
           resolve(false);
         });
       });
@@ -53,12 +53,12 @@ export class UserDataService {
   }
 
   changeData(data: UserMetaDataType) {
-    Logger.log('Changing User Metadata :' + (data === undefined ? 'No data' : data.noOfTargets), 'UserDataService.changeData', 54);
+    Logger.log('Changing User Metadata :' + (data === undefined ? 'No data' : data.noOfTargets), 'UserDataService.changeData', 56);
     this.userData.next(data);
   }
 
   get getCurrentData(): Observable<UserMetaDataType> {
-    Logger.log('Getting User Metadata', 'UserDataService.getCurrentData', 59);
+    Logger.log('Getting User Metadata', 'UserDataService.getCurrentData', 61);
     return this.currentUserData;
   }
 }

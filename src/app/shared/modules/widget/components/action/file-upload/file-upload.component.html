@@ -1,5 +1,5 @@
 <!-- FOR CATEGORY & ITEMS -->
-<div class="drop" appFileDragDrop (doFileDropped)="this.handleFiles($event);" #upload>
+<div class="drop" appFileDragDrop (doFileDropped)="this.handleFiles($event);" #upload *ngIf="!showTypeToAdd(none)">
   <form class="my-form">
     <p></p>
     <input type="file" [id]="fileUpload" multiple="multiple" accept="image/*" (change)="this.handleFiles($event.target.files);">

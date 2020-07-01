@@ -48,7 +48,7 @@ export class FileActionsComponent implements OnInit {
   @Output() doCommand = new EventEmitter<string>();
 
   constructor(private ws: WidgetService) {
-    Logger.log('File Actions Init', 'FileActionsComponent.constructor', 46);
+    Logger.log('File Actions Init', 'FileActionsComponent.constructor', 51);
   }
 
   ngOnInit() {
@@ -79,7 +79,7 @@ export class FileActionsComponent implements OnInit {
         },
         error => {
           WidgetVariables.actionInProgress(false);
-          Logger.error('Get share file link rejected ERROR: ' + error, 'FileActionsComponent.getShareLinkOrError', 80);
+          Logger.error('Get share file link rejected ERROR: ' + error, 'FileActionsComponent.getShareLinkOrError', 82);
           reject(WidgetConstants.tryLater);
         });
     });
@@ -98,7 +98,7 @@ export class FileActionsComponent implements OnInit {
     },
       error => {
         WidgetVariables.actionInProgress(false);
-        Logger.error('Get share file link rejected ERROR: ' + error, 'FileActionsComponent.openFile', 80);
+        Logger.error('Get share file link rejected ERROR: ' + error, 'FileActionsComponent.openFile', 102);
         this.ws.modalFileActionConfig.title = WidgetConstants.modalFileOpenErrorTitle;
         this.ws.modal.alertUser(this.ws.modalFileActionConfig, WidgetConstants.tryLater);
     });
@@ -114,7 +114,7 @@ export class FileActionsComponent implements OnInit {
     await this.getShareLinkOrError().then( response => {
         if (typeof response === 'string') {
           const sharedURL = location.protocol + '//' + location.host + '/' +  this.shareWithURL + response;
-          Logger.log('Share Link URL: ' + sharedURL, 'FileActionsComponent.shareFile', 115);
+          Logger.log('Share Link URL: ' + sharedURL, 'FileActionsComponent.shareFile', 117);
           this.ws.modalFileCopyConfig.title = WidgetConstants.modalFileShareTitle;
           this.ws.modal.alertUser(this.ws.modalFileCopyConfig, sharedURL);
         } else {
@@ -123,7 +123,7 @@ export class FileActionsComponent implements OnInit {
       },
       error => {
         WidgetVariables.actionInProgress(false);
-        Logger.error('Get share file link rejected ERROR: ' + error, 'FileActionsComponent.shareFile', 124);
+        Logger.error('Get share file link rejected ERROR: ' + error, 'FileActionsComponent.shareFile', 126);
         this.ws.modalFileActionConfig.title = WidgetConstants.modalFileShareErrorTitle;
         this.ws.modal.alertUser(this.ws.modalFileActionConfig, WidgetConstants.tryLater);
       });
@@ -135,17 +135,16 @@ export class FileActionsComponent implements OnInit {
 
   async removeFile() {
     await this.ws.modal.alertUser(this.ws.modalRemoveConfig, WidgetConstants.removeFile).then( success => {
-      Logger.log('Remove response: ' + success, 'FileActionsComponent.removeFile', 137);
+      Logger.log('Remove response: ' + success, 'FileActionsComponent.removeFile', 138);
       if (success === 'action') {
-        Logger.log('Removing files and all items .. ', 'FileActionsComponent.removeFile', 139);
+        Logger.log('Removing files and all items .. ', 'FileActionsComponent.removeFile', 140);
         WidgetVariables.actionInProgress(true);
         // Allow for Spinner to start ...
         setTimeout(() => {
           this.ws.action.removeFiles(this.targetUUID, this.fileUUID).then(result => {
               if (result.completed === 'success') {
-                Logger.log('Removed THIS file item', 'FileActionsComponent.removeFile', 143);
+                Logger.log('Removed THIS file item', 'FileActionsComponent.removeFile', 146);
                 this.doAction.emit(ActionEvents.FILE_DELETED);
-                this.doAction.emit(ActionEvents.LOAD_DATA);
               } else { // Token has expired
                 this.ws.modal.alertUser(this.ws.modalRemoveErrorConfig, result.error);
                 this.doAction.emit(ActionEvents.TOKEN_EXPIRED);
@@ -153,13 +152,13 @@ export class FileActionsComponent implements OnInit {
             },
             error => {
               const errorFail = error as RemoveUserFilesResponseType;
-              Logger.error('Remove Category ERROR: ' + errorFail.error, 'FileActionsComponent.removeFile', 153);
+              Logger.error('Remove Category ERROR: ' + errorFail.error, 'FileActionsComponent.removeFile', 155);
               this.ws.modal.alertUser(this.ws.modalRemoveErrorConfig, WidgetConstants.tryLater);
             });
         }, 10);
         WidgetVariables.actionInProgress(false);
       } else {
-        Logger.log('Remove file CANCELLED', 'FileActionsComponent.removeFile', 142);
+        Logger.log('Remove file CANCELLED', 'FileActionsComponent.removeFile', 161);
         return;
       }
     });
