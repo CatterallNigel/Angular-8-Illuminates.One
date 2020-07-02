@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 import {UserMetaDataType} from '../../../../shared/models';
 import {UserDataService} from '../../../../shared/services';
@@ -11,6 +11,7 @@ const quotesData = GlobalConstants.listofQuotes;
 const changeQuotePeriod = GlobalConstants.changeQuotePeriod;
 const noOfWords = GlobalConstants.quoteWordLengthFooter;
 const quotationsClassRight = GlobalConstants.quotationsClassRight;
+const maxWidth = GlobalConstants.maxViewWidth;
 
 @Component({
   selector: 'app-dash',
@@ -22,8 +23,16 @@ export class DashComponent implements OnInit, AfterViewInit {
   @ViewChild('container', {static: false}) container: ElementRef;
   metadata: UserMetaDataType | string;
   div: HTMLDivElement;
+  screenWidth: number;
+  isOverlaid = false;
 
   constructor(private router: Router, private data: UserDataService, private eventService: EventService) { }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.screenWidth = event.target.innerWidth;
+    this.moveLeft();
+  }
 
   ngOnInit() {
     try {
@@ -54,6 +63,8 @@ export class DashComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.div = this.container.nativeElement as HTMLDivElement;
+    this.screenWidth = window.innerWidth;
+    Logger.log('Screen width View: ' + this.screenwidth, 'DashComponent.ngAfterViewInit' , 64);
   }
   hasMetadata() {
     const metadata = this.metadata as UserMetaDataType;
@@ -71,6 +82,7 @@ export class DashComponent implements OnInit, AfterViewInit {
   }
 
   hasOverLay(show: boolean) {
+    this.isOverlaid = show;
     Logger.log('Dash Has OverLay ? ' + show ? 'YES' : 'NO'
       , 'DashComponent.hasOverLay', 75);
     const classes: DOMTokenList = this.div.classList;
@@ -79,6 +91,16 @@ export class DashComponent implements OnInit, AfterViewInit {
     } else {
       classes.remove('noscroll');
     }
+    this.moveLeft();
   }
 
+  moveLeft() {
+    if (this.isOverlaid) {
+      const moveLeft = this.screenWidth - 1920 <= 0 ? 0 : (this.screenWidth - maxWidth) / 2;
+      this.div.style.left = moveLeft + 'px';
+      Logger.log('Moving View Left: ' + moveLeft, 'DashComponent.moveLeft' , 100);
+    } else {
+      this.div.style = '';
+    }
+  }
 }

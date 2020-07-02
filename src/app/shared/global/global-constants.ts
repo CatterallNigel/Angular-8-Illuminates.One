@@ -95,6 +95,7 @@ export class GlobalConstants {
   public static tagsNoCatPlaceholder = 'cat-placeholder-uuid';
   // View-File Component
   public static viewTextNotAvsilable = 'N/A';
+  public static maxViewWidth = 1920; // Maximum width of viewing area
   // Display Text
   public static displayImageCssClassName = ['file-thumb'];
   public static displayImageCSSDivClassList = ['scroll', 'center-fit'];
