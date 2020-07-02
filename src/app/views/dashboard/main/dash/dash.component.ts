@@ -64,7 +64,7 @@ export class DashComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.div = this.container.nativeElement as HTMLDivElement;
     this.screenWidth = window.innerWidth;
-    Logger.log('Screen width View: ' + this.screenwidth, 'DashComponent.ngAfterViewInit' , 64);
+    Logger.log('Screen width View: ' + this.screenWidth, 'DashComponent.ngAfterViewInit' , 64);
   }
   hasMetadata() {
     const metadata = this.metadata as UserMetaDataType;
@@ -100,7 +100,8 @@ export class DashComponent implements OnInit, AfterViewInit {
       this.div.style.left = moveLeft + 'px';
       Logger.log('Moving View Left: ' + moveLeft, 'DashComponent.moveLeft' , 100);
     } else {
-      this.div.style = '';
+      // noinspection TsLint
+      this.div.style.left;
     }
   }
 }
