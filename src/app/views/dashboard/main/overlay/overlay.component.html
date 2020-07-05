@@ -13,28 +13,30 @@
         </div>
         <div class="col2 ostyle" >
           <div [ngClass]="{'fixed': this.fixView}">
+            <div style="max-width: 403px;">
             <app-dash-items-gallery [listItemsDescriptor]="this.listItemsDescriptor"></app-dash-items-gallery>
+            </div>
           </div>
         </div>
         <div class="col3 ostyle" >
           <div [ngClass]="{'fixed': this.fixView}">
-          <mat-tab-group headerPosition="below" dynamicHeight>
-            <mat-tab label="Item">
-                <div id="itemTagContainer">
-                  <app-tag-descriptors [tagsToDisplay]="this.displayMe"></app-tag-descriptors>
+            <mat-tab-group headerPosition="below" dynamicHeight>
+              <mat-tab label="Item">
+                  <div class="itemTagContainer">
+                    <app-tag-descriptors [tagsToDisplay]="this.displayMe"></app-tag-descriptors>
+                  </div>
+              </mat-tab>
+              <mat-tab label="Category">
+                <div class="itemTagContainer">
+                  <app-dash-items-gallery [listCategoryDescriptor]="this.listCategoryDescriptor" (sendCatTags)="this.processTags($event)"></app-dash-items-gallery>
+                  <app-tag-descriptors [tagsToDisplay]="this.displayCat"></app-tag-descriptors>
                 </div>
-            </mat-tab>
-            <mat-tab label="Category">
-              <div>
-                <app-dash-items-gallery [listCategoryDescriptor]="this.listCategoryDescriptor" (sendCatTags)="this.processTags($event)"></app-dash-items-gallery>
-                <app-tag-descriptors [tagsToDisplay]="this.displayCat"></app-tag-descriptors>
-              </div>
-            </mat-tab>
-          </mat-tab-group>
+              </mat-tab>
+            </mat-tab-group>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <app-brief-footer></app-brief-footer>
+  <app-brief-footer  [ngStyle]="{'display': this.displayThis ? 'none' : 'block'}"></app-brief-footer>
 </div>
