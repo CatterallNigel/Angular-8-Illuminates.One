@@ -52,6 +52,7 @@ export class FileActionsComponent implements OnInit, AfterViewInit {
   @Input()
     set whereAmI(pos: number) {
     if (this.position !== pos) {
+      this.position = pos;
       if ( this.div != null) {
         this.div.style.top = pos + 'px';
       }
@@ -62,7 +63,7 @@ export class FileActionsComponent implements OnInit, AfterViewInit {
   @Output() doCommand = new EventEmitter<string>();
 
   constructor(private ws: WidgetService) {
-    Logger.log('File Actions Init', 'FileActionsComponent.constructor', 65);
+    Logger.log('File Actions Init', 'FileActionsComponent.constructor', 66);
   }
 
   ngOnInit() {
@@ -120,7 +121,7 @@ export class FileActionsComponent implements OnInit, AfterViewInit {
         },
         error => {
           WidgetVariables.actionInProgress(false);
-          Logger.error('Get share file link rejected ERROR: ' + error, 'FileActionsComponent.getShareLinkOrError', 123);
+          Logger.error('Get share file link rejected ERROR: ' + error, 'FileActionsComponent.getShareLinkOrError', 124);
           reject(WidgetConstants.tryLater);
         });
     });
@@ -139,7 +140,7 @@ export class FileActionsComponent implements OnInit, AfterViewInit {
     },
       error => {
         WidgetVariables.actionInProgress(false);
-        Logger.error('Get share file link rejected ERROR: ' + error, 'FileActionsComponent.openFile', 142);
+        Logger.error('Get share file link rejected ERROR: ' + error, 'FileActionsComponent.openFile', 143);
         this.ws.modalFileActionConfig.title = WidgetConstants.modalFileOpenErrorTitle;
         this.ws.modal.alertUser(this.ws.modalFileActionConfig, WidgetConstants.tryLater);
     });
@@ -155,7 +156,7 @@ export class FileActionsComponent implements OnInit, AfterViewInit {
     await this.getShareLinkOrError().then( response => {
         if (typeof response === 'string') {
           const sharedURL = location.protocol + '//' + location.host + '/' +  this.shareWithURL + response;
-          Logger.log('Share Link URL: ' + sharedURL, 'FileActionsComponent.shareFile', 158);
+          Logger.log('Share Link URL: ' + sharedURL, 'FileActionsComponent.shareFile', 159);
           this.ws.modalFileCopyConfig.title = WidgetConstants.modalFileShareTitle;
           this.ws.modal.alertUser(this.ws.modalFileCopyConfig, sharedURL);
         } else {
@@ -164,7 +165,7 @@ export class FileActionsComponent implements OnInit, AfterViewInit {
       },
       error => {
         WidgetVariables.actionInProgress(false);
-        Logger.error('Get share file link rejected ERROR: ' + error, 'FileActionsComponent.shareFile', 167);
+        Logger.error('Get share file link rejected ERROR: ' + error, 'FileActionsComponent.shareFile', 168);
         this.ws.modalFileActionConfig.title = WidgetConstants.modalFileShareErrorTitle;
         this.ws.modal.alertUser(this.ws.modalFileActionConfig, WidgetConstants.tryLater);
       });
@@ -176,15 +177,15 @@ export class FileActionsComponent implements OnInit, AfterViewInit {
 
   async removeFile() {
     await this.ws.modal.alertUser(this.ws.modalRemoveConfig, WidgetConstants.removeFile).then( success => {
-      Logger.log('Remove response: ' + success, 'FileActionsComponent.removeFile', 138);
+      Logger.log('Remove response: ' + success, 'FileActionsComponent.removeFile', 180);
       if (success === 'action') {
-        Logger.log('Removing files and all items .. ', 'FileActionsComponent.removeFile', 181);
+        Logger.log('Removing files and all items .. ', 'FileActionsComponent.removeFile', 182);
         WidgetVariables.actionInProgress(true);
         // Allow for Spinner to start ...
         setTimeout(() => {
           this.ws.action.removeFiles(this.targetUUID, this.fileUUID).then(result => {
               if (result.completed === 'success') {
-                Logger.log('Removed THIS file item', 'FileActionsComponent.removeFile', 187);
+                Logger.log('Removed THIS file item', 'FileActionsComponent.removeFile', 188);
                 this.doAction.emit(ActionEvents.FILE_DELETED);
               } else { // Token has expired
                 this.ws.modal.alertUser(this.ws.modalRemoveErrorConfig, result.error);
@@ -193,13 +194,13 @@ export class FileActionsComponent implements OnInit, AfterViewInit {
             },
             error => {
               const errorFail = error as RemoveUserFilesResponseType;
-              Logger.error('Remove Category ERROR: ' + errorFail.error, 'FileActionsComponent.removeFile', 196);
+              Logger.error('Remove Category ERROR: ' + errorFail.error, 'FileActionsComponent.removeFile', 197);
               this.ws.modal.alertUser(this.ws.modalRemoveErrorConfig, WidgetConstants.tryLater);
             });
         }, 10);
         WidgetVariables.actionInProgress(false);
       } else {
-        Logger.log('Remove file CANCELLED', 'FileActionsComponent.removeFile', 202);
+        Logger.log('Remove file CANCELLED', 'FileActionsComponent.removeFile', 203);
         return;
       }
     });
@@ -215,7 +216,7 @@ export class FileActionsComponent implements OnInit, AfterViewInit {
 
   downloadFile() {
     const url = this.downloadURL + '/' + this.targetUUID + '/' + this.fileUUID;
-    Logger.log('Download URL: ' + url, 'FileActionsComponent.downloadFile', 218);
+    Logger.log('Download URL: ' + url, 'FileActionsComponent.downloadFile', 219);
     window.location.href = url;
   }
 }

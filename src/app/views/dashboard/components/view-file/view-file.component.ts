@@ -109,7 +109,7 @@ export class ViewFileComponent implements OnInit {
     }
     // End of set-ip ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Logger.log('Displaying IMAGE fileId: ' + fileInfoModel.file.fileUUID
-      , 'ViewFileComponent.loadItemToDisplay', 114);
+      , 'ViewFileComponent.loadItemToDisplay', 111);
     const url = GlobalConstants.getViewImageURL + GlobalVariables.userId + '/' + this.targetUUID  + '/' + this.fileUUID;
     const image: HTMLImageElement = this.mainImage.nativeElement.querySelector(img) as HTMLImageElement;
     image.src = url;
@@ -119,7 +119,7 @@ export class ViewFileComponent implements OnInit {
   }
 
   showImage( image: HTMLImageElement, event: Event) {
-    Logger.log('Making image visible ...', 'ViewFileComponent.showImage', 124);
+    Logger.log('Making image visible ...', 'ViewFileComponent.showImage', 122);
     this.showPin();
     image.style.visibility = visible;
     this.eventService.onMainImageLoaded(true);
@@ -130,12 +130,12 @@ export class ViewFileComponent implements OnInit {
   }
 
   showPin() {
-    Logger.log('Showing PIN ..', 'ViewFileComponent.showPin', 135);
+    Logger.log('Showing PIN ..', 'ViewFileComponent.showPin', 133);
     try {
       this.mainImage.nativeElement.querySelector('#close').style.display = block;
     } catch (e) {
       Logger.error('Error in displaying pin ! : ' +  e.message
-        , 'ViewFileComponent.showPin', 118);
+        , 'ViewFileComponent.showPin', 137);
     }
   }
 
@@ -143,12 +143,12 @@ export class ViewFileComponent implements OnInit {
     let classe;
     switch (command) {
       case GlobalConstants.horizontal:
-        Logger.log('Commanded FLIP-Y...', 'ViewFileComponent.flipImage', 148);
+        Logger.log('Commanded FLIP-Y...', 'ViewFileComponent.flipImage', 146);
         classe = GlobalConstants.horizontalCSSClass;
         this.changeClass(classe);
         break;
       case GlobalConstants.vertical:
-        Logger.log('Commanded FLIP-Y...', 'ViewFileComponent.flipImage', 153);
+        Logger.log('Commanded FLIP-Y...', 'ViewFileComponent.flipImage', 151);
         classe = GlobalConstants.verticalCSSClass;
         this.changeClass(classe);
         break;
@@ -159,10 +159,10 @@ export class ViewFileComponent implements OnInit {
     const image: HTMLImageElement = this.mainImage.nativeElement.querySelector(img) as HTMLImageElement;
     const classes: DOMTokenList = image.classList;
     if (classes.contains(classe)) {
-      Logger.log('Removing :' + classe + ' from IMAGE ..', 'ViewFileComponent.changeClass', 164);
+      Logger.log('Removing :' + classe + ' from IMAGE ..', 'ViewFileComponent.changeClass', 162);
       classes.remove(classe);
     } else {
-      Logger.log('Adding :' + classe + ' from IMAGE ..', 'ViewFileComponent.changeClass', 167);
+      Logger.log('Adding :' + classe + ' from IMAGE ..', 'ViewFileComponent.changeClass', 165);
       classes.add(classe);
     }
   }

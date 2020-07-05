@@ -51,7 +51,7 @@ export class ItemsGalleryComponent implements OnInit {
        this.selectedItem = fileDescrpt.fileId;
        this.selectedTarget = fileDescrpt.target;
        this.fileInfos = files!;
-       Logger.log('Changes in File Descriptor', 'ItemsGalleryComponent.listItemsDescriptor' , 55);
+       Logger.log('Changes in File Descriptor', 'ItemsGalleryComponent.listItemsDescriptor' , 54);
        this.createImageArray();
      }
   }
@@ -83,7 +83,7 @@ export class ItemsGalleryComponent implements OnInit {
         // Return tags to Parent to pass on ..
         // noinspection JSUnusedAssignment
         const tags = file!.targetMetadata.tags;
-        Logger.log('Single Cat Tags No: ' + tags.length, 'ItemsGalleryComponent.listCategoryDescriptor', 82);
+        Logger.log('Single Cat Tags No: ' + tags.length, 'ItemsGalleryComponent.listCategoryDescriptor', 86);
         this.sendCatTags.emit(tags);
       } // else TODO FOR MULTIPLES
     }
@@ -94,7 +94,7 @@ export class ItemsGalleryComponent implements OnInit {
   constructor(private data: UserDataService, private eventService: EventService) { }
 
   ngOnInit() {
-    Logger.log('ngOnInit ...', 'ItemsGalleryComponent.ngOnInit' , 38);
+    Logger.log('ngOnInit ...', 'ItemsGalleryComponent.ngOnInit' , 97);
   }
 
   get showMe() {
@@ -119,10 +119,10 @@ export class ItemsGalleryComponent implements OnInit {
   createImageArray() {
     try {
       if (this.fileInfos === undefined) {
-        Logger.log('No Items to display in gallery...', 'ItemsGalleryComponent.createImageArray' , 118);
+        Logger.log('No Items to display in gallery...', 'ItemsGalleryComponent.createImageArray' , 122);
         return;
       }
-      Logger.log('Creating gallery images ...', 'ItemsGalleryComponent.createImageArray' , 121);
+      Logger.log('Creating gallery images ...', 'ItemsGalleryComponent.createImageArray' , 125);
       const fileInfos = this.cloneReverseFileInfo();
       const images: ImageThumbDescriptorType[] = [];
       fileInfos.forEach(fi => {
@@ -138,7 +138,7 @@ export class ItemsGalleryComponent implements OnInit {
           id: fi.fileUUID,
           classes: className,
         };
-        Logger.log('We are adding an image .... ', 'ItemsGalleryComponent.createImageArray' , 137);
+        Logger.log('We are adding an image .... ', 'ItemsGalleryComponent.createImageArray' , 141);
         images.push(image);
       });
       // Move Selected item to TOP
@@ -152,7 +152,7 @@ export class ItemsGalleryComponent implements OnInit {
       this.images = images;
     } catch (e) {
       Logger.error('Creating items gallery images ERROR: ' + e.message
-        , 'ItemsGalleryComponent.createImageArray', 151);
+        , 'ItemsGalleryComponent.createImageArray', 155);
     }
   }
 

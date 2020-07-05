@@ -34,7 +34,7 @@ export class QuoteGenComponent implements OnInit, AfterViewInit {
   set quotationConfig(config: QuotationConfigType) {
     if (this.quoteData == null || this.quoteData !== config.dataFile ||
       this.interval !== config.changeInterval || this.noOfWords !== config.noOfWords ) {
-      Logger.log('Quote Config is: ' + JSON.stringify(config), 'QuoteGenComponent.quotationConfig', 36);
+      Logger.log('Quote Config is: ' + JSON.stringify(config), 'QuoteGenComponent.quotationConfig', 37);
       this.quoteData = config.dataFile;
       this.interval = config.changeInterval;
       this.noOfWords = config.noOfWords;

@@ -85,7 +85,7 @@ export class DisplayComponent implements OnInit {
 
   hasMetadata() {
     Logger.log('Display Metadata : ' + this.metadata.noOfTargets
-      , 'DisplayComponent.hasMetadata', 77);
+      , 'DisplayComponent.hasMetadata', 87);
   }
 
   get addMe(): AddDescriptorType {
@@ -131,10 +131,10 @@ export class DisplayComponent implements OnInit {
   }
 
   loadItemsToDisplay(targetUUID: string) {
-    Logger.log('This is the DISPLAY UUID: ' + targetUUID, 'DisplayComponent.loadItemsToDisplay', 135);
+    Logger.log('This is the DISPLAY UUID: ' + targetUUID, 'DisplayComponent.loadItemsToDisplay', 134);
     const fileInfo: FileInfoType =  this.metadata.fileInfo.find(fi => fi.targetUUID === targetUUID);
     if (fileInfo === undefined || fileInfo.fileInfos === undefined) {
-      Logger.log('No files to display ...', 'DisplayComponent.loadItemsToDisplay', 116);
+      Logger.log('No files to display ...', 'DisplayComponent.loadItemsToDisplay', 137);
       this.itemCount = 0;
       this.images = [];
       return;
@@ -149,7 +149,7 @@ export class DisplayComponent implements OnInit {
         id: fis.fileUUID,
         classes: imageClassName,
       };
-      Logger.log('We are adding an image .... ', 'DisplayComponent.loadItemsToDisplay', 153);
+      Logger.log('We are adding an image .... ', 'DisplayComponent.loadItemsToDisplay', 152);
       images.push(image);
     });
     this.images = images;
@@ -160,7 +160,7 @@ export class DisplayComponent implements OnInit {
     const file = this.currentItems.find( fis => fis.fileUUID === event);
     const tags: TagType[] = this.currentItems.find(fis => fis.fileUUID === file.fileUUID).fileMetadata.tags;
     Logger.log('Clicked file name: ' + file.fileName + ' Event:' + event
-      , 'DisplayComponent.loadImage', 163);
+      , 'DisplayComponent.loadImage', 162);
     const fileInfoModel: FileInfoModelType = {
       targetId: this.currentTarget,
       file,

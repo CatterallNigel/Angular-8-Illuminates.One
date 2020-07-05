@@ -138,8 +138,8 @@ export class OverlayComponent implements OnInit, AfterViewInit {
     if (sc === undefined) {
       return;
     }
-    Logger.log('Overlay is scrolling by : ' + sc + 'px', 'OverlayComponent.scrolling', 137);
     if (this.view != null && this.view.style.display === block) {
+      Logger.log('Overlay is scrolling by : ' + sc + 'px', 'OverlayComponent.scrolling', 137);
       this.position = sc;
     }
   }
@@ -157,19 +157,15 @@ export class OverlayComponent implements OnInit, AfterViewInit {
     this.swapHead();
   }
 
-  // Swap header for blank or visa-versa
+  // Swap header for blank or visa-versa if or if not scroll-bar
   swapHead() {
     this.displayThis = this.fixView = this.view.clientHeight < this.view.scrollHeight;
   }
 
+  // Receive Category Tag to post out to child app-tag-descriptors
   processTags(tags: TagType[]) {
     if (this.catTags == null || JSON.stringify(this.catTags) !== JSON.stringify(tags)) {
       this.catTags = tags;
     }
-  }
-
-  // For future action
-  imageClicked(id: string) {
-    Logger.log('Clicked this Catergory ID: ' + id , 'OverlayComponent.imageClicked' , 169);
   }
 }

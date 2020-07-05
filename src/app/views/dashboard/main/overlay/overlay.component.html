@@ -28,7 +28,8 @@
               </mat-tab>
               <mat-tab label="Category">
                 <div class="itemTagContainer">
-                  <app-dash-items-gallery [listCategoryDescriptor]="this.listCategoryDescriptor" (sendCatTags)="this.processTags($event)"></app-dash-items-gallery>
+                  <app-dash-items-gallery [listCategoryDescriptor]="this.listCategoryDescriptor"
+                                          (sendCatTags)="this.processTags($event)"></app-dash-items-gallery>
                   <app-tag-descriptors [tagsToDisplay]="this.displayCat"></app-tag-descriptors>
                 </div>
               </mat-tab>

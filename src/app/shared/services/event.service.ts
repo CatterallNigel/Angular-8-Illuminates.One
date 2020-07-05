@@ -19,29 +19,29 @@ export class EventService {
   constructor() { }
 
   onLoadCatThumbs(targetUUID: string) {
-    Logger.log('onLoadCatThumbs CALLED', 'EventService.onLoadCatThumbs', 21);
+    Logger.log('onLoadCatThumbs CALLED', 'EventService.onLoadCatThumbs', 22);
     this.invokeComponenstLoadItems.emit(targetUUID);
   }
 
   onLoadImage(fileInfoModel: FileInfoModelType) {
-    Logger.log('onLoadImage CALLED', 'EventService.onLoadImage', 26);
+    Logger.log('onLoadImage CALLED', 'EventService.onLoadImage', 27);
     this.invokeComponentLoadImage.emit(fileInfoModel);
   }
 
   onMainImageLoaded(show: boolean) {
-    Logger.log('onMainImageLoaded CALLED', 'EventService.onMainImageLoaded', 31);
+    Logger.log('onMainImageLoaded CALLED', 'EventService.onMainImageLoaded', 32);
     this.invokeComponentImageLoaded.emit(show);
   }
 
   // noinspection JSUnusedGlobalSymbols
   onImageRemoved(deleted: boolean) {
-    Logger.log('onImageRemoved CALLED', 'EventService.onImageRemoved', 37);
+    Logger.log('onImageRemoved CALLED', 'EventService.onImageRemoved', 38);
     this.invokeComponentImageRemoved.emit(deleted);
   }
 
   // noinspection JSUnusedGlobalSymbols
   onSendCommand(command: CommandExe) {
-    Logger.log('onSendCommand CALLED', 'EventService.onSendCommand', 43);
+    Logger.log('onSendCommand CALLED', 'EventService.onSendCommand', 44);
     this.invokeComponentSendCommand.emit(command);
   }
 }
