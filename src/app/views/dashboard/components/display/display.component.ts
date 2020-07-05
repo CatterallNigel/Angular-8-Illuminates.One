@@ -17,6 +17,8 @@ import {TagType} from '../../../../shared/models/user/metadata.model';
 
 const imageClassName = GlobalConstants.displayImageCssClassName;
 const imageDivClassList = GlobalConstants.displayImageCSSDivClassList;
+const none = GlobalConstants.cssDisplayNone;
+const block = GlobalConstants.cssDiplayBlock;
 const landing = GlobalConstants.landingPage;
 
 @Component({
@@ -26,7 +28,7 @@ const landing = GlobalConstants.landingPage;
 })
 export class DisplayComponent implements OnInit {
 
-  @ViewChild('items', {static: false}) items: ElementRef;
+  @ViewChild('thumbDisplay', {static: false}) main: ElementRef;
   metadata: UserMetaDataType;
   currentTarget: string;
   currentItems: FileInfosType[];
@@ -57,11 +59,22 @@ export class DisplayComponent implements OnInit {
         this.loadItemsToDisplay(id);
       });
     }
+    if (this.eventService.subscription === undefined) {
+      this.eventService.subscription = this.eventService
+        .invokeComponentImageLoaded.subscribe((show: boolean) => {
+          this.showHideDisplay(show);
+        });
+    } else {
+      this.eventService
+        .invokeComponentImageLoaded.subscribe((show: boolean) => {
+        this.showHideDisplay(show);
+      });
+    }
   }
 
   hasMetadata() {
     Logger.log('Display Metadata : ' + this.metadata.noOfTargets
-      , 'DisplayComponent.hasMetadata', 63);
+      , 'DisplayComponent.hasMetadata', 77);
   }
 
   get addMe(): AddDescriptorType {
@@ -97,10 +110,10 @@ export class DisplayComponent implements OnInit {
   }
 
   loadItemsToDisplay(targetUUID: string) {
-    Logger.log('This is the DISPLAY UUID: ' + targetUUID, 'DisplayComponent.loadItemsToDisplay', 100);
+    Logger.log('This is the DISPLAY UUID: ' + targetUUID, 'DisplayComponent.loadItemsToDisplay', 113);
     const fileInfo: FileInfoType =  this.metadata.fileInfo.find(fi => fi.targetUUID === targetUUID);
     if (fileInfo === undefined || fileInfo.fileInfos === undefined) {
-      Logger.log('No files to display ...', 'DisplayComponent.loadItemsToDisplay', 103);
+      Logger.log('No files to display ...', 'DisplayComponent.loadItemsToDisplay', 116);
       this.itemCount = 0;
       this.images = [];
       return;
@@ -115,7 +128,7 @@ export class DisplayComponent implements OnInit {
         id: fis.fileUUID,
         classes: imageClassName,
       };
-      Logger.log('We are adding an image .... ', 'DisplayComponent.loadItemsToDisplay', 118);
+      Logger.log('We are adding an image .... ', 'DisplayComponent.loadItemsToDisplay', 131);
       images.push(image);
     });
     this.images = images;
@@ -126,7 +139,7 @@ export class DisplayComponent implements OnInit {
     const file = this.currentItems.find( fis => fis.fileUUID === event);
     const tags: TagType[] = this.currentItems.find(fis => fis.fileUUID === file.fileUUID).fileMetadata.tags;
     Logger.log('Clicked file name: ' + file.fileName + ' Event:' + event
-      , 'DisplayComponent.loadImage', 128);
+      , 'DisplayComponent.loadImage', 142);
     const fileInfoModel: FileInfoModelType = {
       targetId: this.currentTarget,
       file,
@@ -149,5 +162,9 @@ export class DisplayComponent implements OnInit {
         });
         break;
     }
+  }
+
+  showHideDisplay(hide: boolean) {
+    hide ? this.main.nativeElement.style.display = none : this.main.nativeElement.style.display = block;
   }
 }

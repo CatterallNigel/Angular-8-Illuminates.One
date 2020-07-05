@@ -26,7 +26,7 @@ export class HeaderComponent implements OnInit {
         quotes,
         interval: changeQuotePeriod
       };
-      Logger.log('Quotes: ' + Object.keys(this.quotations.quotes).length, 'HeaderComponent.ngOnInit', 28);
+      Logger.log('Quotes: ' + Object.keys(this.quotations.quotes).length, 'HeaderComponent.ngOnInit', 29);
     });
     */
   }

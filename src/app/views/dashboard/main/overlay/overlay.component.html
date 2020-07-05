@@ -1,19 +1,40 @@
-<div id="overlay" #overlay>
-  <div id="head">
+<div id="overlay" #overlay  (scroll)="scrolling($event)" class="scroll scroll-ltr ">
+  <div id="head" [ngStyle]="{'display': this.displayThis ? 'none' : 'block'}">
     <app-dash-header></app-dash-header>
   </div>
-  <div class="head-space">&nbsp; <!-- header replacement --></div>
+  <div class="head-space" [ngStyle]="{'display': this.displayThis ? 'block' : 'none'}">
+    &nbsp; <!-- header replacement -->
+  </div>
   <div class="colmask ostyle threecol">
     <div class="colmid ostyle">
       <div class="colleft ostyle">
         <div class="col1 oCol1">
-          <app-dash-view-file></app-dash-view-file>
+          <app-dash-view-file [whereIAm]="this.getTop"></app-dash-view-file>
         </div>
-        <div class="col2 ostyle" ></div>
-        <div class="col3 ostyle" style="background: #000;">
-          <app-tag-descriptors [tagsToDisplay]="displayMe"></app-tag-descriptors>
+        <div class="col2 ostyle" >
+          <div [ngClass]="{'fixed': this.fixView}">
+            <app-dash-items-gallery [listItemsDescriptor]="this.listItemsDescriptor"></app-dash-items-gallery>
+          </div>
+        </div>
+        <div class="col3 ostyle" >
+          <div [ngClass]="{'fixed': this.fixView}">
+          <mat-tab-group headerPosition="below" dynamicHeight>
+            <mat-tab label="Item">
+                <div id="itemTagContainer">
+                  <app-tag-descriptors [tagsToDisplay]="this.displayMe"></app-tag-descriptors>
+                </div>
+            </mat-tab>
+            <mat-tab label="Category">
+              <div>
+                <app-dash-items-gallery [listCategoryDescriptor]="this.listCategoryDescriptor" (sendCatTags)="this.processTags($event)"></app-dash-items-gallery>
+                <app-tag-descriptors [tagsToDisplay]="this.displayCat"></app-tag-descriptors>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+          </div>
         </div>
       </div>
     </div>
   </div>
+  <app-brief-footer></app-brief-footer>
 </div>

@@ -57,19 +57,20 @@ export class DashComponent implements OnInit, AfterViewInit {
         });
       }
     } catch (e) {
-      Logger.error('Dashboard Init Error: ' + e.message, 'DashComponent.ngOnInit', 51);
+      Logger.error('Dashboard Init Error: ' + e.message, 'DashComponent.ngOnInit', 60);
     }
   }
 
   ngAfterViewInit() {
     this.div = this.container.nativeElement as HTMLDivElement;
     this.screenWidth = window.innerWidth;
-    Logger.log('Screen width View: ' + this.screenWidth, 'DashComponent.ngAfterViewInit' , 64);
+    Logger.log('Screen width View: ' + this.screenWidth, 'DashComponent.ngAfterViewInit' , 67);
   }
+
   hasMetadata() {
     const metadata = this.metadata as UserMetaDataType;
     Logger.log('Dash Metadata : ' + metadata.noOfTargets
-      , 'DashComponent.hasMetadata', 61);
+      , 'DashComponent.hasMetadata', 71);
   }
 
   get quoteConfig() {
@@ -84,7 +85,7 @@ export class DashComponent implements OnInit, AfterViewInit {
   hasOverLay(show: boolean) {
     this.isOverlaid = show;
     Logger.log('Dash Has OverLay ? ' + show ? 'YES' : 'NO'
-      , 'DashComponent.hasOverLay', 75);
+      , 'DashComponent.hasOverLay', 87);
     const classes: DOMTokenList = this.div.classList;
     if (show) {
       classes.add('noscroll');
@@ -96,9 +97,9 @@ export class DashComponent implements OnInit, AfterViewInit {
 
   moveLeft() {
     if (this.isOverlaid) {
-      const moveLeft = this.screenWidth - 1920 <= 0 ? 0 : (this.screenWidth - maxWidth) / 2;
+      const moveLeft = this.screenWidth - maxWidth <= 0 ? 0 : (this.screenWidth - maxWidth) / 2;
       this.div.style.left = moveLeft + 'px';
-      Logger.log('Moving View Left: ' + moveLeft, 'DashComponent.moveLeft' , 100);
+      Logger.log('Moving View Left: ' + moveLeft, 'DashComponent.moveLeft' , 102);
     } else {
       // noinspection TsLint
       this.div.style.left;

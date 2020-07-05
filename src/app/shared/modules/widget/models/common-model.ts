@@ -40,6 +40,7 @@ export type RemoveUserFilesResponseType = RemoveUserCategoryFilesResponse;
 // For Add and Remove Components
 export interface FileDescriptor {
   target: string;
+  fileId?: string;
   isType: FileTypes;
   url?: string;
 }
@@ -47,8 +48,13 @@ export interface FileDescriptor {
 export type RemoveDescriptorType = FileDescriptor;
 export type AddDescriptorType = FileDescriptor;
 
+export interface ListDescriptor extends FileDescriptor {
+  title: string;
+}
+
+export type ListDescriptorType = ListDescriptor;
+
 export interface FileTagDesciptor extends FileDescriptor {
-  fileId?: string;
   data: TagType[];
 }
 
@@ -139,6 +145,7 @@ export enum ImageContainerDisplayIdents {
   CATEGORY = 'cats',
   ITEMS = 'items',
   NONE = 'none',
+  SINGLE = 'single',
   DEFAULT = '',
 }
 

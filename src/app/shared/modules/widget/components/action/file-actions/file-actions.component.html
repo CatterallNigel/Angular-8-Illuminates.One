@@ -1,10 +1,10 @@
-<div class="files-action drop">
+<div class="files-action drop" #buttonSet>
   <div id="button-set">
-    <div class="button-cont" id="edit" *ngIf="this.showThisButton('open')">
-      <input type="button" id="fileActionOpen"  (click)="this.openFile()">
-      <label class="button" for="fileActionOpen">OPEN IN&nbsp;<br/>EDITOR &#9998;</label>
-    </div>
     <div class="button-align button-set">
+      <div class="button-cont" id="edit" *ngIf="this.showThisButton('open')">
+        <input type="button" id="fileActionOpen"  (click)="this.openFile()">
+        <label class="button" for="fileActionOpen">EDITOR &#9998;</label>
+      </div>
       <div class="button-cont" id="download" *ngIf="this.showThisButton('download')">
         <input type="button" value="" id="fileActionDownload"  (click)="this.downloadFile()">
         <label class="button btn-h" for="fileActionDownload" style="padding: 12px 10px 8px 10px;">DOWNLOAD  &#8659;</label>
@@ -26,5 +26,6 @@
         <label class="button btn-h" for="fileActionFlipY">FLIP &#11021;</label>
       </div>
     </div>
+    <i class="arrow-left" (click)="this.toggleButtons(menu)" #menu></i>
   </div>
 </div>

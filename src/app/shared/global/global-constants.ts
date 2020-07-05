@@ -79,7 +79,7 @@ export class GlobalConstants {
   public static cssDisplayNone = 'none';
   public static cssVisibilityHidden = 'hidden';
   public static cssVisibilityVisible = 'visible';
-  public static cssFullWidth = '100%';
+  public static cssFullWidth = '96%';
 
   // HTML Tag identifiers
   public static HTMLImageTag = 'img';

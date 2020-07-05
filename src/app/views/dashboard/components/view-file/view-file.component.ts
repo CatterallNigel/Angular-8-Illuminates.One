@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 import {FileInfoModelType} from '../../../../shared/models';
 import {EventService} from '../../../../shared/services';
@@ -35,6 +35,14 @@ const landing = GlobalConstants.landingPage;
 export class ViewFileComponent implements OnInit {
 
   @ViewChild('mainImage', {static: false}) mainImage: ElementRef;
+
+  position = 0;
+  @Input()
+    set whereIAm(pos: number) {
+    if (this.position !== pos) {
+      this.position = pos;
+    }
+  }
   targetUUID: string;
   fileUUID: string;
   fileGivenName: string;
@@ -68,6 +76,10 @@ export class ViewFileComponent implements OnInit {
     }
   }
 
+  get getPostion() {
+    return this.position;
+  }
+
   get buttonFileInfo() {
     return {
       targetUUID: this.targetUUID,
@@ -86,20 +98,30 @@ export class ViewFileComponent implements OnInit {
 
   loadItemToDisplay(fileInfoModel: FileInfoModelType) {
     GlobalVariables.inProgress(true);
+    // Set Up all the parameters for the file-action-component
     this.targetUUID = fileInfoModel.targetId;
     this.fileUUID = fileInfoModel.file.fileUUID;
     this.fileGivenName = fileInfoModel.file.fileName;
+    // No editor for images presently
+    if (fileInfoModel.file.fileType.indexOf('image') !== -1) {
+      const index = fileActionButtons.indexOf(FileActionButtons.OPEN, 0);
+      if (index > -1) {
+        fileActionButtons.splice(index, 1);
+      }
+    }
+    // End of set-ip ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Logger.log('Displaying IMAGE fileId: ' + fileInfoModel.file.fileUUID
-      , 'ViewFileComponent.loadItemToDisplay', 92);
+      , 'ViewFileComponent.loadItemToDisplay', 114);
     const url = GlobalConstants.getViewImageURL + GlobalVariables.userId + '/' + this.targetUUID  + '/' + this.fileUUID;
     const image: HTMLImageElement = this.mainImage.nativeElement.querySelector(img) as HTMLImageElement;
     image.src = url;
     image.style.width = fullWidth;
+    image.className = 'main-image';
     image.addEventListener('load', this.showImage.bind(this, image));
   }
 
   showImage( image: HTMLImageElement, event: Event) {
-    Logger.log('Making image visible ...', 'ViewFileComponent.showImage', 102);
+    Logger.log('Making image visible ...', 'ViewFileComponent.showImage', 124);
     this.showPin();
     image.style.visibility = visible;
     this.eventService.onMainImageLoaded(true);
@@ -110,7 +132,7 @@ export class ViewFileComponent implements OnInit {
   }
 
   showPin() {
-    Logger.log('Showing PIN ..', 'ViewFileComponent.showPin', 113);
+    Logger.log('Showing PIN ..', 'ViewFileComponent.showPin', 135);
     try {
       this.mainImage.nativeElement.querySelector('#close').style.display = block;
     } catch (e) {
@@ -123,12 +145,12 @@ export class ViewFileComponent implements OnInit {
     let classe;
     switch (command) {
       case GlobalConstants.horizontal:
-        Logger.log('Commanded FLIP-Y...', 'ViewFileComponent.flipImage', 126);
+        Logger.log('Commanded FLIP-Y...', 'ViewFileComponent.flipImage', 148);
         classe = GlobalConstants.horizontalCSSClass;
         this.changeClass(classe);
         break;
       case GlobalConstants.vertical:
-        Logger.log('Commanded FLIP-Y...', 'ViewFileComponent.flipImage', 131);
+        Logger.log('Commanded FLIP-Y...', 'ViewFileComponent.flipImage', 153);
         classe = GlobalConstants.verticalCSSClass;
         this.changeClass(classe);
         break;
@@ -139,10 +161,10 @@ export class ViewFileComponent implements OnInit {
     const image: HTMLImageElement = this.mainImage.nativeElement.querySelector(img) as HTMLImageElement;
     const classes: DOMTokenList = image.classList;
     if (classes.contains(classe)) {
-      Logger.log('Removing :' + classe + ' from IMAGE ..', 'ViewFileComponent.changeClass', 142);
+      Logger.log('Removing :' + classe + ' from IMAGE ..', 'ViewFileComponent.changeClass', 164);
       classes.remove(classe);
     } else {
-      Logger.log('Adding :' + classe + ' from IMAGE ..', 'ViewFileComponent.changeClass', 145);
+      Logger.log('Adding :' + classe + ' from IMAGE ..', 'ViewFileComponent.changeClass', 167);
       classes.add(classe);
     }
   }

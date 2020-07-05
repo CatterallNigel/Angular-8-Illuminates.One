@@ -21,8 +21,10 @@
       </div>
     </div>
   </div>
-    <!-- Add in Common Footer -->
-  <app-brief-footer></app-brief-footer>
-  <app-quote-gen [quotationConfig]="this.quoteConfig"></app-quote-gen>
+  <div [ngStyle]="{'visibility': this.isOverlaid ? 'hidden': 'visible'}">
+      <!-- Add in Common Footer -->
+    <app-brief-footer></app-brief-footer>
+    <app-quote-gen [quotationConfig]="this.quoteConfig"></app-quote-gen>
+  </div>
 </div>
 

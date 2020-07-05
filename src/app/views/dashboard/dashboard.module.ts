@@ -9,6 +9,8 @@ import {TagsComponent} from './components/tags/tags.component';
 import {ViewFileComponent} from './components/view-file/view-file.component';
 import {OverlayComponent} from './main/overlay/overlay.component';
 import {PrefixPadNoToStringPipe} from '../../shared/pipes';
+import {ItemsGalleryComponent} from './components/items-gallery/items-gallery.component';
+import {MatTabsModule} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -20,11 +22,13 @@ import {PrefixPadNoToStringPipe} from '../../shared/pipes';
     ViewFileComponent,
     OverlayComponent,
     PrefixPadNoToStringPipe,
+    ItemsGalleryComponent,
   ],
   imports: [
     CommonModule,
     WidgetModule,
     FooterModule,
+    MatTabsModule
   ]
 })
 export class DashboardModule { }

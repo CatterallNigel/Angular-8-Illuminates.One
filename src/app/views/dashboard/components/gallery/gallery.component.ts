@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {EventService, UserDataService} from '../../../../shared/services';
 import {FileInfoType, UserMetaDataType} from '../../../../shared/models';
 import {ImageType, Logger} from '../../../../shared/classes';
@@ -17,6 +17,8 @@ const anchorTitle = GlobalConstants.galleryImageAnchorTitle; // 'No of \'Items\'
 const imageClassName = GlobalConstants.galleryImageCssClassName; // 'cat-thumb';
 const imageSelectedClassName = GlobalConstants.galleryImageSelectedCssClassName; // 'cat-thumb-selected'
 const imageDivClassList = GlobalConstants.galleryImageCSSDivClassList;
+const none = GlobalConstants.cssDisplayNone;
+const block = GlobalConstants.cssDiplayBlock;
 const placeholderUUID =  GlobalConstants.galleryNoCatPlaceholder;
 
 @Component({
@@ -27,6 +29,7 @@ const placeholderUUID =  GlobalConstants.galleryNoCatPlaceholder;
 
 export class GalleryComponent implements OnInit {
 
+  @ViewChild('gallery', {static: false}) private gallery: ElementRef;
   metadata: UserMetaDataType;
   selectedCatergory: string;
   fileInfo: FileInfoType[];
@@ -35,7 +38,7 @@ export class GalleryComponent implements OnInit {
   constructor(private data: UserDataService, private eventService: EventService, private router: Router) { }
 
   ngOnInit() {
-    Logger.log('ngOnInit ...', 'GalleryComponent.ngOnInit' , 38);
+    Logger.log('ngOnInit ...', 'GalleryComponent.ngOnInit' , 41);
     this.data.getCurrentData.subscribe(data => {
       this.metadata = data;
       if ( this.metadata !== undefined) {
@@ -43,20 +46,32 @@ export class GalleryComponent implements OnInit {
         this.hasMetadata();
       }
     });
+    if (this.eventService.subscription === undefined) {
+      this.eventService.subscription = this.eventService
+        .invokeComponentImageLoaded.subscribe((show: boolean) => {
+          this.showHideDisplay(show);
+        });
+    } else {
+      this.eventService
+        .invokeComponentImageLoaded.subscribe((show: boolean) => {
+        this.showHideDisplay(show);
+      });
+    }
   }
 
   hasMetadata() {
     Logger.log('Gallery Metadata : ' + this.metadata.noOfTargets
-      , 'GalleryComponent.hasMetadata' , 49);
-    this.selectedCatergory = GlobalVariables.target;
-    Logger.log('Updating targets ... Selected Cat : ' + this.selectedCatergory
-      , 'GalleryComponent.hasMetadata' , 52);
-    this.images = undefined;
-    if (this.selectedCatergory != null) {
-      this.loadCatThumbs(this.selectedCatergory);
+      , 'GalleryComponent.hasMetadata' , 63);
+    const hasChanged = this.selectedCatergory !== GlobalVariables.target || this.selectedCatergory == null;
+    // Only load first time around, or on selected change of category
+    if (hasChanged) {
+      this.selectedCatergory = GlobalVariables.target;
+      Logger.log('Updating targets ... Selected Cat : ' + this.selectedCatergory
+        , 'GalleryComponent.hasMetadata' , 70);
+      this.images = undefined;
+      this.createImageArray();
+      Logger.log('Update targets complete', 'GalleryComponent.hasMetadata', 73);
     }
-    this.createImageArray();
-    Logger.log('Update targets complete', 'GalleryComponent.hasMetadata' , 59);
   }
 
   get addMe(): AddDescriptorType {
@@ -95,7 +110,7 @@ export class GalleryComponent implements OnInit {
       if (this.metadata === undefined) {
         return;
       }
-      Logger.log('Creating gallery images ...', 'GalleryComponent.createImageArray' , 98);
+      Logger.log('Creating gallery images ...', 'GalleryComponent.createImageArray' , 113);
       const fileInfo = this.cloneReverseFileInfo();
       const images: ImageThumbDescriptorType[] = [];
       fileInfo.forEach(fi => {
@@ -115,7 +130,7 @@ export class GalleryComponent implements OnInit {
             title: anchorTitle + fi.fileInfos.length
           },
         };
-        Logger.log('We are adding an image .... ', 'GalleryComponent.createImageArray' , 118);
+        Logger.log('We are adding an image .... ', 'GalleryComponent.createImageArray' , 133);
         images.push(image);
       });
       this.images = images;
@@ -130,7 +145,7 @@ export class GalleryComponent implements OnInit {
   }
 
   loadCatThumbs(id: string) {
-    Logger.log('Passed ID of: ' + id, 'GalleryComponent.loadCatThumbs', 133);
+    Logger.log('Passed ID of: ' + id, 'GalleryComponent.loadCatThumbs', 148);
     this.selectedCatergory = id;
     GlobalVariables.target = id;
     setTimeout(() => {
@@ -149,9 +164,13 @@ export class GalleryComponent implements OnInit {
       case ActionEvents.LOAD_COMPLETE:
         GlobalVariables.target = undefined;
         await this.data.loadData().then(result => {
-          Logger.log('Gallery Load Data Result: ' + result, 'GalleryComponent.executeAction', 152);
+          Logger.log('Gallery Load Data Result: ' + result, 'GalleryComponent.executeAction', 167);
         });
         break;
     }
+  }
+
+  showHideDisplay(hide: boolean) {
+    hide ? this.gallery.nativeElement.style.display = none : this.gallery.nativeElement.style.display = block;
   }
 }

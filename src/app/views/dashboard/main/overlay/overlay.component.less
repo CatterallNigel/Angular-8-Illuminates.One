@@ -16,11 +16,8 @@
 }
 
 .oCol1{
-  background: #000;
-  /*border:2px solid black;*/
   border: none;
   overflow-y: visible;
-  width:46% !important;
 }
 
 // Instead of the header over lay use this when scroll bars appear
@@ -29,3 +26,58 @@
   display: none
 }
 
+#itemTagContainer {
+  /*margin: auto;*/
+  max-width: 350px;
+}
+
+.fixed {
+  position: fixed;
+  top: 205px;
+  width:inherit;
+}
+
+/* Fancy scroll bar */
+.scroll-ltr {
+  direction: ltr;
+}
+
+/* Styles for tab labels */
+.mat-tab-label {
+  min-width: 75px !important;
+  padding: 5px;
+  background-color: transparent;
+  color: #dc8f09;
+  font-weight: 900;
+}
+
+/* Styles for the active tab label */
+.mat-tab-label.mat-tab-label-active {
+  min-width: 75px !important;
+  padding: 5px;
+  background-color: transparent;
+  color: white;
+  font-weight: 900;
+}
+
+/* Styles for the ink bar */
+.mat-ink-bar {
+  background-color:  #dc8f09 !important;
+}
+
+.mat-tab-label, .mat-tab-link {
+  font-size: 14pt;
+}
+
+.mat-tab-group-inverted-header .mat-ink-bar {
+  bottom: 0  !important;
+  top: auto !important;
+}
+
+/* For Mat-Tab ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/* Otherwise Active Tab NOT inked or HIGHLIGHTED */
+.mat-tab-label-active {
+  opacity: 1 !important;
+  border-bottom: 1px solid  #dc8f09 !important;
+}
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

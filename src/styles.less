@@ -9,7 +9,6 @@ mat-dialog-container#modal-component {
   background-color: #1a1a1a;
 }
 /* END-OF ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 body{
   font-family: 'Open Sans', sans-serif;
 }
@@ -49,6 +48,13 @@ h1{
   transform: scale(1.25);
 }
 
+//Single
+#single{
+  position: relative;
+  margin : 0 auto 10px auto;
+  width: 90%;
+}
+
 /*Item Thumbnails */
 
 #items{
@@ -76,29 +82,42 @@ h1{
   direction: rtl;
 }
 .scroll::-webkit-scrollbar {
-  width: 12px;
+  width: 9px;
 }
 
 .scroll::-webkit-scrollbar-track {
-  background: #dc8f09;
-  -webkit-box-shadow: inset 0 0 4px rgba(0,0,0,0.3);
+  background: #f1f1f1;
+  -webkit-box-shadow: inset 0 0 2px #ccc;;
   border-radius: 10px;
+  margin: 15px 0;
 }
 
 .scroll::-webkit-scrollbar-thumb {
-  background: #FFF;
+  background: rgba(0, 0, 0);
+  border: 1px solid rgba(0,0,0,0.40);
+  background-clip: padding-box;
   border-radius: 10px;
-  -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+  -webkit-box-shadow: inset 0 0 4px #ccc;;
+}
+
+.scroll::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+  display: none;
+}
+.scroll::-webkit-scrollbar-corner {
+  background-color: transparent;
 }
 /* Screens - 3 Columns  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 body {
-  margin:0;
+  margin:0 auto;
   padding:0;
   border:0;			/* This removes the border around the viewport in old versions of IE */
   width:100%;
   background:#000;
   min-width:850px;		/* Minimum width of layout - remove line if not required */
+  max-width:1920px;
   font-size:90%;
   scroll: auto;
 }
@@ -262,6 +281,5 @@ col3{
 					(100% - left column width) plus (center column left and right padding) plus (left column left and right padding) plus (right column left padding) */
 }
 
-
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { font-family: Roboto, "Helvetica Neue", sans-serif; }

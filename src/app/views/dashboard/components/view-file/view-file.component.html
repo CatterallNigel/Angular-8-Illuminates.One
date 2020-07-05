@@ -1,10 +1,10 @@
-<h3 class="colHeader">Items Given Name : {{this.givenName}}</h3>
-<app-file-actions [loadItemDisplayed]="this.buttonFileInfo" (doAction)="this.actionEvent($event)"
-                  (doCommand)="this.flipImage($event)"></app-file-actions>
+<h3 class="colHeader"><span>Given Name :&nbsp;</span>{{this.givenName}}</h3>
 <div id="main-image" class="none" #mainImage>
   <div id="close">
     <i id="pin" class="material-icons md-18 tag-pin md-36" (click)="this.close();">highlight_off</i>
   </div>
+  <app-file-actions [loadItemDisplayed]="this.buttonFileInfo" [whereAmI]="this.getPostion"
+                    (doAction)="this.actionEvent($event)" (doCommand)="this.flipImage($event)"></app-file-actions>
   <img src="" id="blank" style="" />
 </div>
-
+<app-image-footer></app-image-footer>
