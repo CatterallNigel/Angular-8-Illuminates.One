@@ -1,5 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {EventService, UserDataService} from '../../../../shared/services';
+import {Router} from '@angular/router';
+import {EventService, UserDataService, CommandExe} from '../../../../shared/services';
 import {FileInfoModelType, FileInfosType, FileInfoType, UserMetaDataType} from '../../../../shared/models';
 import {Logger} from '../../../../shared/classes';
 import {
@@ -12,7 +13,6 @@ import {
   RemoveDescriptorType
 } from '../../../../shared/modules/widget';
 import {GlobalConstants, GlobalVariables} from '../../../../shared';
-import {Router} from '@angular/router';
 import {TagType} from '../../../../shared/models/user/metadata.model';
 
 const imageClassName = GlobalConstants.displayImageCssClassName;
@@ -70,6 +70,17 @@ export class DisplayComponent implements OnInit {
         this.showHideDisplay(show);
       });
     }
+    if (this.eventService.subscription === undefined) {
+      this.eventService.subscription = this.eventService
+        .invokeComponentSendCommand.subscribe((cmd: CommandExe) => {
+          this.executeCommand(cmd);
+        });
+    } else {
+      this.eventService
+        .invokeComponentSendCommand.subscribe((cmd: CommandExe) => {
+        this.executeCommand(cmd);
+      });
+    }
   }
 
   hasMetadata() {
@@ -109,8 +120,18 @@ export class DisplayComponent implements OnInit {
     return this.itemCount;
   }
 
+  executeCommand(cmd: CommandExe) {
+    switch (cmd) {
+      case CommandExe.REFRESH:
+        this.loadItemsToDisplay(GlobalVariables.target);
+        break;
+      default:
+        break;
+    }
+  }
+
   loadItemsToDisplay(targetUUID: string) {
-    Logger.log('This is the DISPLAY UUID: ' + targetUUID, 'DisplayComponent.loadItemsToDisplay', 113);
+    Logger.log('This is the DISPLAY UUID: ' + targetUUID, 'DisplayComponent.loadItemsToDisplay', 135);
     const fileInfo: FileInfoType =  this.metadata.fileInfo.find(fi => fi.targetUUID === targetUUID);
     if (fileInfo === undefined || fileInfo.fileInfos === undefined) {
       Logger.log('No files to display ...', 'DisplayComponent.loadItemsToDisplay', 116);
@@ -128,7 +149,7 @@ export class DisplayComponent implements OnInit {
         id: fis.fileUUID,
         classes: imageClassName,
       };
-      Logger.log('We are adding an image .... ', 'DisplayComponent.loadItemsToDisplay', 131);
+      Logger.log('We are adding an image .... ', 'DisplayComponent.loadItemsToDisplay', 153);
       images.push(image);
     });
     this.images = images;
@@ -139,7 +160,7 @@ export class DisplayComponent implements OnInit {
     const file = this.currentItems.find( fis => fis.fileUUID === event);
     const tags: TagType[] = this.currentItems.find(fis => fis.fileUUID === file.fileUUID).fileMetadata.tags;
     Logger.log('Clicked file name: ' + file.fileName + ' Event:' + event
-      , 'DisplayComponent.loadImage', 142);
+      , 'DisplayComponent.loadImage', 163);
     const fileInfoModel: FileInfoModelType = {
       targetId: this.currentTarget,
       file,

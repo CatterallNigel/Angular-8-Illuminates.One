@@ -1,12 +1,10 @@
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 import {FileInfoModelType} from '../../../../shared/models';
-import {EventService} from '../../../../shared/services';
 import {GlobalConstants, GlobalVariables} from '../../../../shared';
 import {Logger} from '../../../../shared/classes';
 import {ActionEvents, FileActionButtons} from '../../../../shared/modules/widget';
-import {UserDataService} from '../../../../shared/services';
-
+import {EventService, UserDataService, CommandExe} from '../../../../shared/services';
 
 const img = GlobalConstants.HTMLImageTag;
 const none = GlobalConstants.cssDisplayNone;
@@ -183,6 +181,7 @@ export class ViewFileComponent implements OnInit {
         GlobalVariables.inProgress(true);
         await this.data.loadData().then( () => {
           this.close();
+          this.eventService.onSendCommand(CommandExe.REFRESH);
         });
         GlobalVariables.inProgress(false);
         break;

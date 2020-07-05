@@ -2,6 +2,7 @@ import {EventEmitter, Injectable} from '@angular/core';
 import {Subscription} from 'rxjs/index';
 import {FileInfoModelType} from '../models/fileInfo.model';
 import {Logger} from './utilities/logger';
+import {CommandExe} from './models/service-model';
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +40,7 @@ export class EventService {
   }
 
   // noinspection JSUnusedGlobalSymbols
-  onSendCommand(command: string) {
+  onSendCommand(command: CommandExe) {
     Logger.log('onSendCommand CALLED', 'EventService.onSendCommand', 43);
     this.invokeComponentSendCommand.emit(command);
   }
