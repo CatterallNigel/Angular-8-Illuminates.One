@@ -130,7 +130,8 @@ export class DisplayImageThumbsComponent implements OnInit, AfterViewInit {
     const images = this.div.querySelectorAll('img');
     images.forEach(img => {
       if (img.id === id) {
-        (img as HTMLImageElement).scrollIntoView();
+        const options: ScrollIntoViewOptions = {behavior: 'smooth', block: 'nearest', inline: 'nearest'};
+        (img as HTMLImageElement).scrollIntoView(options);
       }
     });
   }
