@@ -8,6 +8,8 @@ import {
   ToggleImageType
 } from '../../../models/common-model';
 
+const options: ScrollIntoViewOptions = {behavior: 'smooth', block: 'nearest', inline: 'nearest'};
+
 @Component({
   selector: 'app-display-image-thumbs',
   templateUrl: './display-image-thumbs.component.html',
@@ -32,7 +34,7 @@ export class DisplayImageThumbsComponent implements OnInit, AfterViewInit {
     if (this.containerImages == null
       || (JSON.stringify(this.containerImages) !== JSON.stringify(items.images)
       && (this.isTypeOf === items.isType))) {
-      Logger.log('Data Changes NEW Images? ' + items.images.length, 'DisplayImageThumbsComponent.thumbsTobeDisplayed', 35);
+      Logger.log('Data Changes NEW Images? ' + items.images.length, 'DisplayImageThumbsComponent.thumbsTobeDisplayed', 37);
       this.containerId = items.id == null ? '' : items.id;
       this.containerClasses = items.classes == null ? [''] : items.classes;
       this.containerImages = items.images;
@@ -65,7 +67,9 @@ export class DisplayImageThumbsComponent implements OnInit, AfterViewInit {
   renderImages() {
     this.clearAll();
     this.div.style.display = this.containerImages != null ? this.containerImages.length === 0 ? 'none' : 'block' : 'none';
-    this. createImageDisplay();
+    if (this.containerImages != null && this.containerImages.length !== 0) {
+      this.createImageDisplay();
+    }
   }
 
   clearAll() {
@@ -83,9 +87,6 @@ export class DisplayImageThumbsComponent implements OnInit, AfterViewInit {
   }
 
   createImageDisplay() {
-    if (this.containerImages == null) {
-      return;
-    }
     this.addClassesToElement(this.div, this.containerClasses);
     this.containerImages.forEach(img => {
       const image = this.createImage(img);
@@ -116,32 +117,35 @@ export class DisplayImageThumbsComponent implements OnInit, AfterViewInit {
 
   // noinspection JSUnusedLocalSymbols
   imageClicked(imgId: string, event: Event) { // IS SELECTED ...
-    Logger.log('Clicked on Image !! Id: ' + imgId, 'DisplayImageThumbsComponent.imageClicked', 119);
+    Logger.log('Clicked on Image !! Id: ' + imgId, 'DisplayImageThumbsComponent.imageClicked', 120);
     // Change any styling ...
     if (this.toggle != null) {
       this.toggleStyle(imgId);
+    } else {
+      this.scrollInToView(imgId);
     }
-    // if the scroll-bar is present and image only part showing
-    this.scrollInToView(imgId);
     this.doLoadImage.emit(imgId);
   }
 
+  // Cannot querySelectAll by 'id' as id's don't always start with a letter, CSS requirement to use this.
+  // If a scroll-bar is present and image only part showing.
   scrollInToView(id: string) {
     const images = this.div.querySelectorAll('img');
     images.forEach(img => {
       if (img.id === id) {
-        const options: ScrollIntoViewOptions = {behavior: 'smooth', block: 'nearest', inline: 'nearest'};
         (img as HTMLImageElement).scrollIntoView(options);
       }
     });
   }
 
+  // Add remove Highlight, scroll into view if needed
   toggleStyle(id: string) {
     this.div.querySelector('.' + this.toggle.active).className = this.toggle.inactive;
     const images = this.div.querySelectorAll('img');
     images.forEach(img => {
       if (img.id === id) {
         img.className = this.toggle.active;
+        (img as HTMLImageElement).scrollIntoView(options);
       }
     });
   }

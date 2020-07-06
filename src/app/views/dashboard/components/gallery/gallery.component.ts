@@ -140,7 +140,7 @@ export class GalleryComponent implements OnInit {
       }
     } catch (e) {
       Logger.error('Creating gallery images ERROR: ' + e.message
-        , 'GalleryComponent.createImageArray', 127);
+        , 'GalleryComponent.createImageArray', 143);
     }
   }
 

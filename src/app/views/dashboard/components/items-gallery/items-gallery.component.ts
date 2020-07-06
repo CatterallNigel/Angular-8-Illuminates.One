@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {EventService, UserDataService} from '../../../../shared/services';
-import {FileInfoType} from '../../../../shared/models';
 import {ImageType, Logger} from '../../../../shared/classes';
 import {GlobalConstants} from '../../../../shared';
 import {
@@ -38,54 +37,53 @@ export class ItemsGalleryComponent implements OnInit {
 
 
   @Input()
-  //noinspection JSUnresolvedFunction
     set listItemsDescriptor(fileDescrpt: ListDescriptorType) {
      if (fileDescrpt.target != null && (this.selectedTarget == null ||  this.selectedTarget !== fileDescrpt.target
        || this.selectedItem !== fileDescrpt.fileId)) {
-       // noinspection JSMismatchedCollectionQueryUpdate
-       let files: FileInfosType[];
        this.data.getCurrentData.subscribe(d => {
-         files = d.fileInfo.find( t => t.targetUUID === fileDescrpt.target).fileInfos;
+         if (d.fileInfo.find( t => t.targetUUID === fileDescrpt.target) == null) {
+           return;
+         }
+         const files = d.fileInfo.find( t => t.targetUUID === fileDescrpt.target).fileInfos;
+         this.title = fileDescrpt.title;
+         this.selectedItem = fileDescrpt.fileId;
+         this.selectedTarget = fileDescrpt.target;
+         this.fileInfos = files;
+         Logger.log('Changes in File Descriptor', 'ItemsGalleryComponent.listItemsDescriptor' , 52);
+         this.createImageArray();
        });
-       this.title = fileDescrpt.title;
-       this.selectedItem = fileDescrpt.fileId;
-       this.selectedTarget = fileDescrpt.target;
-       this.fileInfos = files!;
-       Logger.log('Changes in File Descriptor', 'ItemsGalleryComponent.listItemsDescriptor' , 54);
-       this.createImageArray();
      }
   }
 
   @Input()
-  //noinspection JSUnresolvedFunction
     set listCategoryDescriptor(fileDescrpt: ListDescriptorType) {
     if (fileDescrpt.target != null && (this.selectedTarget == null ||  this.selectedTarget !== fileDescrpt.target
         || this.selectedItem !== fileDescrpt.fileId)) {
       this.selectedItem = fileDescrpt.fileId;
       this.selectedTarget = fileDescrpt.target;
       this.title = fileDescrpt.title;
-      // noinspection JSMismatchedCollectionQueryUpdate
-      let file: FileInfoType;
       this.data.getCurrentData.subscribe(d => {
-        file = d.fileInfo.find( t => t.targetUUID === fileDescrpt.target);
+        const file = d.fileInfo.find( t => t.targetUUID === fileDescrpt.target);
+        if (file == null) {
+          return;
+        }
+        if (fileDescrpt.isType === FileTypes.SINGLE) {
+          const image: ImageThumbDescriptorType = {
+            thumbnail: file.targetThumbnail,
+            fileType: ImageType.imageIsTypeOf(file.targetThumbnail),
+            id: file.targetUUID,
+            classes: imageClassName,
+          };
+          // Override Defaults
+          this.id = ImageContainerDisplayIdents.SINGLE;
+          this.typeOf = FileTypes.CATEGORY;
+          this.images = [image];
+          // Return tags to Parent to pass on ..
+          const tags = file.targetMetadata.tags;
+          Logger.log('Single Cat Tags No: ' + tags.length, 'ItemsGalleryComponent.listCategoryDescriptor', 83);
+          this.sendCatTags.emit(tags);
+        } // else TODO FOR MULTIPLES
       });
-      if (fileDescrpt.isType === FileTypes.SINGLE) {
-        const image: ImageThumbDescriptorType = {
-          thumbnail: file!.targetThumbnail,
-          fileType: ImageType.imageIsTypeOf(file!.targetThumbnail),
-          id: file!.targetUUID,
-          classes: imageClassName,
-        };
-        // Override Defaults
-        this.id = ImageContainerDisplayIdents.SINGLE;
-        this.typeOf = FileTypes.CATEGORY;
-        this.images = [image];
-        // Return tags to Parent to pass on ..
-        // noinspection JSUnusedAssignment
-        const tags = file!.targetMetadata.tags;
-        Logger.log('Single Cat Tags No: ' + tags.length, 'ItemsGalleryComponent.listCategoryDescriptor', 86);
-        this.sendCatTags.emit(tags);
-      } // else TODO FOR MULTIPLES
     }
   }
 
@@ -94,7 +92,7 @@ export class ItemsGalleryComponent implements OnInit {
   constructor(private data: UserDataService, private eventService: EventService) { }
 
   ngOnInit() {
-    Logger.log('ngOnInit ...', 'ItemsGalleryComponent.ngOnInit' , 97);
+    Logger.log('ngOnInit ...', 'ItemsGalleryComponent.ngOnInit' , 95);
   }
 
   get showMe() {
@@ -119,10 +117,10 @@ export class ItemsGalleryComponent implements OnInit {
   createImageArray() {
     try {
       if (this.fileInfos === undefined) {
-        Logger.log('No Items to display in gallery...', 'ItemsGalleryComponent.createImageArray' , 122);
+        Logger.log('No Items to display in gallery...', 'ItemsGalleryComponent.createImageArray' , 1210);
         return;
       }
-      Logger.log('Creating gallery images ...', 'ItemsGalleryComponent.createImageArray' , 125);
+      Logger.log('Creating gallery images ...', 'ItemsGalleryComponent.createImageArray' , 123);
       const fileInfos = this.cloneReverseFileInfo();
       const images: ImageThumbDescriptorType[] = [];
       fileInfos.forEach(fi => {
@@ -138,7 +136,7 @@ export class ItemsGalleryComponent implements OnInit {
           id: fi.fileUUID,
           classes: className,
         };
-        Logger.log('We are adding an image .... ', 'ItemsGalleryComponent.createImageArray' , 141);
+        Logger.log('We are adding an image .... ', 'ItemsGalleryComponent.createImageArray' , 139);
         images.push(image);
       });
       // Move Selected item to TOP
@@ -152,7 +150,7 @@ export class ItemsGalleryComponent implements OnInit {
       this.images = images;
     } catch (e) {
       Logger.error('Creating items gallery images ERROR: ' + e.message
-        , 'ItemsGalleryComponent.createImageArray', 155);
+        , 'ItemsGalleryComponent.createImageArray', 152);
     }
   }
 

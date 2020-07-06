@@ -73,7 +73,7 @@ export class OverlayComponent implements OnInit, AfterViewInit {
       }
       window.addEventListener('scroll', this.scrolling, true);
     } catch (e) {
-      Logger.error('Overlay Init Error: ' + e.message, 'OverlayComponent.ngOnInit', 75);
+      Logger.error('Overlay Init Error: ' + e.message, 'OverlayComponent.ngOnInit', 76);
     }
   }
 
@@ -84,10 +84,10 @@ export class OverlayComponent implements OnInit, AfterViewInit {
     this.tabGroup._tabs.forEach(t => {
       if (t.textLabel === 'Item') {
         Logger.log('BEFORE: This ' + t.textLabel.toUpperCase() + ' tag is active : ' + t.isActive,
-          'OverlayComponent.ngAfterViewInit', 85);
+          'OverlayComponent.ngAfterViewInit', 86);
         t.isActive = true;
         Logger.log('AFTER: This ' + t.textLabel.toUpperCase() + ' tag is active NOW : ' + t.isActive,
-          'OverlayComponent.ngAfterViewInit', 89);
+          'OverlayComponent.ngAfterViewInit', 90);
       }
     });
     this.tabGroup.realignInkBar();
@@ -139,7 +139,7 @@ export class OverlayComponent implements OnInit, AfterViewInit {
       return;
     }
     if (this.view != null && this.view.style.display === block) {
-      Logger.log('Overlay is scrolling by : ' + sc + 'px', 'OverlayComponent.scrolling', 137);
+      Logger.log('Overlay is scrolling by : ' + sc + 'px', 'OverlayComponent.scrolling', 142);
       this.position = sc;
     }
   }
@@ -152,7 +152,7 @@ export class OverlayComponent implements OnInit, AfterViewInit {
 
   showItemToDisplay(show: boolean) {
     Logger.log('In DASH - showItemToDisplay :' + show ? block.toUpperCase() : none.toUpperCase()
-      , 'OverlayComponent.showItemToDisplay', 151);
+      , 'OverlayComponent.showItemToDisplay', 155);
     this.view.style.display = show ? block : none ;
     this.swapHead();
   }
