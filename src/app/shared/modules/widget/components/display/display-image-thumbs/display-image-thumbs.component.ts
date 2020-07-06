@@ -121,7 +121,18 @@ export class DisplayImageThumbsComponent implements OnInit, AfterViewInit {
     if (this.toggle != null) {
       this.toggleStyle(imgId);
     }
+    // if the scroll-bar is present and image only part showing
+    this.scrollInToView(imgId);
     this.doLoadImage.emit(imgId);
+  }
+
+  scrollInToView(id: string) {
+    const images = this.div.querySelectorAll('img');
+    images.forEach(img => {
+      if (img.id === id) {
+        (img as HTMLImageElement).scrollIntoView();
+      }
+    });
   }
 
   toggleStyle(id: string) {
