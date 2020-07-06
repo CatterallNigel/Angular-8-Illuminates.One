@@ -42,9 +42,8 @@ export class DisplayImageThumbsComponent implements OnInit, AfterViewInit {
         this.toggle = items.toggle;
       }
       this.isTypeOf = items.isType;
-      if (this.div != null) {
-        this.renderImages();
-      }
+      this.renderImages().then(resolve => Logger.log('Rendered Images',
+        'DisplayImageThumbsComponent.thumbsTobeDisplayed', 45));
     }
   }
   // @Output emitter(s) for click functions ??
@@ -57,24 +56,21 @@ export class DisplayImageThumbsComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.div = this.thumbs.nativeElement as HTMLDivElement;
-    this.renderImages();
+    this.renderImages().then(resolve => Logger.log('Rendered Images',
+      'DisplayImageThumbsComponent.ngAfterViewInit', 59));
   }
 
   get getId() {
     return this.containerId == null ? ImageContainerDisplayIdents.NONE : this.containerId;
   }
 
-  renderImages() {
-    this.clearAll();
-    this.div.style.display = this.containerImages != null ? this.containerImages.length === 0 ? 'none' : 'block' : 'none';
-    if (this.containerImages != null && this.containerImages.length !== 0) {
-      this.createImageDisplay();
-    }
-  }
-
-  clearAll() {
-    if (this.div !== undefined) {
+  async renderImages() {
+    if (this.div != null) {
       this.div.innerHTML = '';
+      this.div.style.display = this.containerImages != null ? this.containerImages.length === 0 ? 'none' : 'block' : 'none';
+      if (this.containerImages != null && this.containerImages.length !== 0) {
+        await this.createImageDisplay();
+      }
     }
   }
 
@@ -117,7 +113,7 @@ export class DisplayImageThumbsComponent implements OnInit, AfterViewInit {
 
   // noinspection JSUnusedLocalSymbols
   imageClicked(imgId: string, event: Event) { // IS SELECTED ...
-    Logger.log('Clicked on Image !! Id: ' + imgId, 'DisplayImageThumbsComponent.imageClicked', 120);
+    Logger.log('Clicked on Image !! Id: ' + imgId, 'DisplayImageThumbsComponent.imageClicked', 116);
     // Change any styling ...
     if (this.toggle != null) {
       this.toggleStyle(imgId);
