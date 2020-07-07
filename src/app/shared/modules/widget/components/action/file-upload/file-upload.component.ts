@@ -121,6 +121,9 @@ export class FileUploadComponent implements OnInit {
     }
     // Required when the calling parent component is refreshed by the results
     this.doAction.emit(ActionEvents.LOAD_COMPLETE); // Notifies all files have been loaded..
+    // Reset for next upload ..
     files = null;
+    const inputId = '#' + this.btnDesc.id;
+    this.upload.nativeElement.querySelector(inputId).value = '';
   }
 }

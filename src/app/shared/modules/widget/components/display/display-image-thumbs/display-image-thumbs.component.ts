@@ -43,10 +43,13 @@ export class DisplayImageThumbsComponent implements OnInit, AfterViewInit {
       }
       this.isTypeOf = items.isType;
       this.renderImages().then(resolve => Logger.log('Rendered Images',
-        'DisplayImageThumbsComponent.thumbsTobeDisplayed', 45));
+        'DisplayImageThumbsComponent.thumbsTobeDisplayed', 46)).catch(
+          e => Logger.error('Display Thumbs ERROR: ' + e.message,
+            'DisplayImageThumbsComponent.thumbsTobeDisplayed', 48)
+      );
     }
   }
-  // @Output emitter(s) for click functions ??
+  // @Output emitter for onClick function
   @Output() doLoadImage = new EventEmitter<string>();
 
   constructor() { }
@@ -57,7 +60,10 @@ export class DisplayImageThumbsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.div = this.thumbs.nativeElement as HTMLDivElement;
     this.renderImages().then(resolve => Logger.log('Rendered Images',
-      'DisplayImageThumbsComponent.ngAfterViewInit', 59));
+      'DisplayImageThumbsComponent.ngAfterViewInit', 63)).catch(
+        reject => Logger.error('Display Thumbs ERROR: ' + reject.message,
+      'DisplayImageThumbsComponent.ngAfterViewInit', 65)
+    );
   }
 
   get getId() {
@@ -84,22 +90,36 @@ export class DisplayImageThumbsComponent implements OnInit, AfterViewInit {
 
   createImageDisplay() {
     this.addClassesToElement(this.div, this.containerClasses);
+    let selectedImage: HTMLImageElement;
     this.containerImages.forEach(img => {
-      const image = this.createImage(img);
-      if (img.anchor != null) {
-        const anchor: HTMLAnchorElement = document.createElement('a');
-        // MUST NOT have href='#' OTHERWISE (click) on 'img' invokes [router] to landing page
-        if (img.anchor.href != null) {
-          anchor.href = img.anchor.href;
-          anchor.target = img.anchor.target == null ? '' : img.anchor.target;
+      if (img != null) {
+        const image = this.createImage(img);
+        if (this.toggle != null && img.classes.indexOf(this.toggle.active) !== -1) {
+          selectedImage = image;
         }
-        anchor.title = img.anchor.title;
-        anchor.appendChild(image);
-        this.div.appendChild(anchor);
-      } else {
-        this.div.appendChild(image);
-      }
+        if (img.anchor != null) {
+          const anchor: HTMLAnchorElement = document.createElement('a');
+          // MUST NOT have href='#' OTHERWISE (click) on 'img' invokes [router] to landing page
+          if (img.anchor.href != null) {
+            anchor.href = img.anchor.href;
+            anchor.target = img.anchor.target == null ? '' : img.anchor.target;
+          }
+          anchor.title = img.anchor.title;
+          anchor.appendChild(image);
+          this.div.appendChild(anchor);
+        } else {
+          this.div.appendChild(image);
+        }
+        }
     });
+    // Fixes if new selected image is at the top and is highlighted and out of view
+    // Brief pause as border may not have been drawn
+    // noinspection JSUnusedAssignment
+    if (selectedImage != null) {
+      setTimeout(() => {
+        selectedImage.scrollIntoView(options);
+      }, 20);
+    }
   }
 
   createImage(imageDesc: ImageThumbDescriptorType): HTMLImageElement {
@@ -113,7 +133,7 @@ export class DisplayImageThumbsComponent implements OnInit, AfterViewInit {
 
   // noinspection JSUnusedLocalSymbols
   imageClicked(imgId: string, event: Event) { // IS SELECTED ...
-    Logger.log('Clicked on Image !! Id: ' + imgId, 'DisplayImageThumbsComponent.imageClicked', 116);
+    Logger.log('Clicked on Image !! Id: ' + imgId, 'DisplayImageThumbsComponent.imageClicked', 125);
     // Change any styling ...
     if (this.toggle != null) {
       this.toggleStyle(imgId);
