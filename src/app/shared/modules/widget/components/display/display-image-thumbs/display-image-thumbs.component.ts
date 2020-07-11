@@ -1,10 +1,14 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output,
+  ViewChild
+} from '@angular/core';
 import {Logger} from '../../../utilities/logger';
 import {
+  CategoryItemsUpdateType,
   FileTypes,
   ImageContainerDescriptorType,
   ImageContainerDisplayIdents,
-  ImageThumbDescriptorType,
+  ImageThumbDescriptorType, RolloverAction, RolloverActionDescriptorType,
   ToggleImageType
 } from '../../../models/common-model';
 
@@ -25,6 +29,7 @@ export class DisplayImageThumbsComponent implements OnInit, AfterViewInit {
   containerImages: ImageThumbDescriptorType[];
   isTypeOf: FileTypes;
   toggle: ToggleImageType;
+  rollover: RolloverActionDescriptorType;
 
   div: HTMLDivElement;
 
@@ -34,23 +39,37 @@ export class DisplayImageThumbsComponent implements OnInit, AfterViewInit {
     if (this.containerImages == null
       || (JSON.stringify(this.containerImages) !== JSON.stringify(items.images)
       && (this.isTypeOf === items.isType))) {
-      Logger.log('Data Changes NEW Images? ' + items.images.length, 'DisplayImageThumbsComponent.thumbsTobeDisplayed', 37);
+      Logger.log('Data Changes NEW Images? ' + items.images.length, 'DisplayImageThumbsComponent.thumbsTobeDisplayed', 42);
       this.containerId = items.id == null ? '' : items.id;
       this.containerClasses = items.classes == null ? [''] : items.classes;
       this.containerImages = items.images;
-      if (items.toggle != null) {
-        this.toggle = items.toggle;
-      }
+      this.toggle = items.toggle;
+      this.rollover = items.rollover;
       this.isTypeOf = items.isType;
       this.renderImages().then(resolve => Logger.log('Rendered Images',
-        'DisplayImageThumbsComponent.thumbsTobeDisplayed', 46)).catch(
+        'DisplayImageThumbsComponent.thumbsTobeDisplayed', 49)).catch(
           e => Logger.error('Display Thumbs ERROR: ' + e.message,
-            'DisplayImageThumbsComponent.thumbsTobeDisplayed', 48)
+            'DisplayImageThumbsComponent.thumbsTobeDisplayed', 50)
       );
     }
   }
   // @Output emitter for onClick function
   @Output() doLoadImage = new EventEmitter<string>();
+
+  lastUpdateId: string;
+  noOfItems: number;
+
+  @Input()
+  set updateItemCount(update: CategoryItemsUpdateType) {
+    if (update.id != null && (this.lastUpdateId == null || this.lastUpdateId !== update.id
+        || this.noOfItems !== update.noOfItems)) {
+      this.lastUpdateId = update.id;
+      this.noOfItems = update.noOfItems;
+      if (update.title != null) {
+        this.updateImageTitle(update.title);
+      }
+    }
+  }
 
   constructor() { }
 
@@ -60,9 +79,9 @@ export class DisplayImageThumbsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.div = this.thumbs.nativeElement as HTMLDivElement;
     this.renderImages().then(resolve => Logger.log('Rendered Images',
-      'DisplayImageThumbsComponent.ngAfterViewInit', 63)).catch(
+      'DisplayImageThumbsComponent.ngAfterViewInit', 82)).catch(
         reject => Logger.error('Display Thumbs ERROR: ' + reject.message,
-      'DisplayImageThumbsComponent.ngAfterViewInit', 65)
+      'DisplayImageThumbsComponent.ngAfterViewInit', 83)
     );
   }
 
@@ -88,6 +107,13 @@ export class DisplayImageThumbsComponent implements OnInit, AfterViewInit {
     });
   }
 
+  removeClassesFromElement(ele: HTMLElement, classesArr: string[]) {
+    const classes: DOMTokenList = ele.classList;
+    classesArr.forEach(classe => {
+      classes.remove(classe);
+    });
+  }
+
   createImageDisplay() {
     this.addClassesToElement(this.div, this.containerClasses);
     let selectedImage: HTMLImageElement;
@@ -108,6 +134,7 @@ export class DisplayImageThumbsComponent implements OnInit, AfterViewInit {
           anchor.appendChild(image);
           this.div.appendChild(anchor);
         } else {
+          image.title = img.title != null ? img.title : '';
           this.div.appendChild(image);
         }
         }
@@ -128,12 +155,17 @@ export class DisplayImageThumbsComponent implements OnInit, AfterViewInit {
     this.addClassesToElement(image, imageDesc.classes);
     image.id = imageDesc.id != null ? imageDesc.id : '';
     image.addEventListener('click', this.imageClicked.bind(this, imageDesc.id) , true);
+    // Can't use DIRECTIVE as you can't bind them dymanically
+    if (this.rollover != null && this.rollover.type === RolloverAction.MOUSE) {
+      image.addEventListener('mouseover', this.mouseEvent.bind(this, imageDesc.id), true);
+      image.addEventListener('mouseout', this.mouseEvent.bind(this, imageDesc.id), true);
+    }
     return image;
   }
 
   // noinspection JSUnusedLocalSymbols
   imageClicked(imgId: string, event: Event) { // IS SELECTED ...
-    Logger.log('Clicked on Image !! Id: ' + imgId, 'DisplayImageThumbsComponent.imageClicked', 125);
+    Logger.log('Clicked on Image !! Id: ' + imgId, 'DisplayImageThumbsComponent.imageClicked', 168);
     // Change any styling ...
     if (this.toggle != null) {
       this.toggleStyle(imgId);
@@ -143,26 +175,91 @@ export class DisplayImageThumbsComponent implements OnInit, AfterViewInit {
     this.doLoadImage.emit(imgId);
   }
 
-  // Cannot querySelectAll by 'id' as id's don't always start with a letter, CSS requirement to use this.
-  // If a scroll-bar is present and image only part showing.
-  scrollInToView(id: string) {
-    const images = this.div.querySelectorAll('img');
-    images.forEach(img => {
-      if (img.id === id) {
-        (img as HTMLImageElement).scrollIntoView(options);
+  mouseEvent(id: string, event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    Logger.log('Type of EVENT is: ' + event.type, 'DisplayImageThumbsComponent.mouseEvent', 182);
+    const image = this.findImage(id);
+    if (this.toggle != null) {
+      if (image.className === this.toggle.active) {
+        image.scrollIntoView(options);
+        return;
       }
-    });
+    }
+    switch (event.type) {
+      case 'mouseover':
+        // We want to add the present class to the rollover classes so we keep the original class
+        const addClassesArray = Object.assign([], this.rollover.rolloverClasses);
+        addClassesArray.unshift(image.className);
+        this.addClassesToElement(image, addClassesArray);
+        // No offset SET so we can just scrollIntoView
+        if (this.rollover.offset == null) {
+          image.scrollIntoView(options);
+          break;
+        }
+        // Allow for Margin,Border and Padding
+        this.scrollIntoViewWithOffset(this.div, image, this.rollover.offset);
+        break;
+      case 'mouseout':
+        // We just want to remove JUST the rollover classes
+        this.removeClassesFromElement(image, this.rollover.rolloverClasses);
+        break;
+    }
   }
 
-  // Add remove Highlight, scroll into view if needed
+  scrollIntoViewWithOffset(parent: HTMLDivElement, child: HTMLImageElement, setOffset: number ) {
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    const parentHeight = parent.offsetHeight;
+    const childY = child.getBoundingClientRect().top;
+    const childYOT = child.offsetTop;
+    const childHeight = child.height;
+    const parentScroll = parent.scrollTop;
+    // Is it a TOP or BOTTOM partial thumb ?
+    const top = childYOT - childHeight + setOffset < parentScroll;
+    const bottom = childYOT + childHeight + setOffset > parentHeight + parentScroll;
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    if ( top || bottom) {
+      let offset = top ? childYOT - parentScroll - setOffset : bottom ? childY - childHeight - parentHeight + setOffset   : 0;
+      // Required where calc offset is larger than image
+      if (offset > childHeight + setOffset) {
+        offset = offset - childHeight;
+      }
+      parent.scrollBy({left: 0, top: offset, behavior: 'smooth' });
+    }
+  }
+
+  // If a scroll-bar is present and image only part showing.
+  scrollInToView(id: string) {
+    this.findImage(id).scrollIntoView(options);
+  }
+
+  // Add/Remove Highlight, scroll into view if needed
   toggleStyle(id: string) {
     this.div.querySelector('.' + this.toggle.active).className = this.toggle.inactive;
+    const img = this.findImage(id);
+    img.className = this.toggle.active;
+    img.scrollIntoView(options);
+  }
+
+  // Items added and this update the Category count
+  updateImageTitle(title: string) {
+    if (this.div != null) {
+      this.findImage(this.lastUpdateId).parentElement.title = title;
+    }
+  }
+
+  // Cannot querySelectAll by 'id' as id's don't always start with a letter, CSS requirement to use this.
+  findImage(id: string): HTMLImageElement {
     const images = this.div.querySelectorAll('img');
-    images.forEach(img => {
+    // Traditional FOR so can break after finding the req items
+    // without needing to know what type we are looping
+    // noinspection TsLint
+    for (let i = 0; i < images.length; i++) {
+      const img = images[i];
       if (img.id === id) {
-        img.className = this.toggle.active;
-        (img as HTMLImageElement).scrollIntoView(options);
+        return img;
       }
-    });
+    }
   }
 }

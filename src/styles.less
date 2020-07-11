@@ -27,6 +27,10 @@ h1{
 /* Additions as not found locally these are added Dynamically so need to appear here */
 #centerContainer { max-width: 1920px; text-align: center; margin: 0 auto; }
 /* Category Thumbnails */
+img {
+  transition: all .2s ease-in-out;
+}
+
 #cats{
   margin: auto;
   max-height: 61vh;
@@ -38,6 +42,14 @@ h1{
   display: block;
   margin: auto;
   padding: 10px 10px 10px 10px;
+  filter: brightness(60%);
+}
+
+.cat-thumb-full{
+  display: block;
+  margin: auto;
+  padding: 10px 10px 10px 10px;
+  filter: brightness(100%);
 }
 
 .cat-thumb-selected{
@@ -46,6 +58,7 @@ h1{
   padding: 10px 10px 10px 10px;
   border: 2px solid #dc8f09;
   transform: scale(1.25);
+  filter: brightness(100%);
 }
 
 //Single
@@ -72,6 +85,24 @@ h1{
 .file-thumb{
   margin: 10px 10px 10px 10px;
   /*float:left;*/
+}
+
+// Image Thumb Rollover Activate
+.imageCatActive {
+  transform: scale(1.25);
+  margin: 10px auto;
+  padding: 30px;
+  z-index: 10;
+  cursor: pointer;
+  filter: brightness(100%);
+}
+
+// Image Thumb Rollover Activate
+.imageItemActive {
+  transform: scale(1.1);
+  border: 2px solid  #dc8f09;
+  padding:10px;
+  cursor: pointer;
 }
 
 /* Fancy scroll bar */

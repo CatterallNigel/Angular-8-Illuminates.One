@@ -8,13 +8,15 @@ import {
   ImageThumbDescriptorType
 } from '../../../../shared/modules/widget';
 import {
-  ListDescriptorType, TagType
+  ListDescriptorType, RolloverAction, TagType
 } from '../../../../shared/modules/widget/models/common-model';
 import {FileInfosType} from '../../../../shared/models/user/metadata.model';
 import {FileInfoModelType} from '../../../../shared/models/fileInfo.model';
 
 const imageClassName = GlobalConstants.galleryImageCssClassName; // 'cat-thumb';
+const imageBrightClassName = GlobalConstants.galleryImageBrightCssClassName; // 'cat-thumb-bright'
 const imageSelectedClassName = GlobalConstants.galleryImageSelectedCssClassName; // 'cat-thumb-selected'
+const imageActiveClasses = GlobalConstants.galleryImageActiveCssClasses;
 const imageDivClassList = GlobalConstants.galleryImageCSSDivClassList;
 
 @Component({
@@ -34,6 +36,10 @@ export class ItemsGalleryComponent implements OnInit {
   classes = imageDivClassList;
   id = ImageContainerDisplayIdents.CATEGORY;
   typeOf = FileTypes.ITEMS;
+  rollover = {
+    type: RolloverAction.MOUSE,
+    rolloverClasses: imageActiveClasses,
+  };
 
 
   @Input()
@@ -49,7 +55,7 @@ export class ItemsGalleryComponent implements OnInit {
          this.selectedItem = fileDescrpt.fileId;
          this.selectedTarget = fileDescrpt.target;
          this.fileInfos = files;
-         Logger.log('Changes in File Descriptor', 'ItemsGalleryComponent.listItemsDescriptor' , 52);
+         Logger.log('Changes in File Descriptor', 'ItemsGalleryComponent.listItemsDescriptor' , 58);
          this.createImageArray();
        });
      }
@@ -72,15 +78,16 @@ export class ItemsGalleryComponent implements OnInit {
             thumbnail: file.targetThumbnail,
             fileType: ImageType.imageIsTypeOf(file.targetThumbnail),
             id: file.targetUUID,
-            classes: imageClassName,
+            classes: imageBrightClassName,
           };
           // Override Defaults
           this.id = ImageContainerDisplayIdents.SINGLE;
           this.typeOf = FileTypes.CATEGORY;
+          this.rollover.type = RolloverAction.NONE;
           this.images = [image];
           // Return tags to Parent to pass on ..
           const tags = file.targetMetadata.tags;
-          Logger.log('Single Cat Tags No: ' + tags.length, 'ItemsGalleryComponent.listCategoryDescriptor', 83);
+          Logger.log('Single Cat Tags No: ' + tags.length, 'ItemsGalleryComponent.listCategoryDescriptor', 90);
           this.sendCatTags.emit(tags);
         } // else TODO FOR MULTIPLES
       });
@@ -92,7 +99,7 @@ export class ItemsGalleryComponent implements OnInit {
   constructor(private data: UserDataService, private eventService: EventService) { }
 
   ngOnInit() {
-    Logger.log('ngOnInit ...', 'ItemsGalleryComponent.ngOnInit' , 95);
+    Logger.log('ngOnInit ...', 'ItemsGalleryComponent.ngOnInit' , 102);
   }
 
   get showMe() {
@@ -104,7 +111,8 @@ export class ItemsGalleryComponent implements OnInit {
       toggle: {
         active: imageSelectedClassName[0],
         inactive: imageClassName[0],
-      }
+      },
+      rollover: this.rollover,
     };
   }
 
@@ -117,10 +125,10 @@ export class ItemsGalleryComponent implements OnInit {
   createImageArray() {
     try {
       if (this.fileInfos === undefined) {
-        Logger.log('No Items to display in gallery...', 'ItemsGalleryComponent.createImageArray' , 1210);
+        Logger.log('No Items to display in gallery...', 'ItemsGalleryComponent.createImageArray' , 128);
         return;
       }
-      Logger.log('Creating gallery images ...', 'ItemsGalleryComponent.createImageArray' , 123);
+      Logger.log('Creating gallery images ...', 'ItemsGalleryComponent.createImageArray' , 131);
       const fileInfos = this.cloneReverseFileInfo();
       const images: ImageThumbDescriptorType[] = [];
       fileInfos.forEach(fi => {
@@ -136,7 +144,7 @@ export class ItemsGalleryComponent implements OnInit {
           id: fi.fileUUID,
           classes: className,
         };
-        Logger.log('We are adding an image .... ', 'ItemsGalleryComponent.createImageArray' , 139);
+        Logger.log('We are adding an image .... ', 'ItemsGalleryComponent.createImageArray' , 147);
         images.push(image);
       });
       // Move Selected item to TOP
@@ -150,7 +158,7 @@ export class ItemsGalleryComponent implements OnInit {
       this.images = images;
     } catch (e) {
       Logger.error('Creating items gallery images ERROR: ' + e.message
-        , 'ItemsGalleryComponent.createImageArray', 152);
+        , 'ItemsGalleryComponent.createImageArray', 160);
     }
   }
 

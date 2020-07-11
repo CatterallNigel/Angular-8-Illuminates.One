@@ -88,7 +88,9 @@ export class GlobalConstants {
   // Galley Text
   public static galleryImageAnchorTitle = 'No of \'Items\' in this Category: ';
   public static galleryImageCssClassName = ['cat-thumb'];
+  public static galleryImageBrightCssClassName = ['cat-thumb-full'];
   public static galleryImageSelectedCssClassName = ['cat-thumb-selected'];
+  public static galleryImageActiveCssClasses = ['imageCatActive'];
   public static galleryImageCSSDivClassList = ['scroll'];
   public static galleryNoCatPlaceholder = 'galley-placeholder-uuid';
   // Tags Component
@@ -99,6 +101,8 @@ export class GlobalConstants {
   // Display Text
   public static displayImageCssClassName = ['file-thumb'];
   public static displayImageCSSDivClassList = ['scroll', 'center-fit'];
+  public static displayImageActiveCSSClassList =  ['imageItemActive'];
+  public static displayActiveRolloverOffset = 35;
 
   // HTTP Service
   public static httpServiceAuthTokenName = 'OP-Token';

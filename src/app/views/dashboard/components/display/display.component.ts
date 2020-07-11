@@ -14,9 +14,12 @@ import {
 } from '../../../../shared/modules/widget';
 import {GlobalConstants, GlobalVariables} from '../../../../shared';
 import {TagType} from '../../../../shared/models/user/metadata.model';
+import {RolloverAction} from '../../../../shared/modules/widget/models/common-model';
 
 const imageClassName = GlobalConstants.displayImageCssClassName;
 const imageDivClassList = GlobalConstants.displayImageCSSDivClassList;
+const displayImageActiveCSSClassList = GlobalConstants.displayImageActiveCSSClassList;
+const displayActiveRolloverOffset = GlobalConstants.displayActiveRolloverOffset;
 const none = GlobalConstants.cssDisplayNone;
 const block = GlobalConstants.cssDiplayBlock;
 const landing = GlobalConstants.landingPage;
@@ -85,7 +88,7 @@ export class DisplayComponent implements OnInit {
 
   hasMetadata() {
     Logger.log('Display Metadata : ' + this.metadata.noOfTargets
-      , 'DisplayComponent.hasMetadata', 87);
+      , 'DisplayComponent.hasMetadata', 90);
   }
 
   get addMe(): AddDescriptorType {
@@ -109,6 +112,11 @@ export class DisplayComponent implements OnInit {
       classes: imageDivClassList,
       images: this.images,
       isType: FileTypes.ITEMS,
+      rollover: {
+        type: RolloverAction.MOUSE,
+        rolloverClasses: displayImageActiveCSSClassList,
+        offset: displayActiveRolloverOffset,
+      },
     };
   }
 
@@ -131,10 +139,10 @@ export class DisplayComponent implements OnInit {
   }
 
   loadItemsToDisplay(targetUUID: string) {
-    Logger.log('This is the DISPLAY UUID: ' + targetUUID, 'DisplayComponent.loadItemsToDisplay', 134);
+    Logger.log('This is the DISPLAY UUID: ' + targetUUID, 'DisplayComponent.loadItemsToDisplay', 142);
     const fileInfo: FileInfoType =  this.metadata.fileInfo.find(fi => fi.targetUUID === targetUUID);
     if (fileInfo === undefined || fileInfo.fileInfos === undefined) {
-      Logger.log('No files to display ...', 'DisplayComponent.loadItemsToDisplay', 137);
+      Logger.log('No files to display ...', 'DisplayComponent.loadItemsToDisplay', 145);
       this.itemCount = 0;
       this.images = [];
       return;
@@ -148,8 +156,9 @@ export class DisplayComponent implements OnInit {
         fileType: fis.fileType,
         id: fis.fileUUID,
         classes: imageClassName,
+        title: 'Click for more options',
       };
-      Logger.log('We are adding an image .... ', 'DisplayComponent.loadItemsToDisplay', 152);
+      Logger.log('We are adding an image .... ', 'DisplayComponent.loadItemsToDisplay', 161);
       images.push(image);
     });
     this.images = images;
@@ -160,7 +169,7 @@ export class DisplayComponent implements OnInit {
     const file = this.currentItems.find( fis => fis.fileUUID === event);
     const tags: TagType[] = this.currentItems.find(fis => fis.fileUUID === file.fileUUID).fileMetadata.tags;
     Logger.log('Clicked file name: ' + file.fileName + ' Event:' + event
-      , 'DisplayComponent.loadImage', 162);
+      , 'DisplayComponent.loadImage', 171);
     const fileInfoModel: FileInfoModelType = {
       targetId: this.currentTarget,
       file,

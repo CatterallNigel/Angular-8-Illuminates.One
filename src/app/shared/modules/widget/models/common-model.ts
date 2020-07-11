@@ -110,6 +110,7 @@ export interface ImageContainerDescriptor {
   images: ImageThumbDescriptor[];
   isType: FileTypes;
   toggle?: ToggleImageType;
+  rollover?: RolloverActionDescriptorType;
 }
 
 export type ImageContainerDescriptorType = ImageContainerDescriptor;
@@ -125,16 +126,30 @@ export interface ImageThumbDescriptor {
   thumbnail: string;
   fileType?: string;
   id?: string;
+  title?: string;
   classes?: string[];
   anchor?: AnchorDescriptorType;
 }
 
 export type ImageThumbDescriptorType = ImageThumbDescriptor;
 
+export interface RolloverActionDescriptor {
+  type: RolloverAction;
+  rolloverClasses: string[];
+  offset?: number;
+}
+
+export type RolloverActionDescriptorType = RolloverActionDescriptor;
+
 export interface AnchorDescriptor {
   href?: string;
   title?: string;
   target?: string;
+}
+
+export enum RolloverAction {
+  MOUSE,
+  NONE,
 }
 
 export type AnchorDescriptorType = AnchorDescriptor;
@@ -170,3 +185,11 @@ export enum FileActionButtons {
   FLIP_X = 'flipX',
   FLIP_Y = 'flipY',
 }
+
+export interface CategoryItemsUpdate {
+  id: string;
+  noOfItems: number;
+  title?: string;
+}
+
+export type CategoryItemsUpdateType = CategoryItemsUpdate;

@@ -9,13 +9,14 @@ import {
   ImageContainerDisplayIdents,
   ImageThumbDescriptorType
 } from '../../../../shared/modules/widget';
-import {ActionEvents, AddDescriptorType} from '../../../../shared/modules/widget/models/common-model';
+import {ActionEvents, AddDescriptorType, RolloverAction} from '../../../../shared/modules/widget/models/common-model';
 import {Router} from '@angular/router';
 
 const landing = GlobalConstants.landingPage;
 const anchorTitle = GlobalConstants.galleryImageAnchorTitle; // 'No of \'Items\' in this Category: ';
 const imageClassName = GlobalConstants.galleryImageCssClassName; // 'cat-thumb';
 const imageSelectedClassName = GlobalConstants.galleryImageSelectedCssClassName; // 'cat-thumb-selected'
+const imageActiveClasses = GlobalConstants.galleryImageActiveCssClasses;
 const imageDivClassList = GlobalConstants.galleryImageCSSDivClassList;
 const none = GlobalConstants.cssDisplayNone;
 const block = GlobalConstants.cssDiplayBlock;
@@ -34,11 +35,12 @@ export class GalleryComponent implements OnInit {
   selectedCatergory: string;
   fileInfo: FileInfoType[];
   images: ImageThumbDescriptorType[];
+  newItems = 0;
 
   constructor(private data: UserDataService, private eventService: EventService, private router: Router) { }
 
   ngOnInit() {
-    Logger.log('ngOnInit ...', 'GalleryComponent.ngOnInit' , 41);
+    Logger.log('ngOnInit ...', 'GalleryComponent.ngOnInit' , 43);
     this.data.getCurrentData.subscribe(data => {
       this.metadata = data;
       if ( this.metadata !== undefined) {
@@ -61,16 +63,19 @@ export class GalleryComponent implements OnInit {
 
   hasMetadata() {
     Logger.log('Gallery Metadata : ' + this.metadata.noOfTargets
-      , 'GalleryComponent.hasMetadata' , 63);
+      , 'GalleryComponent.hasMetadata' , 65);
     const hasChanged = this.selectedCatergory !== GlobalVariables.target || this.selectedCatergory == null;
     // Only load first time around, or on selected change of category
     if (hasChanged) {
       this.selectedCatergory = GlobalVariables.target;
       Logger.log('Updating targets ... Selected Cat : ' + this.selectedCatergory
-        , 'GalleryComponent.hasMetadata' , 70);
+        , 'GalleryComponent.hasMetadata' , 71);
       this.images = undefined;
       this.createImageArray();
-      Logger.log('Update targets complete', 'GalleryComponent.hasMetadata', 73);
+      Logger.log('Update targets complete', 'GalleryComponent.hasMetadata', 75);
+    } else {
+      // We have an updated so must have added some items, and need now to update the count on the thumbs
+      this.newItems = this.fileInfo.find(t => t.targetUUID).fileInfos.length;
     }
   }
 
@@ -91,12 +96,20 @@ export class GalleryComponent implements OnInit {
       toggle: {
         active: imageSelectedClassName[0],
         inactive: imageClassName[0],
-      }
+      },
+      rollover: {
+        type: RolloverAction.MOUSE,
+        rolloverClasses: imageActiveClasses,
+      },
     };
   }
 
   get noCategoriesAvailable() {
     return this.images == null || this.images.length === 0;
+  }
+
+  get itemsChanged() {
+    return {id: this.selectedCatergory, noOfItems: this.newItems, title: anchorTitle + this.newItems};
   }
 
   cloneReverseFileInfo(): FileInfoType[] {
@@ -110,7 +123,7 @@ export class GalleryComponent implements OnInit {
       if (this.metadata === undefined) {
         return;
       }
-      Logger.log('Creating gallery images ...', 'GalleryComponent.createImageArray' , 113);
+      Logger.log('Creating gallery images ...', 'GalleryComponent.createImageArray' , 126);
       const fileInfo = this.cloneReverseFileInfo();
       const images: ImageThumbDescriptorType[] = [];
       fileInfo.forEach(fi => {
@@ -121,16 +134,17 @@ export class GalleryComponent implements OnInit {
         } else {
           className = fi.targetUUID === this.selectedCatergory ? imageSelectedClassName : imageClassName;
         }
+        this.newItems = fi.fileInfos.length;
         const image: ImageThumbDescriptorType = {
           thumbnail: fi.targetThumbnail,
           fileType: ImageType.imageIsTypeOf(fi.targetThumbnail),
           id: fi.targetUUID,
           classes: className,
           anchor: {
-            title: anchorTitle + fi.fileInfos.length
+            title: anchorTitle + this.newItems
           },
         };
-        Logger.log('We are adding an image .... ', 'GalleryComponent.createImageArray' , 133);
+        Logger.log('We are adding an image .... ', 'GalleryComponent.createImageArray' , 147);
         images.push(image);
       });
       this.images = images;
@@ -140,12 +154,12 @@ export class GalleryComponent implements OnInit {
       }
     } catch (e) {
       Logger.error('Creating gallery images ERROR: ' + e.message
-        , 'GalleryComponent.createImageArray', 143);
+        , 'GalleryComponent.createImageArray', 156);
     }
   }
 
   loadCatThumbs(id: string) {
-    Logger.log('Passed ID of: ' + id, 'GalleryComponent.loadCatThumbs', 148);
+    Logger.log('Passed ID of: ' + id, 'GalleryComponent.loadCatThumbs', 162);
     this.selectedCatergory = id;
     GlobalVariables.target = id;
     setTimeout(() => {
@@ -164,7 +178,7 @@ export class GalleryComponent implements OnInit {
       case ActionEvents.LOAD_COMPLETE:
         GlobalVariables.target = undefined;
         await this.data.loadData().then(result => {
-          Logger.log('Gallery Load Data Result: ' + result, 'GalleryComponent.executeAction', 167);
+          Logger.log('Gallery Load Data Result: ' + result, 'GalleryComponent.executeAction', 181);
         });
         break;
     }
