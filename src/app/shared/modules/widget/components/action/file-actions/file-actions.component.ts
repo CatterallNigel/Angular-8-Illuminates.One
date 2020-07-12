@@ -176,34 +176,29 @@ export class FileActionsComponent implements OnInit, AfterViewInit {
   }
 
   async removeFile() {
-    await this.ws.modal.alertUser(this.ws.modalRemoveConfig, WidgetConstants.removeFile).then( success => {
-      Logger.log('Remove response: ' + success, 'FileActionsComponent.removeFile', 180);
-      if (success === 'action') {
-        Logger.log('Removing files and all items .. ', 'FileActionsComponent.removeFile', 182);
-        WidgetVariables.actionInProgress(true);
-        // Allow for Spinner to start ...
-        setTimeout(() => {
-          this.ws.action.removeFiles(this.targetUUID, this.fileUUID).then(result => {
-              if (result.completed === 'success') {
-                Logger.log('Removed THIS file item', 'FileActionsComponent.removeFile', 188);
-                this.doAction.emit(ActionEvents.FILE_DELETED);
-              } else { // Token has expired
-                this.ws.modal.alertUser(this.ws.modalRemoveErrorConfig, result.error);
-                this.doAction.emit(ActionEvents.TOKEN_EXPIRED);
-              }
-            },
-            error => {
-              const errorFail = error as RemoveUserFilesResponseType;
-              Logger.error('Remove Category ERROR: ' + errorFail.error, 'FileActionsComponent.removeFile', 197);
-              this.ws.modal.alertUser(this.ws.modalRemoveErrorConfig, WidgetConstants.tryLater);
-            });
-        }, 10);
-        WidgetVariables.actionInProgress(false);
-      } else {
-        Logger.log('Remove file CANCELLED', 'FileActionsComponent.removeFile', 203);
-        return;
-      }
-    });
+    const reply = await this.ws.modal.alertUser(this.ws.modalRemoveConfig, WidgetConstants.removeFile);
+    if (reply === 'action') {
+      Logger.log('Removing files and all items .. ', 'FileActionsComponent.removeFile', 182);
+      WidgetVariables.actionInProgress(true);
+      await this.ws.action.removeFiles(this.targetUUID, this.fileUUID).then(result => {
+          if (result.completed === 'success') {
+            Logger.log('Removed THIS file item', 'FileActionsComponent.removeFile', 188);
+            this.doAction.emit(ActionEvents.FILE_DELETED);
+          } else { // Token has expired
+            this.ws.modal.alertUser(this.ws.modalRemoveErrorConfig, result.error);
+            this.doAction.emit(ActionEvents.TOKEN_EXPIRED);
+          }
+        },
+        error => {
+          const errorFail = error as RemoveUserFilesResponseType;
+          Logger.error('Remove Category ERROR: ' + errorFail.error, 'FileActionsComponent.removeFile', 197);
+          this.ws.modal.alertUser(this.ws.modalRemoveErrorConfig, WidgetConstants.tryLater);
+        });
+      WidgetVariables.actionInProgress(false);
+    } else {
+      Logger.log('Remove file CANCELLED', 'FileActionsComponent.removeFile', 203);
+      return;
+    }
   }
 
   flipFileY() {

@@ -132,6 +132,10 @@ export class OverlayComponent implements OnInit, AfterViewInit {
     };
   }
 
+  get headerPostion() {
+    return this.displayThis ? 'above' : 'below';
+  }
+
   // Needed to move the file-action-component on scroll
   scrolling(s) {
     const sc = s.target.scrollTop;

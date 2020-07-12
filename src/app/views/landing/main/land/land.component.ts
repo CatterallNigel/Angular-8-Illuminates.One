@@ -4,6 +4,7 @@ import {ActionTypes} from '../../../../shared/modules/forms/modules/auth';
 import {GlobalConstants, GlobalVariables} from '../../../../shared';
 import {Logger} from '../../../../shared/classes';
 import {UserDataService} from '../../../../shared/services';
+import {WidgetVariables} from '../../../../shared/modules/widget';
 
 const dashboard = GlobalConstants.dashboardPage;
 
@@ -27,11 +28,11 @@ export class LandComponent implements OnInit {
   async signedIn(action: ActionTypes) {
     switch (action) {
       case ActionTypes.SIGNED_IN:
-        GlobalVariables.inProgress(true);
+        WidgetVariables.actionInProgress(true);
         await this.preLoadData().then( () => {
           GlobalVariables.target = undefined;
         });
-        GlobalVariables.inProgress(false);
+        WidgetVariables.actionInProgress(false);
         break;
     }
   }

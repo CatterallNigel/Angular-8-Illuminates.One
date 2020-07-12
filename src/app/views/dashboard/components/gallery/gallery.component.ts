@@ -75,7 +75,8 @@ export class GalleryComponent implements OnInit {
       Logger.log('Update targets complete', 'GalleryComponent.hasMetadata', 75);
     } else {
       // We have an updated so must have added some items, and need now to update the count on the thumbs
-      this.newItems = this.fileInfo.find(t => t.targetUUID).fileInfos.length;
+      this.newItems = this.fileInfo.find(t => t.targetUUID === this.selectedCatergory).fileInfos.length;
+      Logger.log('New Items added to Category: NOW - ' + this.newItems, 'GalleryComponent.hasMetadata' , 79);
     }
   }
 
@@ -123,7 +124,7 @@ export class GalleryComponent implements OnInit {
       if (this.metadata === undefined) {
         return;
       }
-      Logger.log('Creating gallery images ...', 'GalleryComponent.createImageArray' , 126);
+      Logger.log('Creating gallery images ...', 'GalleryComponent.createImageArray' , 127);
       const fileInfo = this.cloneReverseFileInfo();
       const images: ImageThumbDescriptorType[] = [];
       fileInfo.forEach(fi => {
@@ -144,7 +145,7 @@ export class GalleryComponent implements OnInit {
             title: anchorTitle + this.newItems
           },
         };
-        Logger.log('We are adding an image .... ', 'GalleryComponent.createImageArray' , 147);
+        Logger.log('We are adding an image .... ', 'GalleryComponent.createImageArray' , 148);
         images.push(image);
       });
       this.images = images;
@@ -159,7 +160,7 @@ export class GalleryComponent implements OnInit {
   }
 
   loadCatThumbs(id: string) {
-    Logger.log('Passed ID of: ' + id, 'GalleryComponent.loadCatThumbs', 162);
+    Logger.log('Passed ID of: ' + id, 'GalleryComponent.loadCatThumbs', 163);
     this.selectedCatergory = id;
     GlobalVariables.target = id;
     setTimeout(() => {
@@ -178,7 +179,7 @@ export class GalleryComponent implements OnInit {
       case ActionEvents.LOAD_COMPLETE:
         GlobalVariables.target = undefined;
         await this.data.loadData().then(result => {
-          Logger.log('Gallery Load Data Result: ' + result, 'GalleryComponent.executeAction', 181);
+          Logger.log('Gallery Load Data Result: ' + result, 'GalleryComponent.executeAction', 182);
         });
         break;
     }

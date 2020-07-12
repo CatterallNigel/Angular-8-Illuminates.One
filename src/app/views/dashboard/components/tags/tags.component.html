@@ -6,8 +6,9 @@
     <p><em>Category :</em> any of several fundamental and distinct <u>images</u> to which items belong</p>
   </div>
   <app-sign-out (doAction)="executeAction($event)"></app-sign-out>
-  <div (mouseenter)="this.changeUserGuideImage()" (mouseleave)="this.changeUserGuideImage()">
-    <img [src]="this.userGuideImage" class="user-guide" alt="Download Web User Guide" (click)="this.getUserGuide()" id="guide"/>
-    <img src="../../../../../assets/images/Illuminates-450x375-OnePlace-Mirrored-Trans.png" class="logo-bottom"/>
+  <div>
+    <img [src]="this.userGuideImage" class="user-guide" alt="Download Web User Guide" (click)="this.getUserGuide()" id="guide"
+         (mouseenter)="this.changeUserGuideImage()" (mouseleave)="this.changeUserGuideImage()"/>
+    <img src="../../../../../assets/images/Seek-Online-Final-2020-07-12-Circle.png" class="seek"/>
   </div>
 </div>

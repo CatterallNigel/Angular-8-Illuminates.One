@@ -20,7 +20,7 @@
         </div>
         <div class="col3 ostyle" >
           <div [ngClass]="{'fixed': this.fixView}">
-            <mat-tab-group headerPosition="below" dynamicHeight>
+            <mat-tab-group [headerPosition]="this.headerPostion" dynamicHeight>
               <mat-tab label="Item">
                   <div class="itemTagContainer">
                     <app-tag-descriptors [tagsToDisplay]="this.displayMe"></app-tag-descriptors>
