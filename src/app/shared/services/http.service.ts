@@ -113,7 +113,7 @@ export class HttpService implements IWidgetDataActionsType, IUserFormsActionsTyp
           }
           if ( err.status === HttpService.HTTP_CONFLICT ) {
             Logger.error('User : HTTP_CONFLICT', 'HttpService.postLogin', 115);
-            resolve(GlobalConstants.loginConflict);
+            resolve(err.error);
           }
           // What was the error ?
           Logger.error('Login Error: ' + err.message, 'HttpService.postLogin', 119);
